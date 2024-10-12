@@ -23,6 +23,7 @@
       <Flooring v-model="formData.flooring" />
       <InteriorPainting v-model="formData.interiorPainting" />
       <FinalCleaning v-model="formData.finalCleaning" />
+      <UserForm v-model="formData.user"/>
       <ProgressButton :progress="progress" :disabled="isDisabled" :loading="isLoading" @click="handleSubmit" />
     </form>
   </div>
@@ -34,7 +35,7 @@
 <script setup>
 import axios from 'axios';
 import { reactive, ref, computed, onMounted } from 'vue';
-import { v4 as uuidv4 } from 'uuid'; // Import uuid
+import { v4 as uuidv4 } from 'uuid';
 import KitchenSize from '../components/calculatorView/KitchenSizeComponent.vue';
 import Demo from '../components/calculatorView/DemoComponent.vue';
 import Plumbing from '../components/calculatorView/PlumbingComponent.vue';
@@ -51,6 +52,7 @@ import InteriorPainting from '../components/calculatorView/InteriorPaintingCompo
 import FinalCleaning from '../components/calculatorView/FinalCleaningComponent.vue';
 import ServerResponse from '../components/calculatorView/ServerResponseComponent.vue';
 import ProgressButton from '../components/calculatorView/ProgressButtonComponent.vue';
+import UserForm from '../components/calculatorView/UserComponent.vue';
 
 
 // Generate or retrieve userId on component mount
@@ -67,7 +69,6 @@ const hasServerResponded = ref(false); // Track if the server has responded
 const serverResponse = ref(null); // Store server response
 const formData = reactive({
   kitchenSize: {},
-  // island: {},
   demo: {},
   plumbing: {},
   electrical: {},
@@ -83,9 +84,7 @@ const formData = reactive({
   flooring: {},
   interiorPainting: {},
   finalCleaning: {},
-  user: {
-    id: '',
-  }
+  user: { id: '' }
 });
 
 

@@ -7,11 +7,11 @@
     </label>
     <label class="checkbox-label">
       <input type="checkbox" v-model="localValue.paintStainedCabinets" :disabled="localValue.noCabinets" />
-      Painting existing, currently stained cabinets
+      Paint stained cabinets
     </label>
     <label class="checkbox-label">
       <input type="checkbox" v-model="localValue.paintPaintedCabinets" :disabled="localValue.noCabinets" />
-      Painting existing, currently painted cabinets
+      Repaint cabinets
     </label>
     <label class="checkbox-label">
       <input type="checkbox" v-model="localValue.standardLineCabinets"
