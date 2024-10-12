@@ -65,6 +65,16 @@ button:focus-visible {
   text-align: center;
 }
 
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
