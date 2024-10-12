@@ -53,20 +53,21 @@ const localValue = reactive({
 
 // Watch for changes from parent
 watch(
-  () => props.modelValue?.flooringType,
-  (newVal) => {
-    localValue.flooringType = newVal || '';
-  },
-  { immediate: true }
-);
+    () => props.modelValue,
+    (newVal) => {
+      Object.assign(localValue, newVal);
+    },
+    { deep: true, immediate: true }
+  );
 
 // Watch for local changes to update parent
 watch(
-  () => localValue.flooringType,
-  () => {
-    emit('update:modelValue', { flooringType: localValue.flooringType });
-  }
-);
+    localValue,
+    () => {
+      emit('update:modelValue', { ...localValue });
+    },
+    { deep: true }
+  );
 </script>
 
 <style scoped>

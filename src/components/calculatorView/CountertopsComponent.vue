@@ -1,8 +1,12 @@
+<!--
+  if no cabinets would there be waterfall
+-->
+
 <template>
   <div class="countertops">
     <h2>Countertops</h2>
     <label class="checkbox-label">
-      <input type="radio" value="false" v-model="localValue.countertopType" />
+      <input type="radio" value="noCountertop" v-model="localValue.countertopType" />
       No countertops
     </label>
     <label class="checkbox-label">
@@ -50,6 +54,17 @@ watch(
     Object.assign(localValue, newVal);
   },
   { deep: true, immediate: true }
+);
+
+ // Watcher to reset other countertops options when "No countertops" is checked
+ watch(
+  () => localValue.countertopType,
+  (newVal) => {
+    console.log("newVal: ", newVal)
+    if (newVal == 'noCountertop') {
+      localValue.waterfallEdges = 0;
+    }
+  }
 );
 
 watch(

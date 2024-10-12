@@ -192,13 +192,14 @@ watch(
 );
 
 // Emit updates when localValue changes
+// Watch for local changes to update parent
 watch(
-  () => ({ ...localValue, kitchenArea: kitchenArea.value, islandArea: islandArea.value, measurementType: isSquareFeet.value ? "sq.ft." : "sq.in." }),
-  (updatedValue) => {
-    emit('update:modelValue', updatedValue);
-  },
-  { deep: true }
-);
+    localValue,
+    () => {
+      emit('update:modelValue', { ...localValue });
+    },
+    { deep: true }
+  );
 
 </script>
 

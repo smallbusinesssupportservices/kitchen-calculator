@@ -39,7 +39,7 @@
   watch(
     () => props.modelValue,
     (newVal) => {
-      Object.assign(localValue, newVal || {});
+      Object.assign(localValue, newVal);
     },
     { immediate: true, deep: true }
   );

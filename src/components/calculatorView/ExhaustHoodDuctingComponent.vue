@@ -36,12 +36,12 @@ const localValue = reactive({
 watch(
   () => props.modelValue,
   (newVal) => {
-    Object.assign(localValue, newVal || {});
+    Object.assign(localValue, newVal);
   },
   { immediate: true, deep: true }
 );
 
-// Watcher to reset other demo options when "No demo" is checked
+// Watcher to reset other exhausthood options when "No exhausthood" is checked
 watch(
   () => localValue.noExhaustHood,
   (newVal) => {

@@ -21,20 +21,22 @@ const localValue = reactive({
   fixtureCost: props.modelValue?.fixtureCost || 0,
 });
 
+// Watcher to synchronize props with localValue
 watch(
   () => props.modelValue,
   (newVal) => {
-    localValue.fixtureCost = newVal?.fixtureCost || 0;
+    Object.assign(localValue, newVal);
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 );
 
 watch(
-  () => localValue.fixtureCost,
-  () => {
-    emit('update:modelValue', { fixtureCost: localValue.fixtureCost });
-  }
-);
+    localValue,
+    () => {
+      emit('update:modelValue', { ...localValue });
+    },
+    { deep: true }
+  );
 </script>
 
 <style scoped>

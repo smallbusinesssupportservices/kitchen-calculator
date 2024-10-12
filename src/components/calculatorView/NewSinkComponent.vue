@@ -45,7 +45,7 @@ const props = defineProps({
   modelValue: Object,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'sink-selected']);
 
 const localValue = reactive({
   sinkType: props.modelValue?.sinkType || '',
@@ -68,11 +68,12 @@ watch(selectedSinkType, (newValue) => {
 })
 
 watch(
-  () => localValue.sinkType,
-  () => {
-    emit('update:modelValue', { sinkType: localValue.sinkType });
-  }
-);
+    localValue,
+    () => {
+      emit('update:modelValue', { ...localValue });
+    },
+    { deep: true }
+  );
 </script>
 
 <style scoped>

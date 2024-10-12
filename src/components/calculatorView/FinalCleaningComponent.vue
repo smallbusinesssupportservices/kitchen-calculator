@@ -37,6 +37,16 @@ watch(
     { deep: true, immediate: true }
   );
 
+  // Watcher to reset cleaning options when "No cleaning" is checked
+watch(
+  () => localValue.noCleaning,
+  (newVal) => {
+    if (newVal) {
+      localValue.cleanKitchen = false;
+    }
+  }
+);
+
   watch(
     localValue,
     () => {

@@ -3,7 +3,7 @@
     <h2>Demo</h2>
     <div class="checkbox-group">
       <label class="checkbox-label" >
-        <input type="checkbox" v-model="localValue.noCabinets" />
+        <input type="checkbox" v-model="localValue.noDemo" />
         No demo
       </label>
       <label
@@ -12,7 +12,7 @@
         
         class="checkbox-label"
       >
-        <input type="checkbox" v-model="localValue[option.name]" :disabled="option.name === 'drywallRepair' && localValue.lightDemo"/>
+        <input type="checkbox" v-model="localValue[option.name]" :disabled="localValue.noDemo || (option.name === 'drywallRepair' && localValue.lightDemo)"/>
         <span>{{ option.label }}</span>
       </label>
     </div>
@@ -39,6 +39,7 @@ const localValue = reactive({
   removeFlooring: props.modelValue.removeFlooring || false,
   lightDemo: props.modelValue.lightDemo || false,
   drywallRepair: props.modelValue.drywallRepair || false,
+  noDemo: props.modelValue.noDemo || false
 });
 
 // Define demo options
@@ -84,11 +85,27 @@ watch(
   }
 );
 
+  // Watcher to reset other demo options when "No demo" is checked
+  watch(
+  () => localValue.noDemo,
+  (newVal) => {
+    if (newVal) {
+      localValue.removeSink = false;
+      localValue.removeCountertops = false;
+      localValue.removeCabinets = false;
+      localValue.removeBacksplash = false;
+      localValue.removeFlooring = false;
+      localValue.lightDemo = false;
+      localValue.drywallRepair = false;
+    }
+  }
+);
+
 // Watcher to emit updates including anyDemoSelected
 watch(
-  () => ({ ...localValue, anyDemoSelected: anyDemoSelected.value }),
-  (updatedValue) => {
-    emit('update:modelValue', updatedValue);
+  localValue,
+  () => {
+    emit('update:modelValue', { ...localValue });
   },
   { deep: true }
 );

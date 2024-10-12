@@ -1,7 +1,7 @@
 <template>
     <h1> Kitchen Calculator </h1>  
   
-    <div class="form-container">
+    <div>
   
       <form @submit.prevent="handleSubmit">
         <KitchenSize v-model="formData.kitchenSize" />
@@ -203,11 +203,12 @@
   form {
     /*display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: auto; */
+    grid-template-rows: auto; 
     gap: 1px;
-    padding: 1px;
+    padding: 1px;*/
+    width: 100%;
   }
-  
+ 
   .button-container {
     grid-column: 1 / -1;
     display: flex;
