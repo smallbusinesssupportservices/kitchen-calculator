@@ -63,7 +63,7 @@ watch(
 
 <style scoped>
 .exhaust-hood {
-  grid-column: 1 / 1;
+  grid-column: 6 / 6;
   grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;

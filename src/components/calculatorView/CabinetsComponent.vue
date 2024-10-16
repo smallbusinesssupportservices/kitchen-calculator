@@ -108,8 +108,8 @@ watch(
 
 <style scoped>
 .cabinets {
-  grid-column: 5 / 5;
-  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+  grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;

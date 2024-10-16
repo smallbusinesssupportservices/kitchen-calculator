@@ -145,6 +145,8 @@ watch(
 }
 
 .electric {
+  grid-column: 6 / 6;
+  grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;

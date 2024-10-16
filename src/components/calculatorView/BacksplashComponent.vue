@@ -64,6 +64,8 @@ watch(
 
 <style scoped>
 .backsplash {
+  grid-column: 3 / 3;
+  grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;

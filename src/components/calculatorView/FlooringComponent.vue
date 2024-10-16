@@ -72,7 +72,7 @@ watch(
 
 <style scoped>
 .flooring {
-  grid-column: 5 / 5;
+  grid-column: 4 / 4;
   grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;

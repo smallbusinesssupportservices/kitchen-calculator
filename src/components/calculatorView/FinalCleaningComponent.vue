@@ -58,7 +58,7 @@ watch(
 
 <style scoped>
 .cleaning{
-  grid-column: 6 / 6;
+  grid-column: 5 / 5;
   grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;

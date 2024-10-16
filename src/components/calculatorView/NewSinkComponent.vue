@@ -59,7 +59,7 @@ watch(
 
 <style scoped>
 .new-sink {
-  grid-column: 7 / 7;
+  grid-column: 5 / 5;
   grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;

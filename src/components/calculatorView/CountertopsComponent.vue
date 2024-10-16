@@ -79,7 +79,7 @@ watch(
 
 <style scoped>
 .countertops {
-  grid-column: 6 / 6;
+  grid-column: 4 / 4;
   grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;

@@ -78,7 +78,7 @@ watch(
 
 <style scoped>
 .plumbing {
-  grid-column: 3 / 3;
+  grid-column: 7 / 7;
   grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;

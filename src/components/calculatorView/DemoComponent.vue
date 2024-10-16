@@ -61,13 +61,10 @@ const emit = defineEmits(['update:modelValue']);
 const demoOptions = [
   { name: 'removeSink', label: 'Remove sink & faucet' },
   { name: 'removeCountertops', label: 'Remove countertops' },
-  { name: 'removeCabinets', label: 'Remove cabinets' }, // **Added**
+  { name: 'removeCabinets', label: 'Remove cabinets' }, 
   { name: 'removeBacksplash', label: 'Remove backsplash' },
   { name: 'removeFlooring', label: 'Remove flooring' },
-  {
-    name: 'lightDemo',
-    label: 'Light non-structural demo (e.g., removing pantry, bar wall)',
-  },
+  { name: 'lightDemo', label: 'Light non-structural demo (e.g., removing pantry, bar wall)'},
   { name: 'drywallRepair', label: 'Drywall Repair' }
 ];
 
@@ -100,6 +97,7 @@ const isOptionDisabled = (option) => {
   return disableConditions[option.name] || false;
 };
 
+// Function to determine if a demo option should be shown
 const shouldShowOption = (option) => {
   if (localValue.noDemo) return false; 
 
@@ -272,8 +270,8 @@ watch(
 
 <style scoped>
 .demo {
-  grid-column: 2 / 2;
-  grid-row: 1 / 1;
+  grid-column: 7 / 7;
+  grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;

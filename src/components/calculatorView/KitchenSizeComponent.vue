@@ -205,6 +205,8 @@ watch(
 
 <style scoped>
 .kitchen-size {
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;

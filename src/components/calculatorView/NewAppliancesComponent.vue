@@ -72,8 +72,8 @@
   
   <style scoped>
   .new-appliance {
-  grid-column: 2 / 2;
-  grid-row: 1 / 1;
+    grid-column: 2 / 2;
+    grid-row: 2 / 2;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;
