@@ -3,12 +3,11 @@
   <div class="demo">
     <h2>Demo</h2>
     <div class="checkbox-group">
-      <label v-if="!anyDemoSelected" class="checkbox-label">
-        <input type="checkbox" v-model="localValue.noDemo" disabled :value="true"/>
-        No demo
+      <label class="checkbox-label">
+        <input type="checkbox" v-model="localValue.noDemo" value="clientDemo"/>
+        Client will demo
       </label>
       <template v-for="option in demoOptions" :key="option.name">
-        <!-- Conditionally render each checkbox -->
         <label v-if="shouldShowOption(option)" class="checkbox-label">
           <input 
             type="checkbox" 
@@ -77,7 +76,7 @@ const localValue = reactive({
   removeFlooring: props.modelValue.removeFlooring || false,
   lightDemo: props.modelValue.lightDemo || false,
   drywallRepair: props.modelValue.drywallRepair || false,
-  noDemo: props.modelValue.noDemo || true,
+  noDemo: props.modelValue.noDemo || false,
   dumpster: props.modelValue.dumpster || false
 });
 
@@ -99,7 +98,6 @@ const isOptionDisabled = (option) => {
 
 // Function to determine if a demo option should be shown
 const shouldShowOption = (option) => {
-  if (localValue.noDemo) return false; 
 
   const showConditions = {
     removeSink: props.demoSink && props.demoSink !== 'false',
@@ -113,35 +111,12 @@ const shouldShowOption = (option) => {
   return showConditions[option?.name] || false;
 };
 
-// Computed property to check if any demo option is selected
-const anyDemoSelected = computed(() => {
-  return demoOptions.some(option => localValue[option.name]);
-});
-
-// Watcher to update 'noDemo' based on whether any demo option is selected
-watch(anyDemoSelected, (newVal) => {
-  if (newVal) {
-    // If any demo option is selected, uncheck 'noDemo'
-    if (localValue.noDemo) {
-      localValue.noDemo = false;
-    }
-  } else {
-    // If no demo options are selected, check 'noDemo'
-    if (!localValue.noDemo) {
-      localValue.noDemo = true;
-    }
-  }
-});
-
-
 // Watcher to synchronize props with localValue
 watch(
   () => props.modelValue,
   (newVal) => {
-    // Destructure to exclude 'noDemo' from being overwritten
     const { noDemo, ...rest } = newVal;
     Object.assign(localValue, rest);
-    // 'noDemo' is managed internally based on demo selections
   },
   { deep: true, immediate: true }
 );
@@ -221,7 +196,6 @@ watch(
     }
   }
 );
-
 // Watchers to Handle removeCabinets Based on demoStandardLineCabinets and demoFullCustomCabinets**
 watch(
   () => props.demoCabinets,
@@ -236,24 +210,6 @@ watch(
     }
     if (newVal === 'noCabinets') {
       localValue.removeCabinets = false;
-    }
-  }
-);
-
-// Watcher to reset other demo options when "No demo" is checked
-watch(
-  () => localValue.noDemo,
-  (newVal) => {
-    console.log("localValue.noDemo: ", localValue.noDemo)
-    if (newVal) {
-      console.log("newVal: ", newVal)
-      localValue.removeSink = false;
-      localValue.removeCountertops = false;
-      localValue.removeCabinets = false;
-      localValue.removeBacksplash = false;
-      localValue.removeFlooring = false;
-      localValue.lightDemo = false;
-      localValue.drywallRepair = false;
     }
   }
 );
@@ -305,3 +261,53 @@ h2 {
   cursor: not-allowed;
 }
 </style>
+
+
+<!--  
+  <template>
+    <label v-if="!anyDemoSelected" class="checkbox-label">
+      <input type="checkbox" v-model="localValue.noDemo" disabled :value="true"/>
+      No demo
+    </label>
+  </template>
+  <script>
+  // Computed property to check if any demo option is selected
+  const anyDemoSelected = computed(() => {
+    return demoOptions.some(option => localValue[option.name]);
+  });
+
+  // Watcher to update 'noDemo' based on whether any demo option is selected
+   watch(anyDemoSelected, (newVal) => {
+     if (newVal) {
+       // If any demo option is selected, uncheck 'noDemo'
+       if (localValue.noDemo) {
+         localValue.noDemo = false;
+       }
+     } else {
+       // If no demo options are selected, check 'noDemo'
+       if (!localValue.noDemo) {
+         localValue.noDemo = true;
+       }
+     }
+   });
+
+   // Watcher to reset other demo options when "No demo" is checked
+watch(
+  () => localValue.noDemo,
+  (newVal) => {
+    console.log("localValue.noDemo: ", localValue.noDemo)
+    if (newVal) {
+      console.log("newVal: ", newVal)
+      localValue.removeSink = false;
+      localValue.removeCountertops = false;
+      localValue.removeCabinets = false;
+      localValue.removeBacksplash = false;
+      localValue.removeFlooring = false;
+      localValue.lightDemo = false;
+      localValue.drywallRepair = false;
+    }
+  }
+);
+  </script>
+
+-->
