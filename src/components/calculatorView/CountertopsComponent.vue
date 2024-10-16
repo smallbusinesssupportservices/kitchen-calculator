@@ -46,12 +46,14 @@ const emit = defineEmits(['update:modelValue']);
 const localValue = reactive({
   countertopType: props.modelValue.countertopType || '',
   waterfallEdges: props.modelValue.waterfallEdges || 0,
+  dumpster: props.modelValue.dumpster || false
 });
 
 watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
+    localValue.dumpster = true;
   },
   { deep: true, immediate: true }
 );
@@ -60,7 +62,6 @@ watch(
  watch(
   () => localValue.countertopType,
   (newVal) => {
-    console.log("newVal: ", newVal)
     if (newVal == 'noCountertop') {
       localValue.waterfallEdges = 0;
     }

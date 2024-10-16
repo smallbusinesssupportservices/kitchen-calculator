@@ -74,6 +74,7 @@
   watch(
     localValue,
     () => {
+      console.log("userComponent: ", localValue)
       emit('update:modelValue', { ...localValue });
     },
     { deep: true }

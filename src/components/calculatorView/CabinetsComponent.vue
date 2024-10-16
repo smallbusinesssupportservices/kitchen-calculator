@@ -1,100 +1,109 @@
+<!-- CabinetsComponent.vue -->
 <template>
   <div class="cabinets">
     <h2>Cabinets</h2>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.noCabinets" />
+    <!-- Main Cabinet Options as Radio Buttons -->
+    <label class="radio-label">
+      <input type="radio" name="cabinetOptions" value="noCabinets" v-model="localValue.cabinetType" />
       No cabinets
     </label>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.paintStainedCabinets" :disabled="localValue.noCabinets" />
+    <label class="radio-label">
+      <input type="radio" name="cabinetOptions" value="paintStainedCabinets" v-model="localValue.cabinetType"
+        :disabled="isOptionDisabled('paintStainedCabinets')" />
       Paint stained cabinets
     </label>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.paintPaintedCabinets" :disabled="localValue.noCabinets" />
+    <label class="radio-label">
+      <input type="radio" name="cabinetOptions" value="paintPaintedCabinets" v-model="localValue.cabinetType"
+        :disabled="isOptionDisabled('paintPaintedCabinets')" />
       Repaint cabinets
     </label>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.standardLineCabinets"
-        :disabled="localValue.noCabinets || localValue.fullCustomCabinets" />
+    <label class="radio-label">
+      <input type="radio" name="cabinetOptions" value="standardLineCabinets" v-model="localValue.cabinetType"
+        :disabled="isOptionDisabled('standardLineCabinets')" />
       Standard Line Cabinets
     </label>
-    <div class="sub-section" v-if="localValue.standardLineCabinets">
+    <div class="sub-section" v-if="localValue.cabinetType == 'standardLineCabinets'">
       <label class="checkbox-label">
-        <input type="checkbox" v-model="localValue.customColorBase" :disabled="localValue.noCabinets" />
+        <input type="checkbox" v-model="localValue.customColorBase" :disabled="isSubOptionDisabled" />
         Custom Color for standard line Shaker base cabinets
       </label>
       <label class="checkbox-label">
-        <input type="checkbox" v-model="localValue.customColorWall" :disabled="localValue.noCabinets" />
+        <input type="checkbox" v-model="localValue.customColorWall" :disabled="isSubOptionDisabled" />
         Custom Color for standard line Shaker wall cabinets
       </label>
     </div>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.fullCustomCabinets"
-        :disabled="localValue.noCabinets || localValue.standardLineCabinets" />
+    <label class="radio-label">
+      <input type="radio" name="cabinetOptions" value="fullCustomCabinets" v-model="localValue.cabinetType"
+        :disabled="isOptionDisabled('fullCustomCabinets')" />
       Full custom cabinets
     </label>
   </div>
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, watch, computed } from 'vue';
 
+// Define Props
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => ({}),
   },
 });
+
+// Define Emits
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
-  paintStainedCabinets: props.modelValue.paintStainedCabinets || false,
-  paintPaintedCabinets: props.modelValue.paintPaintedCabinets || false,
-  standardLineCabinets: props.modelValue.standardLineCabinets || false,
-  customColorBase: props.modelValue.customColorBase || false,
-  customColorWall: props.modelValue.customColorWall || false,
-  fullCustomCabinets: props.modelValue.fullCustomCabinets || false,
-  noCabinets: props.modelValue.noCabinets || false,
+  cabinetType: props.modelValue.cabinetType || '',
+  dumpster: props.modelValue.dumpster || false
 });
 
-const cabinetOptions = [
-  { name: 'addCanLights', label: 'Add can lights' },
-  { name: 'addUnderCabinetLights', label: 'Add undercabinet lights' },
-  { name: 'switchesAndOutlets', label: 'Add/move outlets/switches' },
-  { name: 'applianceOutlets', label: 'Add/move appliance outlets' },
-];
+// Computed property to determine if sub-options should be disabled
+const isSubOptionDisabled = computed(() => {
+  return localValue.noCabinets;
+});
 
-// Watcher to synchronize props with localValue
+
+// Function to determine if a main option should be disabled
+const isOptionDisabled = (optionName) => {
+  // Add any additional logic if certain options need to be disabled based on other conditions
+  // For example, you can disable options based on other formData properties
+  // Currently, assuming no additional conditions
+  return false;
+};
+
+
 watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
+    localValue.dumpster = true;
   },
-  { immediate: true, deep: true }
+  { deep: true, immediate: true }
 );
 
-  // Watcher to reset other cabinet options when "No cabinet" is checked
-  watch(
+ // Watcher to reset other countertops options when "No countertops" is checked
+ watch(
   () => localValue.noCabinets,
   (newVal) => {
-    if (newVal) {
-      localValue.paintStainedCabinets = false;
-      localValue.paintPaintedCabinets = false;
-      localValue.standardLineCabinets = false;
-      localValue.customColorBase = false;
+    if (newVal == 'noCabinets') {
+      // localValue.standardLineCabinets = false;
+      localValue.customColorBase =false;
       localValue.customColorWall = false;
-      localValue.fullCustomCabinets = false;
+      localValue.dumpster = false;
     }
   }
 );
 
 watch(
-    localValue,
-    () => {
-      emit('update:modelValue', { ...localValue });
-    },
-    { deep: true }
-  );
+  localValue,
+  () => {
+    emit('update:modelValue', { ...localValue });
+  },
+  { deep: true }
+);
+
 </script>
 
 <style scoped>
@@ -108,4 +117,23 @@ watch(
   width: 200px;
 }
 
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.radio-label input {
+  margin-right: 8px;
+}
+
+.checkbox-label input:disabled+span {
+  color: #888;
+  /* Grey out the label text when disabled */
+  cursor: not-allowed;
+}
+
+.sub-section {
+  margin-left: 20px;
+}
 </style>

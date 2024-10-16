@@ -27,45 +27,26 @@
 <script setup>
 import { reactive, watch, ref } from 'vue';
 
-const selectedSinkType = ref('');
-
-// Emit the selection status when a sink is chosen
-const onSinkChange = () => {
-  const isSinkSelected =
-    selectedSinkType.value === 'standard' ||
-    selectedSinkType.value === 'workstation' ||
-    selectedSinkType.value === 'farmhouse' ||
-    selectedSinkType.value === 'customFinish'
-  
-  // Emit the event to the parent
-  emit('sink-selected', isSinkSelected)
-}
-
 const props = defineProps({
   modelValue: Object,
 });
 
-const emit = defineEmits(['update:modelValue', 'sink-selected']);
+const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
   sinkType: props.modelValue?.sinkType || '',
+  dumpster: props.modelValue.dumpster || false
 });
 
 watch(
   () => props.modelValue,
   (newVal) => {
-    localValue.sinkType = newVal?.sinkType || '';
+    // localValue.sinkType = newVal?.sinkType || '';
+    Object.assign(localValue, newVal);
+    localValue.dumpster = true;
   },
   { immediate: true }
 );
-
-watch(selectedSinkType, (newValue) => {
-  if (['standard', 'workstation', 'farmhouse', 'customFinish'].includes(newValue)) {
-    emit('update:modelValue', { ...localValue, removeSink: true })  // Check removeSink
-  } else {
-    emit('update:modelValue', { ...localValue, removeSink: false })  // Uncheck removeSink
-  }
-})
 
 watch(
     localValue,

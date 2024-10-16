@@ -29,20 +29,7 @@ const dbItems = {
         sqftPrice: 2, 
         unitCost: undefined, 
         markup: 0.65, 
-        unitPrice() {
-            return (!this.sqftPrice ? this.unitCost : this.sqftPrice) * (1 + this.markup);
-        },
-        subtotal(formData) {
-            let d73 = this.sqftPrice
-            let g73 = this.unitPrice()
-            let a73 = 1
-            let d3 = formData.kitchenSize.measurementType == 'sq.in.' ? formData.kitchenSize.kitchenArea / 144 : formData.kitchenSize.kitchenArea
-            const c73 = typeof this.calculatedUnits === 'function'
-                ? this.calculatedUnits(formData)
-                : (this.calculatedUnits || 1);
-
-            return (!d73 ? g73 * a73 * (!c73 ? 1 : c73) : g73 * d3 * a73);
-        }
+        unitPrice: undefined
 
     },
     removeCabinets: {
@@ -77,7 +64,7 @@ const dbItems = {
         unitPrice:undefined
 
     },
-    anyDemoSelected: {
+    dumpster: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 425, 
@@ -519,8 +506,7 @@ const dbItems = {
         markup: 0.0, 
         unitPrice:undefined,
         subtotal:undefined
-    },
-
+    }
 }
 
 
@@ -541,13 +527,13 @@ export const processFormData = (req, res) => {
 
             if (cat === 'kitchenSize') {
 
-                var kitchenLength = (formData.kitchenSize.measurementType == 'sq.in.' ? (formData.kitchenSize.length / 12) : formData.kitchenSize.length);
-                var kitchenWidth = (formData.kitchenSize.measurementType == 'sq.in.' ? (formData.kitchenSize.width / 12) : formData.kitchenSize.width);
-                var kitchenArea = (kitchenLength * kitchenWidth)
-                var islandLength = (formData.kitchenSize.measurementType == 'sq.in.' ? (formData.kitchenSize.islandLength / 12) : formData.kitchenSize.islandLength)
-                var islandWidth = (formData.kitchenSize.measurementType == 'sq.in.' ? (formData.kitchenSize.islandWidth / 12) : formData.kitchenSize.islandWidth)
+                var kitchenLength = formData.kitchenSize.length / 12;
+                var kitchenWidth = formData.kitchenSize.width / 12;
+                var kitchenArea = kitchenLength * kitchenWidth;
+                var islandLength = formData.kitchenSize.islandLength / 12;
+                var islandWidth = formData.kitchenSize.islandWidth / 12;
                 var hasIsland = formData.kitchenSize.hasIsland;
-                var islandArea = (islandLength * islandWidth)
+                var islandArea = (islandLength * islandWidth);
 
                 continue;
             }
@@ -566,10 +552,10 @@ export const processFormData = (req, res) => {
 
             for (let categoryItem in formCategory) {
                 const item = {};
-
-                const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : categoryItem);
-                const itemsNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) ? cat : categoryItem);
-
+                console.log(">>> categoryItem :", categoryItem)
+                const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}`: categoryItem);
+                const itemsNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) ? cat : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}` : categoryItem);
+                console.log("dbNeddle: ",dbNeddle)
                 if (formCategory[categoryItem] && dbItems[dbNeddle]) {  // Ensure the categoryItem is selected and exists in dbItems
 
                     const dbItem = dbItems[dbNeddle];
@@ -598,9 +584,10 @@ export const processFormData = (req, res) => {
                         calculatedUnits = cabinetUnits - customColorBase;
 
                     } else if (['countertops:Granite', 'countertops:Quartz', 'countertops:Solid-Surface', 'countertops:Butcher Block'].includes(dbNeddle)) {
-
+                        const a = 1; //=IF(A42,((B$3+C$3)*1.6-9-3-4)+(IF(A$6,B$6*C$6,0)),0)*2.5
+                        console.log("dbNeddle: ",dbNeddle)
                         calculatedUnits = ((((kitchenLength + kitchenWidth) * 1.6 - 9 - 3 - 4) + (hasIsland ? islandLength * islandWidth : 0)) * 2.5);
-
+                        console.log("calculatedUnits: ", calculatedUnits)
                     } else if (dbNeddle == 'waterfallEdges') {
 
                         calculatedUnits = formCategory[categoryItem]
@@ -643,6 +630,10 @@ export const processFormData = (req, res) => {
                     }
 
                     // calculate subtotal
+                    //d sqft
+                    //e unit cost
+                    //f markup
+                    //g unit price
                     let subtotal = 0;
 
                     if (dbNeddle == 'swapFixtures') {
@@ -664,7 +655,7 @@ export const processFormData = (req, res) => {
                                     ? ((unitPrice + allowance) * a * calculatedUnits)
                                     : (categoryMinimum * (1 + markup) + (allowance * calculatedUnits)) * a
                         )
-                    } else if (dbNeddle == 'waterfallEdges') {//=if(D46="",G46*A46*(if(C46="",1,C46)),G46*D$3*A46)
+                    } else if (dbNeddle == 'waterfallEdges') {
 
                         const edges = parseInt(formData.countertops.waterfallEdges);
 
@@ -685,7 +676,8 @@ export const processFormData = (req, res) => {
                         let allowance = dbNeddle == 'flooring:Tile' ? 12 : 0;
                         subtotal = (!sqftPrice ? unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : (unitPrice + allowance) * kitchenArea * a)
                     } else {
-                        const a = 1 // column a from the spradsheet
+                        const a = 1 // if(D11="",G11*A11*(if(C11="",1,C11)),G11*D$3*A11)
+                        console.log(">>>>dbNeddle: ", dbNeddle, "\nsqftPrice: ",sqftPrice, "\nunitPrice: ", unitPrice, "\ncalculatedUnits: ", calculatedUnits, "\nkitchenArea: ", kitchenArea)
                         subtotal = (!sqftPrice ? unitPrice * a * calculatedUnits : unitPrice * kitchenArea * a)
                     }
 
@@ -711,7 +703,7 @@ export const processFormData = (req, res) => {
             }
 
             // Apply category minimum if applicable
-            if (categoryMinimums[cat] && category.categoryTotal < categoryMinimums[cat]) {
+            if (categoryMinimums[cat] && category.categoryTotal > 0 && category.categoryTotal < categoryMinimums[cat] ) {
                 category.categoryTotal = categoryMinimums[cat];
             }
 

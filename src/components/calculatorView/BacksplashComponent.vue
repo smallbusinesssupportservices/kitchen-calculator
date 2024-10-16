@@ -1,19 +1,30 @@
 <template>
   <div class="backsplash">
     <h2>Backsplash</h2>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.noBacksplash" />
+    <label class="checkbox-label" for="noBacksplash">
+      <input
+        type="radio"
+        id="noBacksplash"
+        :value="false"
+        v-model="localValue.backsplash"
+      />
       No backsplash
     </label>
-    <label class="checkbox-label">
-      <input type="checkbox" v-model="localValue.backsplash" :disabled="localValue.noBacksplash" />
+    <label class="checkbox-label" for="backsplash">
+      <input
+        type="radio"
+        id="backsplash"
+        :value="true"
+        v-model="localValue.backsplash"
+      />
       Backsplash
     </label>
+    
   </div>
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, watch, computed } from 'vue';
 
 // Define props
 const props = defineProps({
@@ -28,30 +39,18 @@ const emit = defineEmits(['update:modelValue']);
 
 // Initialize local state
 const localValue = reactive({
-  backsplash: props.modelValue?.backsplash || false,
-  noBacksplash: props.modelValue.noBacksplash || false,
+  backsplash: props.modelValue?.backsplash || '',
 });
 
-// Watch for changes from parent
 watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
+    localValue.dumpster = true;
   },
   { deep: true, immediate: true }
 );
 
-// Watcher to reset backsplash option when "No backsplash" is checked
-watch(
-  () => localValue.noBacksplash,
-  (newVal) => {
-    if (newVal) {
-      localValue.backsplash = false;
-    }
-  }
-);
-
-// Watch for local changes to update parent
 watch(
   localValue,
   () => {
@@ -59,6 +58,8 @@ watch(
   },
   { deep: true }
 );
+
+
 </script>
 
 <style scoped>

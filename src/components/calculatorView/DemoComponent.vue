@@ -1,20 +1,25 @@
+<!-- DemoComponent.vue -->
 <template>
   <div class="demo">
     <h2>Demo</h2>
     <div class="checkbox-group">
-      <label class="checkbox-label" >
-        <input type="checkbox" v-model="localValue.noDemo" />
+      <label v-if="!anyDemoSelected" class="checkbox-label">
+        <input type="checkbox" v-model="localValue.noDemo" disabled :value="true"/>
         No demo
       </label>
-      <label
-        v-for="option in demoOptions"
-        :key="option.name"
-        
-        class="checkbox-label"
-      >
-        <input type="checkbox" v-model="localValue[option.name]" :disabled="localValue.noDemo || (option.name === 'drywallRepair' && localValue.lightDemo)"/>
-        <span>{{ option.label }}</span>
-      </label>
+      <template v-for="option in demoOptions" :key="option.name">
+        <!-- Conditionally render each checkbox -->
+        <label v-if="shouldShowOption(option)" class="checkbox-label">
+          <input 
+            type="checkbox" 
+            v-model="localValue[option.name]" 
+            :disabled="isOptionDisabled(option)" 
+          />
+          <span :class="{ disabled: isOptionDisabled(option) }">
+            {{ option.label }}
+          </span>
+        </label>
+      </template>
     </div>
   </div>
 </template>
@@ -22,15 +27,51 @@
 <script setup>
 import { reactive, watch, computed } from 'vue';
 
+// Define Props
 const props = defineProps({
   modelValue: {
     type: Object,
     default: () => ({}),
   },
+  demoSink: {
+    type: String,
+    default: 'false',
+  },
+  demoCountertops: {
+    type: String,
+    default: 'noCountertop'
+  },
+  demoBacksplash: {
+    type: Boolean,
+    default: false
+  },
+  demoCabinets: {
+    type: String,
+    default: ''
+  }, demoFlooring: {
+    type: String,
+    default: 'false'
+  },
 });
+
+// Define Emits
 const emit = defineEmits(['update:modelValue']);
 
-// Reactive state for demo options (excluding dumpster)
+// Define demo options
+const demoOptions = [
+  { name: 'removeSink', label: 'Remove sink & faucet' },
+  { name: 'removeCountertops', label: 'Remove countertops' },
+  { name: 'removeCabinets', label: 'Remove cabinets' }, // **Added**
+  { name: 'removeBacksplash', label: 'Remove backsplash' },
+  { name: 'removeFlooring', label: 'Remove flooring' },
+  {
+    name: 'lightDemo',
+    label: 'Light non-structural demo (e.g., removing pantry, bar wall)',
+  },
+  { name: 'drywallRepair', label: 'Drywall Repair' }
+];
+
+// Initialize local state
 const localValue = reactive({
   removeSink: props.modelValue.removeSink || false,
   removeCountertops: props.modelValue.removeCountertops || false,
@@ -39,36 +80,70 @@ const localValue = reactive({
   removeFlooring: props.modelValue.removeFlooring || false,
   lightDemo: props.modelValue.lightDemo || false,
   drywallRepair: props.modelValue.drywallRepair || false,
-  noDemo: props.modelValue.noDemo || false
+  noDemo: props.modelValue.noDemo || true,
+  dumpster: props.modelValue.dumpster || false
 });
 
-// Define demo options
-const demoOptions = [
-  { name: 'removeSink', label: 'Remove sink & faucet' },
-  { name: 'removeCountertops', label: 'Remove countertops' },
-  { name: 'removeCabinets', label: 'Remove cabinets' },
-  { name: 'removeBacksplash', label: 'Remove backsplash' },
-  { name: 'removeFlooring', label: 'Remove flooring' },
-  {
-    name: 'lightDemo',
-    label: 'Light non-structural demo (e.g., removing pantry, bar wall)',
-  },
-  { name: 'drywallRepair', label: 'Drywall Repair'}
-];
+// Function to determine if a demo option should be disabled
+const isOptionDisabled = (option) => {
+  if (localValue.noDemo) return true;
+
+  const disableConditions = {
+    removeSink: props.demoSink && props.demoSink !== 'false',
+    removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
+    removeBacksplash: props.demoBacksplash,
+    removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
+    drywallRepair: localValue.lightDemo,
+    removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
+  };
+
+  return disableConditions[option.name] || false;
+};
+
+const shouldShowOption = (option) => {
+  if (localValue.noDemo) return false; 
+
+  const showConditions = {
+    removeSink: props.demoSink && props.demoSink !== 'false',
+    removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
+    removeBacksplash: props.demoBacksplash,
+    removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
+    drywallRepair: localValue.lightDemo,
+    removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
+  };
+
+  return showConditions[option?.name] || false;
+};
 
 // Computed property to check if any demo option is selected
-const anyDemoSelected = computed(() =>
-  demoOptions.some((option) => localValue[option.name])
-);
+const anyDemoSelected = computed(() => {
+  return demoOptions.some(option => localValue[option.name]);
+});
 
-  const anyLightDemoSelected = computed(() =>
-  demoOptions.some()
-);
+// Watcher to update 'noDemo' based on whether any demo option is selected
+watch(anyDemoSelected, (newVal) => {
+  if (newVal) {
+    // If any demo option is selected, uncheck 'noDemo'
+    if (localValue.noDemo) {
+      localValue.noDemo = false;
+    }
+  } else {
+    // If no demo options are selected, check 'noDemo'
+    if (!localValue.noDemo) {
+      localValue.noDemo = true;
+    }
+  }
+});
+
+
 // Watcher to synchronize props with localValue
 watch(
   () => props.modelValue,
   (newVal) => {
-    Object.assign(localValue, newVal);
+    // Destructure to exclude 'noDemo' from being overwritten
+    const { noDemo, ...rest } = newVal;
+    Object.assign(localValue, rest);
+    // 'noDemo' is managed internally based on demo selections
   },
   { deep: true, immediate: true }
 );
@@ -78,18 +153,102 @@ watch(
   () => localValue.lightDemo,
   (newVal) => {
     if (newVal) {
-      localValue.drywallRepair = true;
+      if (!localValue.drywallRepair) {
+        localValue.drywallRepair = true;
+      }
     } else {
-      localValue.drywallRepair = false;
+      if (localValue.drywallRepair) {
+        localValue.drywallRepair = false;
+      }
     }
   }
 );
 
-  // Watcher to reset other demo options when "No demo" is checked
-  watch(
-  () => localValue.noDemo,
+// Watcher to automatically set and disable removeBacksplash
+watch(
+  () => props.demoBacksplash,
   (newVal) => {
     if (newVal) {
+      console.log("props.demoBacksplash: ", props.demoBacksplash)
+      if (!localValue.removeBacksplash) {
+        localValue.removeBacksplash = true;
+      }
+    } else {
+      localValue.removeBacksplash = false;
+    }
+  }
+);
+
+// Watcher to automatically set and disable removeBacksplash
+watch(
+  () => props.demoCountertops,
+  (newVal) => {
+    if (newVal) {
+      console.log("props.demoCountertops: ", props.demoCountertops)
+      if (!localValue.removeCountertops) {
+        localValue.removeCountertops = true;
+      }
+    } else {
+      localValue.removeCountertops = false;
+    }
+
+    if (newVal == 'noCountertop') localValue.removeCountertops = false;
+  }
+
+
+);
+// Watcher to automatically set and disable removeSink
+watch(
+  () => props.demoSink,
+  (newVal) => {
+    console.log("newVal: ", newVal)
+    console.log("BEFORE: localValue.removeSink: ", localValue.removeSink)
+    if (newVal !== 'false') {
+      localValue.removeSink = true;
+    } else {
+      localValue.removeSink = false;
+    }
+    console.log("AFTER: localValue.removeSink: ", localValue.removeSink)
+
+  }
+);
+// Watcher to automatically set and disable demoFlooring
+watch(
+  () => props.demoFlooring,
+  (newVal) => {
+    if (newVal === 'false') {
+      localValue.removeFlooring = false;
+    } else {
+      localValue.removeFlooring = true;
+    }
+  }
+);
+
+// Watchers to Handle removeCabinets Based on demoStandardLineCabinets and demoFullCustomCabinets**
+watch(
+  () => props.demoCabinets,
+  (newVal) => {
+    console.log("props.demoCabinets: ", props.demoCabinets)
+    if (newVal === 'standardLineCabinets' || newVal === 'fullCustomCabinets') {
+      if (!localValue.removeCabinets) {
+        localValue.removeCabinets = true;
+      } else {
+        localValue.removeCabinets = false;
+      }
+    }
+    if (newVal === 'noCabinets') {
+      localValue.removeCabinets = false;
+    }
+  }
+);
+
+// Watcher to reset other demo options when "No demo" is checked
+watch(
+  () => localValue.noDemo,
+  (newVal) => {
+    console.log("localValue.noDemo: ", localValue.noDemo)
+    if (newVal) {
+      console.log("newVal: ", newVal)
       localValue.removeSink = false;
       localValue.removeCountertops = false;
       localValue.removeCabinets = false;
@@ -101,7 +260,7 @@ watch(
   }
 );
 
-// Watcher to emit updates including anyDemoSelected
+// Watch for local changes to update parent
 watch(
   localValue,
   () => {
@@ -126,10 +285,6 @@ h2 {
   margin-bottom: 10px;
 }
 
-h3 {
-  margin-bottom: 15px;
-}
-
 .checkbox-group {
   display: flex;
   flex-direction: column;
@@ -143,5 +298,12 @@ h3 {
 
 .checkbox-label input {
   margin-right: 8px;
+}
+
+/* Style for disabled labels */
+.checkbox-label .disabled {
+  color: #888;
+  /* Grey out the label text when disabled */
+  cursor: not-allowed;
 }
 </style>

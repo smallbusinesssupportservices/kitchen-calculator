@@ -1,40 +1,45 @@
 <template>
-  <h1> Kitchen Calculator </h1>
-
+  <h1>Kitchen Calculator</h1>
   <div v-if="!hasServerResponded">
-
     <form @submit.prevent="handleSubmit">
       <KitchenSize v-model="formData.kitchenSize" />
-
-      <Demo v-model="formData.demo" />
-      <Backsplash v-model="formData.backsplash" />
-
-      <Plumbing v-model="formData.plumbing" />
       <Electrical v-model="formData.electrical" />
-
-      <Cabinets v-model="formData.cabinets" />
-      <Countertops v-model="formData.countertops" />
-      <NewSink v-model="formData.newSink" />
-
-      <ExhaustHoodDucting v-model="formData.exhaustHoodDucting" />
       <NewAppliances v-model="formData.newAppliances" />
+      <ExhaustHoodDucting v-model="formData.exhaustHoodDucting" />
       <Installation v-model="formData.installation" />
-
-      <Flooring v-model="formData.flooring" />
       <InteriorPainting v-model="formData.interiorPainting" />
       <FinalCleaning v-model="formData.finalCleaning" />
-      <UserForm v-model="formData.user"/>
-      <ProgressButton :progress="progress" :disabled="isDisabled" :loading="isLoading" @click="handleSubmit" />
+      <Plumbing v-model="formData.plumbing" />
+      <NewSink v-model="formData.newSink" />
+      <Countertops v-model="formData.countertops" />
+      <Cabinets v-model="formData.cabinets" />
+      <Backsplash v-model="formData.backsplash" />
+      <Flooring v-model="formData.flooring" />
+      <UserForm v-model="formData.user" />
+      <Demo 
+        v-model="formData.demo" 
+        :demoSink="formData.newSink.sinkType" 
+        :demoCountertops="formData.countertops.countertopType" 
+        :demoBacksplash="formData.backsplash.backsplash"
+        :demoCabinets="formData.cabinets.cabinetType"
+        :demoFlooring="formData.flooring.flooringType"
+      />
+      <ProgressButton 
+        :progress="progress" 
+        :disabled="isDisabled" 
+        :loading="isLoading" 
+        @click="handleSubmit" 
+      />
     </form>
   </div>
   <div v-else>
-      <ServerResponse :response="serverResponse" />
-    </div>
+    <ServerResponse :response="serverResponse" />
+  </div>
 </template>
 
 <script setup>
 import axios from 'axios';
-import { reactive, ref, computed, onMounted } from 'vue';
+import { reactive, ref, computed, onMounted, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import KitchenSize from '../components/calculatorView/KitchenSizeComponent.vue';
 import Demo from '../components/calculatorView/DemoComponent.vue';
@@ -54,19 +59,18 @@ import ServerResponse from '../components/calculatorView/ServerResponseComponent
 import ProgressButton from '../components/calculatorView/ProgressButtonComponent.vue';
 import UserForm from '../components/calculatorView/UserComponent.vue';
 
-
 // Generate or retrieve userId on component mount
 onMounted(() => {
   let storedUserId = localStorage.getItem('atlhm');
   if (!storedUserId) {
-    storedUserId = uuidv4(); // Generate a new UUID
-    localStorage.setItem('atlhm', storedUserId); // Store it in localStorage
+    storedUserId = uuidv4(); 
+    localStorage.setItem('atlhm', storedUserId); 
   }
-  formData.user.id = storedUserId; // Assign it to formData
+  formData.user = {id :storedUserId}; 
 });
 
-const hasServerResponded = ref(false); // Track if the server has responded
-const serverResponse = ref(null); // Store server response
+const hasServerResponded = ref(false);
+const serverResponse = ref(null); 
 const formData = reactive({
   kitchenSize: {},
   demo: {},
@@ -84,24 +88,23 @@ const formData = reactive({
   flooring: {},
   interiorPainting: {},
   finalCleaning: {},
-  user: { id: '' }
+  user: {}
 });
 
-
+// Configuration for excluded subfields
+const excludedSubFields = {
+  user: ['id']
+};
 
 // Define required fields for progress calculation
-
 const requiredFields = ref([
   'kitchenSize',
-  // 'island',
-  'demo',
+  // 'demo',
   'plumbing',
   'electrical',
-  // 'drywall',
   'cabinets',
   'countertops',
   'newSink',
-  // 'newFixtures',
   'exhaustHoodDucting',
   'newAppliances',
   'installation',
@@ -109,37 +112,45 @@ const requiredFields = ref([
   'flooring',
   'interiorPainting',
   'finalCleaning',
+  'user'
 ]);
 
-// Compute progress based on filled required fields
+// Compute progress based on filled required fields, excluding specified subfields
 const progress = computed(() => {
   const filled = requiredFields.value.reduce((count, field) => {
-    // Check if the field has any non-empty value
     const fieldData = formData[field];
-    if (typeof fieldData === 'object') {
-      // If fieldData is an object, check if any of its properties are filled
 
-      return Object.values(fieldData).some(value => {
+    if (typeof fieldData === 'object' && fieldData !== null) {
+      // Determine which subfields to exclude for the current field
+      const exclusions = excludedSubFields[field] || [];
+
+      // Extract values, excluding the specified subfields
+      const values = Object.entries(fieldData)
+        .filter(([key]) => !exclusions.includes(key))
+        .map(([, value]) => value);
+
+      // Check if any of the remaining subfield values are filled
+      const isFilled = values.some(value => {
         if (typeof value === 'string') {
           return value.trim() !== '';
         }
         return Boolean(value);
-      }) ? count + 1 : count;
+      });
+
+      return isFilled ? count + 1 : count;
     } else if (typeof fieldData === 'string') {
-
+      // If the field data is a string, check if it's not empty after trimming
       return fieldData.trim() !== '' ? count + 1 : count;
-
     }
 
+    // For other data types, use a boolean check
     return Boolean(fieldData) ? count + 1 : count;
-
   }, 0);
 
   return Math.round((filled / requiredFields.value.length) * 100);
-
 });
 
-const isDisabled = false; //computed(() => progress.value < 100); **001
+const isDisabled = computed(() => progress.value < 100); // **Enabled based on progress**
 const isLoading = ref(false);
 const isSubmitted = ref(false);
 
@@ -186,9 +197,10 @@ const handleSubmit = async () => {
     const response = await axios.post('http://localhost:3000/submit-form', formData);
 
     if (response.status === 200) {
+      console.log(response.data.estimate)
       serverResponse.value = response.data; // Store server response
-      serverResponse.high = response.data.estimate.highRange;
-      serverResponse.low = response.data.estimate.lowRange
+      serverResponse.value.high = response.data.estimate.highRange;
+      serverResponse.value.low = response.data.estimate.lowRange
       hasServerResponded.value = true; // Switch content when server responds 
     }
   } catch (error) {
@@ -198,6 +210,7 @@ const handleSubmit = async () => {
     isLoading.value = false;
   }
 };
+
 </script>
 
 <style>
