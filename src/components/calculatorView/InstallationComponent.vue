@@ -11,7 +11,7 @@
       </label>
       <label class="checkbox-label" >
         <input type="checkbox" v-model="localValue.installVentHood" :disabled="localValue.noInstallation"/>
-        Vent Hood
+        Exhaust Hood
       </label>
       <label class="checkbox-label" >
         <input type="checkbox" v-model="localValue.installWallOven" :disabled="localValue.noInstallation"/>

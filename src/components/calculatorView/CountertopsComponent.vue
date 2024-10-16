@@ -1,6 +1,3 @@
-<!--
-  if no cabinets would there be waterfall
--->
 
 <template>
   <div class="countertops">

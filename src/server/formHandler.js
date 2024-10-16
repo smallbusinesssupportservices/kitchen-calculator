@@ -554,7 +554,13 @@ export const processFormData = (req, res) => {
                 const item = {};
                 console.log(">>> categoryItem :", categoryItem)
                 const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}`: categoryItem);
-                const itemsNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) ? cat : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}` : categoryItem);
+                const itemsNeddle = (
+                    (categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) 
+                    ? cat 
+                    : (categoryItem == 'cabinetType') 
+                        ? `${formData[cat][categoryItem]}` 
+                        : categoryItem);
+
                 console.log("dbNeddle: ",dbNeddle)
                 if (formCategory[categoryItem] && dbItems[dbNeddle]) {  // Ensure the categoryItem is selected and exists in dbItems
 
