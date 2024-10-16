@@ -6,6 +6,7 @@
       <div class="contact-info">
         <label for="name">Name:</label>
         <input
+        required
           v-model="localValue.name"
           type="text"
           id="name"
@@ -14,6 +15,7 @@
   
         <label for="phone">Phone:</label>
         <input
+        required
           v-model="localValue.phone"
           type="text"
           id="phone"
@@ -22,6 +24,7 @@
   
         <label for="email">Email:</label>
         <input
+        required
           v-model="localValue.email"
           type="email"
           id="email"

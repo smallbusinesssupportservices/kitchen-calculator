@@ -1,13 +1,13 @@
 <script setup>
-    // import CalculatorSettings from '../components/adminView/CalculatorSettings.vue';
-    // import CategorySettings from '../components/adminView/CategorySettings.vue';
-    // import Items from '../components/adminView/Items.vue';
+    import CalculatorSettings from '../components/adminView/CalculatorSettings.vue';
+    import CategorySettings from '../components/adminView/CategorySettings.vue';
+    import Items from '../components/adminView/Items.vue';
 
 </script>
 
 <template>
     <h1> Admin view</h1>
-    <!-- <div class="admin-container" >
+    <div class="admin-container" >
         
         <div>
             <CalculatorSettings />
@@ -19,7 +19,7 @@
             <Items />
         </div>
 
-    </div> -->
+    </div>
 </template>
 
 <style>

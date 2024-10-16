@@ -25,7 +25,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
-  cleaningOption: props.modelValue?.cleaningOption || 'none', // Can be 'none' or 'kitchen'
+  cleaningOption: props.modelValue?.cleaningOption || '', 
 });
 
 watch(
