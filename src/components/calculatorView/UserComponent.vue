@@ -86,8 +86,8 @@
   
   <style scoped>
   .user-form {
-    grid-column: 1 / 1;
-    grid-row: 3 / 3;
+    grid-column: 6 / 6;
+    grid-row: 2 / 2;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;

@@ -7,7 +7,7 @@
     </label>
     <label class="checkbox-label" >
       <input type="radio" value="Standard" v-model="localValue.sinkType" @change="onSinkChange"/>
-      Standard Sink - choice of single basin, 50/50, or 60/40
+      Standard Sink
     </label>
     <label class="checkbox-label" >
       <input type="radio" value="Workstation" v-model="localValue.sinkType" @change="onSinkChange"/>

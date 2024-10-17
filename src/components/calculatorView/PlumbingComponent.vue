@@ -35,7 +35,7 @@ const localValue = reactive({
 });
 
 const plumbingOptions = [
-  { name: 'moveSink', label: 'Move kitchen sink/faucet' },
+  { name: 'moveSink', label: 'Move sink/faucet' },
   { name: 'moveFridgeWater', label: 'Move fridge water' },
   { name: 'installPotFiller', label: 'Install new pot filler' },
   { name: 'installFaucet', label: 'Install faucet' },

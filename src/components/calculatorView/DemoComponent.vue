@@ -226,7 +226,7 @@ watch(
 
 <style scoped>
 .demo {
-  grid-column: 7 / 7;
+  grid-column: 5 / 5;
   grid-row: 2 / 2;
   border: 1px solid #ccc;
   padding: 20px;

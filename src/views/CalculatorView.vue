@@ -5,8 +5,8 @@
       <KitchenSize v-model="formData.kitchenSize" />
       <Electrical v-model="formData.electrical" />
       <NewAppliances v-model="formData.newAppliances" />
-      <ExhaustHoodDucting v-model="formData.exhaustHoodDucting" />
-      <Installation v-model="formData.installation" />
+      <!-- <ExhaustHoodDucting v-model="formData.exhaustHoodDucting" /> -->
+      <!-- <Installation v-model="formData.installation" /> -->
       <InteriorPainting v-model="formData.interiorPainting" />
       <FinalCleaning v-model="formData.finalCleaning" />
       <Plumbing v-model="formData.plumbing" />
