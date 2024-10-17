@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div>
+  <div class="calculator-app">
     <nav class="horizontal-nav">
       <div><router-link to="/">Calculator</router-link></div>
       <div><router-link to="/admin">Admin</router-link></div>
@@ -22,13 +22,13 @@
   gap: 20px; /* Add space between the links */
 }
 
+.calculator-app {
+  width: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 20px;
-}
-
-form {
-  width: 97%;
 }
 
 .button-container {

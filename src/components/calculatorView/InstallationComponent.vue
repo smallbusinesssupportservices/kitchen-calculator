@@ -73,7 +73,7 @@
     padding: 20px;
     border-radius: 8px;
     background-color: #fff;
-    width: 200px;
+    
   }
 
 

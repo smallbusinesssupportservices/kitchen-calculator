@@ -5,8 +5,6 @@
       <KitchenSize v-model="formData.kitchenSize" />
       <Electrical v-model="formData.electrical" />
       <NewAppliances v-model="formData.newAppliances" />
-      <!-- <ExhaustHoodDucting v-model="formData.exhaustHoodDucting" /> -->
-      <!-- <Installation v-model="formData.installation" /> -->
       <InteriorPainting v-model="formData.interiorPainting" />
       <FinalCleaning v-model="formData.finalCleaning" />
       <Plumbing v-model="formData.plumbing" />
@@ -16,20 +14,10 @@
       <Backsplash v-model="formData.backsplash" />
       <Flooring v-model="formData.flooring" />
       <UserForm v-model="formData.user" />
-      <Demo 
-        v-model="formData.demo" 
-        :demoSink="formData.newSink.sinkType" 
-        :demoCountertops="formData.countertops.countertopType" 
-        :demoBacksplash="formData.backsplash.backsplash"
-        :demoCabinets="formData.cabinets.cabinetType"
-        :demoFlooring="formData.flooring.flooringType"
-      />
-      <ProgressButton 
-        :progress="progress" 
-        :disabled="isDisabled" 
-        :loading="isLoading" 
-        @click="handleSubmit" 
-      />
+      <Demo v-model="formData.demo" :demoSink="formData.newSink.sinkType"
+        :demoCountertops="formData.countertops.countertopType" :demoBacksplash="formData.backsplash.backsplash"
+        :demoCabinets="formData.cabinets.cabinetType" :demoFlooring="formData.flooring.flooringType" />
+      <ProgressButton :progress="progress" :disabled="isDisabled" :loading="isLoading" @click="handleSubmit" />
     </form>
   </div>
   <div v-else>
@@ -63,14 +51,14 @@ import UserForm from '../components/calculatorView/UserComponent.vue';
 onMounted(() => {
   let storedUserId = localStorage.getItem('atlhm');
   if (!storedUserId) {
-    storedUserId = uuidv4(); 
-    localStorage.setItem('atlhm', storedUserId); 
+    storedUserId = uuidv4();
+    localStorage.setItem('atlhm', storedUserId);
   }
-  formData.user = {id :storedUserId}; 
+  formData.user = { id: storedUserId };
 });
 
 const hasServerResponded = ref(false);
-const serverResponse = ref(null); 
+const serverResponse = ref(null);
 const formData = reactive({
   kitchenSize: {},
   demo: {},
@@ -220,12 +208,13 @@ body {
 }
 
 form {
-  display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: auto; 
-    gap: 1px;
-    padding: 1px;
+  /*display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+  gap: 1px;
+  padding: 1px;*/
   width: 100%;
+  
 }
 
 .button-container {

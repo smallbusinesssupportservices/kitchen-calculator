@@ -30,6 +30,36 @@
           id="email"
           placeholder="Email"
         />
+        <label for="address">Address:</label>
+        <input
+          v-model="localValue.address"
+          type="text"
+          id="address"
+          placeholder="Street Address"
+        />
+  
+        <label for="city">City:</label>
+        <input
+          v-model="localValue.city"
+          type="text"
+          id="city"
+          placeholder="City"
+        />
+        <label for="state">State:</label>
+        <input
+          v-model="localValue.state"
+          type="text"
+          id="state"
+          placeholder="State"
+        />
+  
+        <label for="zip">Zip Code:</label>
+        <input
+          v-model="localValue.zip"
+          type="text"
+          id="zip"
+          placeholder="Zip Code"
+        />
       </div>
     </div>
   </template>
@@ -92,7 +122,6 @@
     padding: 20px;
     border-radius: 8px;
     background-color: #fff;
-    width: 200px;
   }
   
   .contact-info {

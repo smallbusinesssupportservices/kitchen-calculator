@@ -1,5 +1,4 @@
 <template>
-  <div class="combined">
     <!-- Electrical Section -->
     <div class="electric">
       <h2>Electrical</h2>
@@ -47,7 +46,6 @@
         </label>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -139,10 +137,6 @@ watch(
 </script>
 
 <style scoped>
-.combined {
-  display: flex;
-  gap: 20px;
-}
 
 .electric {
   grid-column: 6 / 6;
@@ -151,8 +145,7 @@ watch(
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
-  width: 200px;
-  /* Increased width for better spacing */
+
 }
 
 .checkbox-group {
@@ -181,23 +174,16 @@ watch(
   /* Indicates disabled state visually */
 }
 
-/* Error Message Styling */
 .error-message {
   color: red;
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Responsive Design */
 @media (max-width: 700px) {
   .combined {
     flex-direction: column;
     align-items: center;
-  }
-
-  .electric {
-    width: 90%;
-    /* Adjust width for smaller screens */
   }
 }
 </style>
