@@ -19,28 +19,19 @@
       <strong>This kitchen renovation cost calculator provided by 7 Day Kitchen is intended to give a general estimate based on the information you provide. The actual cost of your renovation will vary depending on factors such as the complexity of the renovation, the ease of access to any plumbing and electrical systems being relocated, the specific kitchen layout, materials and accessories chosen, and any unique aspects of your kitchen. While we strive for accuracy, please note that this tool is for informational purposes only and does not constitute a final quote or guarantee. For a more precise estimate, we recommend scheduling a consultation with our team to assess your kitchen's unique requirements and preferences.</strong>
     </p>
 
-
+    <br>
     <div class="call-to-action"> 
-      
+      <button @click="scheduleAppointment" class="cta-button schedule">
+        Schedule an Appointment
+      </button>
+      <button @click="handleUnexpected" class="cta-button unexpected">
+        Not What I Was Expecting
+      </button>
     </div>
-
-    <p>
-      <strong>we will not call unless you ask for a consultation.</strong>
-      <strong> </strong>
-    </p>
   </div>
 </template>
 
 <script setup>
-//amout animation rolling over.
-//placeholder 
-// schedule a free consultation
-// - google calendar appoinpment 
-// - 
-// compare 
-// hybrid 
-// calculation for name, email
-//
 import { ref } from 'vue';
 
 // Define the props that this component will accept
@@ -51,13 +42,6 @@ const props = defineProps({
   }
 });
 
-// State to store user-provided contact info
-const contactName = ref('');
-const contactPhone = ref('');
-const contactEmail = ref('');
-const projectName = ref('');
-const communicationConsent = ref(true); // Checkbox checked by default
-
 // Helper function to format currency
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-US', {
@@ -66,25 +50,7 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-// Method to handle contact info submission
-const submitContactInfo = () => {
-  if (!contactName.value || !contactPhone.value || !contactEmail.value || !projectName.value) {
-    alert('Please fill out all contact fields before submitting.');
-    return;
-  }
 
-  if (!communicationConsent.value) {
-    alert('You must agree to receive communications via SMS and email.');
-    return;
-  }
-
-  // You can send this contact info to the server or process it further here
-  alert(`Thank you for providing your contact information:\n
-      Name: ${contactName.value}\n
-      Phone: ${contactPhone.value}\n
-      Email: ${contactEmail.value}\n
-      Project Name: ${projectName.value}`);
-};
 </script>
 
 <style scoped>
