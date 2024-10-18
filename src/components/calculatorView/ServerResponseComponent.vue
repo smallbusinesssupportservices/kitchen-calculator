@@ -1,50 +1,29 @@
 <template>
   <div>
-    <h3>Your Project Estimate</h3>
+    <h3>Your Project Estimate {{ formatCurrency(response.estimate.lowRange) }} - {{
+      formatCurrency(response.estimate.highRange) }}</h3>
 
     <!-- Display the range of the estimate -->
 
-    <p>Estimated Range: {{ formatCurrency(response.estimate.lowRange) }} - {{
-      formatCurrency(response.estimate.highRange) }}</p>
+    <!-- <p>Estimated Range: {{ formatCurrency(response.estimate.lowRange) }} - {{
+      formatCurrency(response.estimate.highRange) }}</p> -->
 
     <!-- Display dynamic message about range changes -->
-    <p class="range-change-info">
+    <!-- <p class="range-change-info">
       The range shown may change based on certain selections, such as custom cabinet designs, countertop materials, or
       additional features like pot fillers and under-cabinet lighting.
-    </p>
-
-    <!-- Contact Info Fields -->
-    <div class="contact-info">
-      <label for="name">Contact Name:</label>
-      <input v-model="contactName" type="text" id="name" placeholder="Enter your name" />
-
-      <label for="phone">Phone Number:</label>
-      <input v-model="contactPhone" type="text" id="phone" placeholder="Enter your phone number" />
-
-      <label for="email">Email Address:</label>
-      <input v-model="contactEmail" type="email" id="email" placeholder="Enter your email" />
-
-      <label for="projectName">Project Name:</label>
-      <input v-model="projectName" type="text" id="projectName" placeholder="Enter the project name" />
-
-      <!-- Disclosure and Checkbox -->
-      <div class="disclosure">
-        <input v-model="communicationConsent" type="checkbox" id="consent" checked />
-        <label for="consent">
-          I understand that by providing my contact information, I may receive communications via SMS and email through
-          web applications.
-        </label>
-      </div>
-
-      <button @click="submitContactInfo">Submit</button>
-    </div>
+    </p> -->
 
     <!-- Disclaimer section -->
     <p>
-      <strong>Please note that this estimate represents the initial planning steps for your kitchen remodel. Some tasks
-        still require a human touch, such as taking final measurements and conducting a preliminary jobsite
-        inspection.</strong>
+      <strong>This kitchen renovation cost calculator provided by 7 Day Kitchen is intended to give a general estimate based on the information you provide. The actual cost of your renovation will vary depending on factors such as the complexity of the renovation, the ease of access to any plumbing and electrical systems being relocated, the specific kitchen layout, materials and accessories chosen, and any unique aspects of your kitchen. While we strive for accuracy, please note that this tool is for informational purposes only and does not constitute a final quote or guarantee. For a more precise estimate, we recommend scheduling a consultation with our team to assess your kitchen's unique requirements and preferences.</strong>
     </p>
+
+
+    <div class="call-to-action"> 
+      
+    </div>
+
     <p>
       <strong>we will not call unless you ask for a consultation.</strong>
       <strong> </strong>
