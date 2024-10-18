@@ -1,7 +1,8 @@
 <template>
   <div class="new-appliance">
-    <h2>New Appliances</h2>
-    
+    <h2>Appliances</h2>
+    <h4>Select your current appliances and any new ones.</h4>
+    <p>This calculator assumes we will install the appliances as part of the renovation project, unless you opt to install them yourself.</p>
     <!-- Loop through appliances -->
     <div v-for="appliance in appliances" :key="appliance.name" class="appliance-item">
       
@@ -11,15 +12,35 @@
           <input 
             type="checkbox" 
             v-model="localValue[appliance.name]"
-            :disabled="localValue.noAppliances && appliance.name != 'noAppliances'" 
+            :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' " 
           />
           {{ appliance.label }}
         </label>
+
+        <!-- Added Keep and New checkboxes -->
+        <div class="keep-new-options" v-if="localValue[appliance.name] && appliance.name !== 'installationOptout'">
+          <label>
+            <input 
+              type="checkbox" 
+              v-model="localValue[`${appliance.name}_keep`]"
+              :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_new`]"
+            />
+            Keep
+          </label>
+          <label>
+            <input 
+              type="checkbox" 
+              v-model="localValue[`${appliance.name}_new`]"
+              :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_keep`]"
+            />
+            New
+          </label>
+        </div>
       </template>
       
       <!-- Render sub-section after Exhaust Hood -->
       <template v-else>
-        <div class="sub-section" v-if="localValue.newRangeHood">
+        <div class="sub-section" v-if="localValue.newRangeHood_new">
           <label class="checkbox-label">
             <input 
               type="checkbox" 
@@ -38,7 +59,7 @@
           </label>
         </div>
       </template>
-      
+
     </div>
 
     <!-- Installation Opt Out Modal -->
@@ -47,15 +68,25 @@
         <span class="close" @click="showOptOutModal = false">&times;</span>
         <p>
           Installation opt out means you the client are responsible for the installation of the
-          appliances, excluding the Exhaust Hood and Wall Oven.
+          appliances, new or original, excluding the Exhaust Hood and Wall Oven.
         </p>
       </div>
+    </div>
+  </div>
+
+  <!-- New appliance Opt Out Modal -->
+  <div v-if="showNewApplianceModal" class="modal">
+    <div class="modal-content">
+      <span class="close" @click="showNewApplianceModal = false">&times;</span>
+      <p>
+        You have chosen to keep There will be a reinstall 
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, watch, ref } from 'vue'; // Added 'ref'
+import { reactive, watch, ref } from 'vue';
 
 const props = defineProps({
   modelValue: Object,
@@ -66,19 +97,22 @@ const emit = defineEmits(['update:modelValue']);
 const appliances = [
   { name: 'newRange', label: 'Range' },
   { name: 'newCooktop', label: 'Cooktop' },
-  { name: 'newWallOven', label: 'Wall Oven*' },
   { name: 'newMicrowave', label: 'Built-in Microwave' },
   { name: 'newFridge', label: 'Fridge' },
   { name: 'newDishwasher', label: 'Dishwasher' },
-  { name: 'newRangeHood', label: 'Exhaust Hood*' },
+  { name: 'newWallOven', label: 'Wall Oven' },
+  { name: 'newRangeHood', label: 'Exhaust Hood' },
   { name: 'subSection', label: null },
   { name: 'installationOptout', label: 'Installation opt out' },
-  { name: 'noAppliances', label: 'No appliances' },
+  // { name: 'noAppliances', label: 'Keep my appliances' },
+  
 ];
 
 const localValue = reactive(
   appliances.reduce((acc, curr) => {
     acc[curr.name] = props.modelValue?.[curr.name] || false;
+    acc[`${curr.name}_keep`] = props.modelValue?.[`${curr.name}_keep`] || false;
+    acc[`${curr.name}_new`] = props.modelValue?.[`${curr.name}_new`] || false;
     return acc;
   }, {
     installAppliances: props.modelValue?.installAppliances || false,
@@ -87,16 +121,20 @@ const localValue = reactive(
     installationOptout: props.modelValue?.installationOptout || false,
     runExhaustDucting: props.modelValue?.runExhaustDucting || false,
     runDuctingThroughBrick: props.modelValue?.runDuctingThroughBrick || false,
+    noAppliances: props.modelValue?.noAppliances || false,
   })
-
-
-
 );
+
+// // Computed property to determine noAppliances
+// const noAppliances = computed(() => {
+//   return appliances.every(appliance => !localValue[`${appliance.name}_new`]);
+// });
 
 // Control Modal Visibility
 const showOptOutModal = ref(false);
+const showNewApplianceModal = ref(false);
 
-// Watcher for 'installationOptout' Checkbox**
+// Watcher for 'installationOptout
 watch(
   () => localValue.installationOptout,
   (newVal) => {
@@ -109,7 +147,7 @@ watch(
   }
 );
 
-// Watcher for 'newWallOven' Checkbox**
+// Watcher for 'installWallOven' 
 watch(
   () => localValue.newWallOven,
   (newVal) => {
@@ -117,11 +155,10 @@ watch(
   }
 );
 
-// Watcher for 'newRangeHood' Checkbox**
+// Watcher for 'installVentHood' 
 watch(
   () => localValue.newRangeHood,
   (newVal) => {
-    console.log("newRangeHood: ", localValue.newRangeHood)
     localValue.installVentHood = newVal;
   }
 );
@@ -130,7 +167,6 @@ watch(
 watch(
   () => [localValue.newRange, localValue.newDishwasher, localValue.newFridge, localValue.newMicrowave, localValue.newCooktop],
   ([newRangeVal, newDishwasherVal, newFridgeVal, newMicrowaveVal, newCooktopVal]) => {
-    console.log("installAppliances")
     if (newRangeVal || newDishwasherVal || newFridgeVal || newMicrowaveVal || newCooktopVal) {
       localValue.installAppliances = true;
     } else {
@@ -139,14 +175,34 @@ watch(
   }
 );
 
+// Watcher to Reset "Keep" and "New" when appliance checkbox is unchecked
+appliances.forEach(appliance => {
+  watch(
+    () => localValue[appliance.name],
+    (newVal) => {
+      if (!newVal) {
+        localValue[`${appliance.name}_keep`] = false;
+        localValue[`${appliance.name}_new`] = false;
+        if (appliance.name === "newRangeHood"){
+          localValue.runExhaustDucting = false;
+          localValue.runDuctingThroughBrick = false;
+        }
+      }
+    }
+  );
+});
+
 // Watcher to Reset Other Appliances When "No appliances" is Checked
 watch(
   () => localValue.noAppliances,
   (newVal) => {
     if (newVal) {
+      showNewApplianceModal.value = true;
       appliances.forEach((appliance) => {
         if (appliance.name !== 'noAppliances') {
           localValue[appliance.name] = false;
+          localValue[`${appliance.name}_keep`] = false;
+          localValue[`${appliance.name}_new`] = false;
         }
       });
       // Optionally, reset installation responsibilities when no appliances are selected
@@ -174,10 +230,17 @@ watch(
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
-  
 }
 
-/* **Added: Modal Styles** */
+.keep-new-options {
+  display: flex;
+  justify-content: space-between;
+  width: 200px; /* Adjust based on the layout */
+  margin-left: 20px; /* Align with the main checkbox */
+  margin-bottom: 10px;
+}
+
+/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -211,6 +274,4 @@ watch(
 .sub-section {
   margin-left: 20px;
 }
-
-
 </style>
