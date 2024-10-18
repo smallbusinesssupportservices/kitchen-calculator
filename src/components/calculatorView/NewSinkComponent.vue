@@ -35,18 +35,16 @@ const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
   sinkType: props.modelValue?.sinkType || '',
-  dumpster: props.modelValue.dumpster || false
 });
 
 watch(
   () => props.modelValue,
   (newVal) => {
-    // localValue.sinkType = newVal?.sinkType || '';
     Object.assign(localValue, newVal);
-    localValue.dumpster = true;
   },
   { immediate: true }
 );
+
 
 watch(
     localValue,

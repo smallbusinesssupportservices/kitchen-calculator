@@ -56,7 +56,6 @@ const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
   cabinetType: props.modelValue.cabinetType || '',
-  dumpster: props.modelValue.dumpster || false
 });
 
 // Computed property to determine if sub-options should be disabled
@@ -78,10 +77,11 @@ watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
-    localValue.dumpster = true;
+
   },
   { deep: true, immediate: true }
 );
+
 
  // Watcher to reset other countertops options when "No countertops" is checked
  watch(

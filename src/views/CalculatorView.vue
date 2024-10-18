@@ -107,20 +107,20 @@ const excludedSubFields = {
 // Define required fields for progress calculation
 const requiredFields = ref([
   'kitchenSize',
-  // 'demo',
-  'plumbing',
-  'electrical',
-  'cabinets',
-  'countertops',
-  'newSink',
   // 'exhaustHoodDucting',
+  'electrical',
   'newAppliances',
   // 'installation',
-  'backsplash',
-  'flooring',
   'interiorPainting',
   'finalCleaning',
-  'user'
+  'plumbing',
+  'newSink',
+  'countertops',
+  'cabinets',
+  'backsplash',
+  'flooring',
+  'user',
+  // 'demo',
 ]);
 
 // Compute progress based on filled required fields, excluding specified subfields

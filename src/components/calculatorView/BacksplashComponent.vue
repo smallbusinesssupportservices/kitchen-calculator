@@ -5,7 +5,7 @@
       <input
         type="radio"
         id="noBacksplash"
-        :value="false"
+        value="noBacksplash"
         v-model="localValue.backsplash"
       />
       No backsplash
@@ -14,7 +14,7 @@
       <input
         type="radio"
         id="backsplash"
-        :value="true"
+        value="backsplash"
         v-model="localValue.backsplash"
       />
       Backsplash
@@ -25,6 +25,7 @@
 
 <script setup>
 import { reactive, watch, computed } from 'vue';
+import { babelParse } from 'vue/compiler-sfc';
 
 // Define props
 const props = defineProps({
@@ -46,10 +47,10 @@ watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
-    localValue.dumpster = true;
   },
   { deep: true, immediate: true }
 );
+
 
 watch(
   localValue,

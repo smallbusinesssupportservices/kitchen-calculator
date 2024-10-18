@@ -514,6 +514,12 @@ export const processFormData = (req, res) => {
 
     let formData = req?.body;
     console.log(formData)
+
+    const isSelected = (item) => {
+        if (item === false) return item
+        if(['noCabinets','noCountertop','noBacksplash'].includes(item)) return false
+        if( item === 'false' || item === 'none' || item === 0) return false
+    }
     // Function to calculate total cost
     const calculateTotalCost = (dbItems, formData) => {
 
@@ -552,7 +558,6 @@ export const processFormData = (req, res) => {
 
             for (let categoryItem in formCategory) {
                 const item = {};
-                console.log(">>> categoryItem :", categoryItem)
                 const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}`: categoryItem);
                 const itemsNeddle = (
                     (categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) 
@@ -560,9 +565,9 @@ export const processFormData = (req, res) => {
                     : (categoryItem == 'cabinetType') 
                         ? `${formData[cat][categoryItem]}` 
                         : categoryItem);
+                console.log(">>> ", categoryItem, " ", formCategory[categoryItem])
 
-                console.log("dbNeddle: ",dbNeddle)
-                if (formCategory[categoryItem] && dbItems[dbNeddle]) {  // Ensure the categoryItem is selected and exists in dbItems
+                if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {  // Ensure the categoryItem is selected and exists in dbItems
 
                     const dbItem = dbItems[dbNeddle];
                     const markup = dbItem?.markup ?? 1;
@@ -591,9 +596,9 @@ export const processFormData = (req, res) => {
 
                     } else if (['countertops:Granite', 'countertops:Quartz', 'countertops:Solid-Surface', 'countertops:Butcher Block'].includes(dbNeddle)) {
                         const a = 1; //=IF(A42,((B$3+C$3)*1.6-9-3-4)+(IF(A$6,B$6*C$6,0)),0)*2.5
-                        console.log("dbNeddle: ",dbNeddle)
+
                         calculatedUnits = ((((kitchenLength + kitchenWidth) * 1.6 - 9 - 3 - 4) + (hasIsland ? islandLength * islandWidth : 0)) * 2.5);
-                        console.log("calculatedUnits: ", calculatedUnits)
+
                     } else if (dbNeddle == 'waterfallEdges') {
 
                         calculatedUnits = formCategory[categoryItem]
@@ -683,7 +688,6 @@ export const processFormData = (req, res) => {
                         subtotal = (!sqftPrice ? unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : (unitPrice + allowance) * kitchenArea * a)
                     } else {
                         const a = 1 // if(D11="",G11*A11*(if(C11="",1,C11)),G11*D$3*A11)
-                        console.log(">>>>dbNeddle: ", dbNeddle, "\nsqftPrice: ",sqftPrice, "\nunitPrice: ", unitPrice, "\ncalculatedUnits: ", calculatedUnits, "\nkitchenArea: ", kitchenArea)
                         subtotal = (!sqftPrice ? unitPrice * a * calculatedUnits : unitPrice * kitchenArea * a)
                     }
 

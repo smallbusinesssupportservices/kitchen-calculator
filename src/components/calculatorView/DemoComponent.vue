@@ -41,8 +41,8 @@ const props = defineProps({
     default: 'noCountertop'
   },
   demoBacksplash: {
-    type: Boolean,
-    default: false
+    type: String,
+    default: ''
   },
   demoCabinets: {
     type: String,
@@ -87,7 +87,7 @@ const isOptionDisabled = (option) => {
   const disableConditions = {
     removeSink: props.demoSink && props.demoSink !== 'false',
     removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
-    removeBacksplash: props.demoBacksplash,
+    removeBacksplash: props.demoBacksplash === 'backsplash',
     removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
     drywallRepair: localValue.lightDemo,
     removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
@@ -102,7 +102,7 @@ const shouldShowOption = (option) => {
   const showConditions = {
     removeSink: props.demoSink && props.demoSink !== 'false',
     removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
-    removeBacksplash: props.demoBacksplash,
+    removeBacksplash: props.demoBacksplash === 'backsplash',
     removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
     drywallRepair: localValue.lightDemo,
     removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
@@ -142,7 +142,7 @@ watch(
   () => props.demoBacksplash,
   (newVal) => {
     if (newVal) {
-      console.log("props.demoBacksplash: ", props.demoBacksplash)
+
       if (!localValue.removeBacksplash) {
         localValue.removeBacksplash = true;
       }
@@ -157,7 +157,7 @@ watch(
   () => props.demoCountertops,
   (newVal) => {
     if (newVal) {
-      console.log("props.demoCountertops: ", props.demoCountertops)
+
       if (!localValue.removeCountertops) {
         localValue.removeCountertops = true;
       }
@@ -174,14 +174,11 @@ watch(
 watch(
   () => props.demoSink,
   (newVal) => {
-    console.log("newVal: ", newVal)
-    console.log("BEFORE: localValue.removeSink: ", localValue.removeSink)
     if (newVal !== 'false') {
       localValue.removeSink = true;
     } else {
       localValue.removeSink = false;
     }
-    console.log("AFTER: localValue.removeSink: ", localValue.removeSink)
 
   }
 );
@@ -200,7 +197,6 @@ watch(
 watch(
   () => props.demoCabinets,
   (newVal) => {
-    console.log("props.demoCabinets: ", props.demoCabinets)
     if (newVal === 'standardLineCabinets' || newVal === 'fullCustomCabinets') {
       if (!localValue.removeCabinets) {
         localValue.removeCabinets = true;
