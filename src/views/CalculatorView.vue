@@ -77,11 +77,13 @@ onMounted(() => {
   };
 });
 
+
 const hasServerResponded = ref(false);
 const serverResponse = ref(null);
 const formData = reactive({
   kitchenSize: {},
   demo: {},
+  dumpster:{},
   plumbing: {},
   electrical: {},
   drywall: {},
@@ -218,6 +220,17 @@ const handleSubmit = async () => {
     isLoading.value = false;
   }
 };
+
+watch(
+  () => formData.demo,
+  (newVal) => {
+    const anySelected = Object.values(newVal).some(value => value);
+    console.log("anySelected: ", anySelected)
+    formData.dumpster = {dumpster:anySelected};
+  },
+  { deep: true } // Ensures that nested changes are detected
+);
+
 
 </script>
 

@@ -55,7 +55,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
-  cabinetType: props.modelValue.cabinetType || '',
+  cabinetType: props.modelValue.cabinetType || false,
 });
 
 // Computed property to determine if sub-options should be disabled
@@ -91,7 +91,6 @@ watch(
       // localValue.standardLineCabinets = false;
       localValue.customColorBase =false;
       localValue.customColorWall = false;
-      localValue.dumpster = false;
     }
   }
 );

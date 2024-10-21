@@ -1,6 +1,6 @@
 const categoryMinimums = {
     kitchenSize: 0,
-    demo: 500,
+    demo: (500),
     plumbing: 600,
     electrical: 1250,
     cabinets: 0,
@@ -516,10 +516,15 @@ export const processFormData = (req, res) => {
     console.log(formData)
 
     const isSelected = (item) => {
-        if (item === false) return item
-        if(['noCabinets','noCountertop','noBacksplash'].includes(item)) return false
-        if( item === 'false' || item === 'none' || item === 0) return false
+        console.log("is selected: ", item)
+        if (!item) return item
+
+        // if(['noCabinets','noCountertop','removeBacksplash'].includes(item)) return false
+        // console.log(`**** ${item} ****`)
+        // if( item === 'false' || item === 'none' || item === 0) return false
+        return true
     }
+
     // Function to calculate total cost
     const calculateTotalCost = (dbItems, formData) => {
 
@@ -565,7 +570,9 @@ export const processFormData = (req, res) => {
                     : (categoryItem == 'cabinetType') 
                         ? `${formData[cat][categoryItem]}` 
                         : categoryItem);
-                console.log(">>> ", categoryItem, " ", formCategory[categoryItem])
+
+                console.log("categoryItem ", categoryItem, " Value", formCategory[categoryItem])
+                console.log("dbNeddle: ",dbNeddle, "itemsNeddle: ", itemsNeddle)
 
                 if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {  // Ensure the categoryItem is selected and exists in dbItems
 
@@ -735,7 +742,7 @@ export const processFormData = (req, res) => {
 
     // Output estimate as a JSON response
     estimate.categories.forEach(cat => {
-        console.log(cat)
+        // console.log(cat)
     })
     // console.log(JSON.stringify(estimate, null, 2));
 
