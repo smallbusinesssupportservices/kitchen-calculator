@@ -100,6 +100,7 @@ const appliances = [
   { name: 'newMicrowave', label: 'Built-in Microwave' },
   { name: 'newFridge', label: 'Fridge' },
   { name: 'newDishwasher', label: 'Dishwasher' },
+  { name: 'newDisposal', label: 'Disposal'},
   { name: 'newWallOven', label: 'Wall Oven' },
   { name: 'newRangeHood', label: 'Exhaust Hood' },
   { name: 'subSection', label: null },

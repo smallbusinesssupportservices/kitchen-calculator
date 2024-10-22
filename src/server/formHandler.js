@@ -116,6 +116,15 @@ const dbItems = {
         unitPrice:undefined
 
     },
+    newDisposal:{
+        qboId: '',
+        calculatedUnits: undefined,
+        sqftPrice: undefined, 
+        unitCost: 220, 
+        markup: 0.00, 
+        unitPrice:undefined
+
+    },
     addGasLine: {
         qboId: '',
         calculatedUnits: undefined,

@@ -30,7 +30,7 @@ import { reactive, watch } from 'vue';
 const props = defineProps({
   modelValue: {
     type: Object,
-    default: () => ({ backsplash: false }), 
+    default: () => ({}), 
   },
 });
 
@@ -39,26 +39,18 @@ const emit = defineEmits(['update:modelValue']);
 
 // Initialize local state as a ref since it's a Boolean
 const localValue = reactive({
-  backsplash: props.modelValue.backsplash ?? false,
+  backsplash: props.modelValue.backsplash, // ?? false,
 });
 
 // Watch for external changes to modelValue and update localValue
 watch(
   () => props.modelValue,
   (newVal) => {
-    if (newVal && typeof newVal.backsplash !== 'undefined') {
+    if (newVal && 'backsplash' in newVal) {
       localValue.backsplash = newVal.backsplash;
     }
   },
   { deep: true }
-);
-
-// Watch for local changes and emit them
-watch(
-  localValue,
-  (newVal) => {
-    emit('update:modelValue', newVal);
-  }
 );
 
 

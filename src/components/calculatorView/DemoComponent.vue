@@ -223,8 +223,6 @@ watch(
 watch(
   localValue,
   () => {
-    console.log("localValue: ", localValue)
-
     emit('update:modelValue', { ...localValue });
   },
   { deep: true }
