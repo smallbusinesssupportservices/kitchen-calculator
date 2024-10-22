@@ -84,7 +84,6 @@ const localValue = reactive({
 // Function to determine if a demo option should be disabled
 const isOptionDisabled = (option) => {
   if (localValue.noDemo) return true;
-
   const disableConditions = {
     removeSink: props.demoSink && props.demoSink !== 'false',
     removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
@@ -206,16 +205,14 @@ watch(
 watch(
   () => props.demoCabinets,
   (newVal) => {
-    if (newVal === 'standardLineCabinets' || newVal === 'fullCustomCabinets') {
-      if (!localValue.removeCabinets) {
-        localValue.removeCabinets = true;
-      } else {
-        localValue.removeCabinets = false;
-      }
-    }
-    if (newVal === 'noCabinets') {
+
+    if (newVal === 'Standard Line Cabinets' || newVal === 'Full custom cabinets') {
       localValue.removeCabinets = false;
+    } else {
+      localValue.removeCabinets = true;
     }
+
+    if (newVal === 'noCabinets') localValue.removeCabinets = false;
   }
 );
 
