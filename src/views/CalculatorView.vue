@@ -59,22 +59,24 @@ onMounted(() => {
 
 // Temporarily set hasServerResponded and serverResponse for testing purposes
 onMounted(() => {
+
   let storedUserId = localStorage.getItem('atlhm');
   if (!storedUserId) {
     storedUserId = uuidv4();
     localStorage.setItem('atlhm', storedUserId);
   }
-  formData.user = { id: storedUserId };
 
+  formData.user = { id: storedUserId };
+  
   // Mock server response for testing
-  hasServerResponded.value = false;
-  serverResponse.value = {
-    estimate: {
-      highRange: 15000,
-      lowRange: 12000
-    },
-    message: "Here is the estimated cost for your kitchen renovation."
-  };
+  // hasServerResponded.value = false;
+  // serverResponse.value = {
+  //   estimate: {
+  //     highRange: 15000,
+  //     lowRange: 12000
+  //   },
+  //   message: "Here is the estimated cost for your kitchen renovation."
+  // };
 });
 
 
@@ -222,12 +224,17 @@ const handleSubmit = async () => {
   }
 };
 
+// watcher to see if any demo requires a dumpster
 watch(
   () => formData.demo,
   (newVal) => {
-    const anySelected = Object.values(newVal).some(value => value);
-    console.log("anySelected: ", anySelected)
+    if (newVal && typeof newVal === 'object') {
+      const { noDemo, ...rest } = newVal;
+      const restValues = Object.values(rest);
+      const anySelected = restValues.some(value => value);
+      console.log("anySelected (excluding 'noDemo'): ", anySelected);
     formData.dumpster = {dumpster:anySelected};
+    }
   },
   { deep: true } // Ensures that nested changes are detected
 );
