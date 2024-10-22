@@ -129,7 +129,6 @@ const requiredFields = ref([
 const progress = computed(() => {
   const filled = requiredFields.value.reduce((count, field) => {
     const fieldData = formData[field];
-
     if (typeof fieldData === 'object' && fieldData !== null) {
       // Determine which subfields to exclude for the current field
       const exclusions = excludedSubFields[field] || [];
@@ -143,6 +142,8 @@ const progress = computed(() => {
       const isFilled = values.some(value => {
         if (typeof value === 'string') {
           return value.trim() !== '';
+        } else if (typeof value === 'boolean') {
+          return true; // Consider boolean fields as filled regardless of true/false
         }
         return Boolean(value);
       });
