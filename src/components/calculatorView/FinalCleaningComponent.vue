@@ -2,11 +2,11 @@
   <div class="cleaning">
     <h2>Final Cleaning</h2>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.cleaningOption" value="none" />
+      <input type="radio" v-model="localValue.cleanKitchen" :value="false" />
       No cleaning
     </label>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.cleaningOption" value="kitchen" />
+      <input type="radio" v-model="localValue.cleanKitchen" :value="true" />
       Clean the kitchen
     </label>
   </div>
@@ -25,7 +25,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
-  cleaningOption: props.modelValue?.cleaningOption || '', 
+  cleanKitchen: props.modelValue?.cleanKitchen || '', 
 });
 
 watch(
