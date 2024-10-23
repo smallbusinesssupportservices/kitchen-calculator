@@ -16,7 +16,7 @@ const routes = [
     component: Admin
   },
   {
-    path: '/cal',
+    path: '/make-appointment',
     name: 'Calendar',
     component: Calendar
   },

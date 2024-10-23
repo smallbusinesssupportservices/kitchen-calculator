@@ -69,14 +69,14 @@ onMounted(() => {
   formData.user = { id: storedUserId };
 
   // Mock server response for testing
-  // hasServerResponded.value = false;
-  // serverResponse.value = {
-  //   estimate: {
-  //     highRange: 15000,
-  //     lowRange: 12000
-  //   },
-  //   message: "Here is the estimated cost for your kitchen renovation."
-  // };
+  hasServerResponded.value = true;
+  serverResponse.value = {
+    estimate: {
+      highRange: 15000,
+      lowRange: 12000
+    },
+    message: "Here is the estimated cost for your kitchen renovation."
+  };
 });
 
 

@@ -1,22 +1,15 @@
 <template>
   <div>
-    <h3>Your Project Estimate {{ formatCurrency(response.estimate.lowRange) }} - {{
-      formatCurrency(response.estimate.highRange) }}</h3>
-
-    <!-- Display the range of the estimate -->
-
-    <!-- <p>Estimated Range: {{ formatCurrency(response.estimate.lowRange) }} - {{
-      formatCurrency(response.estimate.highRange) }}</p> -->
-
-    <!-- Display dynamic message about range changes -->
-    <!-- <p class="range-change-info">
-      The range shown may change based on certain selections, such as custom cabinet designs, countertop materials, or
-      additional features like pot fillers and under-cabinet lighting.
-    </p> -->
+    <h3>
+      Your Project Estimate {{ formatCurrency(response.estimate.lowRange) }} - {{
+        formatCurrency(response.estimate.highRange) }}
+    </h3>
 
     <!-- Disclaimer section -->
     <p>
-      <strong>This kitchen renovation cost calculator provided by 7 Day Kitchen is intended to give a general estimate based on the information you provide. The actual cost of your renovation will vary depending on factors such as the complexity of the renovation, the ease of access to any plumbing and electrical systems being relocated, the specific kitchen layout, materials and accessories chosen, and any unique aspects of your kitchen. While we strive for accuracy, please note that this tool is for informational purposes only and does not constitute a final quote or guarantee. For a more precise estimate, we recommend scheduling a consultation with our team to assess your kitchen's unique requirements and preferences.</strong>
+      <strong>
+        This kitchen renovation cost calculator provided by 7 Day Kitchen is intended to give a general estimate based on the information you provide. The actual cost of your renovation will vary depending on factors such as the complexity of the renovation, the ease of access to any plumbing and electrical systems being relocated, the specific kitchen layout, materials and accessories chosen, and any unique aspects of your kitchen. While we strive for accuracy, please note that this tool is for informational purposes only and does not constitute a final quote or guarantee. For a more precise estimate, we recommend scheduling a consultation with our team to assess your kitchen's unique requirements and preferences.
+      </strong>
     </p>
 
     <br>
@@ -33,6 +26,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router'; // Import useRouter from vue-router
 
 // Define the props that this component will accept
 const props = defineProps({
@@ -42,6 +36,9 @@ const props = defineProps({
   }
 });
 
+// Initialize the router
+const router = useRouter();
+
 // Helper function to format currency
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-US', {
@@ -50,7 +47,17 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
+// Define the scheduleAppointment method
+const scheduleAppointment = () => {
+  router.push('/make-appointment'); // Navigate to the make-appointment route
+};
 
+// (Optional) Define the handleUnexpected method
+const handleUnexpected = () => {
+  // Implement your logic here
+  // For example, navigate to a feedback form or display a message
+  alert('We\'re sorry to hear that. Please contact us for assistance.');
+};
 </script>
 
 <style scoped>
@@ -104,9 +111,15 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-right: 10px; /* Added spacing between buttons */
 }
 
 button:hover {
   background-color: #0056b3;
+}
+
+.call-to-action {
+  display: flex;
+  gap: 10px; /* Add space between buttons */
 }
 </style>

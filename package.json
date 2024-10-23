@@ -17,6 +17,7 @@
     "node-quickbooks": "^2.0.45",
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.7",
+    "pdf-lib": "^1.17.1",
     "simple-oauth2": "^5.1.0",
     "uuid": "^10.0.0",
     "vue": "^3.5.10",
