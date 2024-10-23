@@ -116,7 +116,7 @@ const dbItems = {
         unitPrice:undefined
 
     },
-    newDisposal:{
+    newDisposal_new:{
         qboId: '',
         calculatedUnits: undefined,
         sqftPrice: undefined, 
@@ -344,7 +344,7 @@ const dbItems = {
         markup: 0.65,
         unitPrice: undefined
     },
-    newRange: {
+    newRange_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 1000, 
@@ -352,7 +352,7 @@ const dbItems = {
         unitPrice:undefined
 
     },
-    newCooktop: {
+    newCooktop_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 1250, 
@@ -360,14 +360,14 @@ const dbItems = {
         unitPrice:undefined
 
     },
-    newWallOven: {
+    newWallOven_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 1500, 
         markup: 0, 
         unitPrice:undefined
     },
-    newMicrowave: {
+    newMicrowave_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 450, 
@@ -375,21 +375,21 @@ const dbItems = {
         unitPrice:undefined
 
     },
-    newFridge: {
+    newFridge_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 2500, 
         markup: 0, 
         unitPrice:undefined
     },
-    newDishwasher: {
+    newDishwasher_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 700, 
         markup: 0, 
         unitPrice:undefined
     },
-    newRangeHood: {
+    newRangeHood_new: {
         calculatedUnits: undefined,
         sqftPrice: undefined, 
         unitCost: 800, 
