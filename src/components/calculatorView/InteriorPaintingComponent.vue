@@ -3,11 +3,11 @@
     <h2>Interior Painting</h2>
     <h3></h3>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.paintKitchen" value="none" />
+      <input type="radio" v-model="localValue.paintKitchen" :value="false" />
       <span>No paint</span>     
     </label>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.paintKitchen" value="kitchen" />
+      <input type="radio" v-model="localValue.paintKitchen" :value="true" />
       Paint the kitchen
     </label>
   </div>
