@@ -1,0 +1,432 @@
+{
+  "removeSink": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "150",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "removeCountertops": {
+    "calculatedUnits": null,
+    "sqftPrice": "2",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "removeCabinets": {
+    "calculatedUnits": null,
+    "sqftPrice": "4",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "removeBacksplash": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "300",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "removeFlooring": {
+    "calculatedUnits": null,
+    "sqftPrice": "2",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "lightDemo": {
+    "calculatedUnits": null,
+    "sqftPrice": "9",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "dumpster": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "425",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "moveSink": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "650",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "moveFridgeWater": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "650",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "installPotFiller": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1050",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "installFaucet": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "400",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "installDisposal": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "400",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newDisposal_new": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "220",
+    "markup": "0.00",
+    "unitPrice": null
+  },
+  "addGasLine": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1500",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "swapFixtures": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "150",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "addCanLights": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "5",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "addUnderCabinetLights": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "2",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "switchesAndOutlets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "3",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "applianceOutlets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "6",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "drywallRepair": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "850",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "paintStainedCabinets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "220",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "paintPaintedCabinets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "175",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "standardLineCabinets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "317.5",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "customColorBase": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "80",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "customColorWall": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "80",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "fullCustomCabinets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1060",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "noCabinets": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "0",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "countertops:Granite": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "60",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "countertops:Quartz": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "60",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "countertops:Solid-Surface": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "55",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "countertops:Butcher Block": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "50",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newSink:Standard": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "450",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newSink:Workstation": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "850",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newSink:Farmhouse": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1050",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newSink:Custom Finish": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "650",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "newRange_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1000",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newCooktop_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1250",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newWallOven_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "1500",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newMicrowave_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "450",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newFridge_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "2500",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newDishwasher_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "700",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "newRangeHood_new": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "800",
+    "markup": "0",
+    "unitPrice": null
+  },
+  "installAppliances": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "600",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "installVentHood": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "450",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "installWallOven": {
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "600",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "backsplash": {
+    "calculatedUnits": null,
+    "sqftPrice": "20",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "paintKitchen": {
+    "calculatedUnits": null,
+    "sqftPrice": "6",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "cleanKitchen": {
+    "calculatedUnits": null,
+    "sqftPrice": "1.1",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "flooring:Hardwood": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "9",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "flooring:Tile": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "13.5",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "flooring:LVP/Engineered": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": "5",
+    "unitCost": null,
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "runExhaustDucting": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "750",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "runDuctingThroughBrick": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "450",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "waterfallEdges": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "540",
+    "markup": "0.65",
+    "unitPrice": null
+  },
+  "fixtureCount": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": null,
+    "markup": null,
+    "unitPrice": null,
+    "subtotal": null
+  },
+  "newFixtures": {
+    "qboId": "",
+    "calculatedUnits": null,
+    "sqftPrice": null,
+    "unitCost": "200",
+    "markup": "0.0",
+    "unitPrice": null,
+    "subtotal": null
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "kitchenSize": 0,
+    "demo": 500,
+    "plumbing": 600,
+    "electrical": 1250,
+    "cabinets": 0,
+    "countertops": 0,
+    "newSink": 0,
+    "newFixtures": 0,
+    "exhaustHoodDucting": 0,
+    "newAppliances": 0,
+    "installation": 0,
+    "backsplash": 700,
+    "flooring": 0,
+    "interiorPainting": 700,
+    "finalCleaning": 0
+}
