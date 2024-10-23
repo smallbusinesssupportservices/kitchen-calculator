@@ -67,7 +67,7 @@ onMounted(() => {
   }
 
   formData.user = { id: storedUserId };
-  
+
   // Mock server response for testing
   // hasServerResponded.value = false;
   // serverResponse.value = {
@@ -85,7 +85,7 @@ const serverResponse = ref(null);
 const formData = reactive({
   kitchenSize: {},
   demo: {},
-  dumpster:{},
+  dumpster: {},
   plumbing: {},
   electrical: {},
   drywall: {},
@@ -176,6 +176,8 @@ const handleSubmit = async () => {
       const isFilled = Object.values(fieldData).some(value => {
         if (typeof value === 'string') {
           return value.trim() !== '';
+        } else if (typeof value === 'boolean') {
+          return true;
         }
         return Boolean(value);
       });
@@ -232,8 +234,9 @@ watch(
       const { noDemo, ...rest } = newVal;
       const restValues = Object.values(rest);
       const anySelected = restValues.some(value => value);
+
       console.log("anySelected (excluding 'noDemo'): ", anySelected);
-    formData.dumpster = {dumpster:anySelected};
+      formData.dumpster = { dumpster: anySelected };
     }
   },
   { deep: true } // Ensures that nested changes are detected
@@ -255,7 +258,7 @@ form {
   gap: 1px;
   padding: 1px;*/
   width: 100%;
-  
+
 }
 
 .button-container {

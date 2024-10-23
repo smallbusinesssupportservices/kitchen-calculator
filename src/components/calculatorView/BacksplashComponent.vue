@@ -37,9 +37,9 @@ const props = defineProps({
 // Define emits
 const emit = defineEmits(['update:modelValue']);
 
-// Initialize local state as a ref since it's a Boolean
+
 const localValue = reactive({
-  backsplash: props.modelValue.backsplash, // ?? false,
+  backsplash: props.modelValue.backsplash,
 });
 
 // Watch for external changes to modelValue and update localValue
