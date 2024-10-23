@@ -3,11 +3,11 @@
     <h2>Interior Painting</h2>
     <h3></h3>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.paintOption" value="none" />
+      <input type="radio" v-model="localValue.paintKitchen" value="none" />
       <span>No paint</span>     
     </label>
     <label class="checkbox-label">
-      <input type="radio" v-model="localValue.paintOption" value="kitchen" />
+      <input type="radio" v-model="localValue.paintKitchen" value="kitchen" />
       Paint the kitchen
     </label>
   </div>
@@ -23,7 +23,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
-  paintOption: props.modelValue?.paintOption || '', 
+  paintKitchen: props.modelValue?.paintKitchen || '', 
 });
 
 watch(
@@ -35,7 +35,7 @@ watch(
 );
 
 watch(
-  () => localValue.paintOption,
+  () => localValue.paintKitchen,
   (newVal) => {
     emit('update:modelValue', { ...localValue });
   },
