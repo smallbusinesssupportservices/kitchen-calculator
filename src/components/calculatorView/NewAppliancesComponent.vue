@@ -7,7 +7,7 @@
     <div v-for="appliance in appliances" :key="appliance.name" class="appliance-item">
       
       <!-- Render regular appliance checkboxes -->
-      <template v-if="appliance.name !== 'subSection'">
+      <template v-if="appliance.name !== 'RangeHoodSubSection'">
         <label class="checkbox-label">
           <input 
             type="checkbox" 
@@ -103,7 +103,7 @@ const appliances = [
   { name: 'newDisposal', label: 'Disposal'},
   { name: 'newWallOven', label: 'Wall Oven' },
   { name: 'newRangeHood', label: 'Exhaust Hood' },
-  { name: 'subSection', label: null },
+  { name: 'RangeHoodSubSection', label: null },
   { name: 'installationOptout', label: 'Installation opt out' },
   // { name: 'noAppliances', label: 'Keep my appliances' },
   
@@ -150,7 +150,7 @@ watch(
 
 // Watcher for 'installWallOven' 
 watch(
-  () => localValue.newWallOven,
+  () => localValue.newWallOven_new,
   (newVal) => {
     localValue.installWallOven = newVal;
   }
@@ -158,7 +158,7 @@ watch(
 
 // Watcher for 'installVentHood' 
 watch(
-  () => localValue.newRangeHood,
+  () => localValue.newRangeHood_new,
   (newVal) => {
     localValue.installVentHood = newVal;
   }
@@ -166,9 +166,9 @@ watch(
 
 // Watcher for appliance install thats not rangeHood or wallOven
 watch(
-  () => [localValue.newRange, localValue.newDishwasher, localValue.newFridge, localValue.newMicrowave, localValue.newCooktop],
-  ([newRangeVal, newDishwasherVal, newFridgeVal, newMicrowaveVal, newCooktopVal]) => {
-    if (newRangeVal || newDishwasherVal || newFridgeVal || newMicrowaveVal || newCooktopVal) {
+  () => [localValue.newRange_new, localValue.newDishwasher_new, localValue.newFridge_new, localValue.newMicrowave_new, localValue.newCooktop_new],
+  ([newRangeVal_new, newDishwasherVal_new, newFridgeVal_new, newMicrowaveVal_new, newCooktopVal_new]) => {
+    if (newRangeVal_new || newDishwasherVal_new || newFridgeVal_new || newMicrowaveVal_new || newCooktopVal_new) {
       localValue.installAppliances = true;
     } else {
       localValue.installAppliances = false;
