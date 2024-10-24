@@ -2,7 +2,7 @@
     import CalculatorSettings from '../components/adminView/calculator/CalculatorSettings.vue';
     import CategorySettings from '../components/adminView/categories/CategorySettings.vue';
     import Items from '../components/adminView/items/Items.vue';
-    import dbItems from '../db/items.json' with { type: "json" };
+    import dbItems from '../components/adminView/items/items.json' with { type: "json" };
     import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' with { type: "json" };
 
 </script>

@@ -1,7 +1,7 @@
 {
   "removeSink": {
     "calculatedUnits": null,
-    "sqftPrice": null,
+    "sqftPrice": "",
     "unitCost": "150",
     "markup": "0.65",
     "unitPrice": null

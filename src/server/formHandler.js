@@ -1,4 +1,4 @@
-import dbItems from '../db/items.json' assert { type: "json" };
+import dbItems from '../components/adminView/items/items.json' assert { type: "json" };
 import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' assert { type: "json" };
 
 export const processFormData = (req, res) => {
