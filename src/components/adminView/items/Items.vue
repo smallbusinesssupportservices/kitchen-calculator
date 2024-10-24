@@ -51,9 +51,8 @@ const saveItem = async (updatedItem) => {
 </script>
 
 <template>
-  <div class="items">
     <h3>Items</h3>
-
+  <div class="items">
     <!-- Render list of items -->
     <ul class="item-list">
       <li 
@@ -85,8 +84,8 @@ const saveItem = async (updatedItem) => {
   border-radius: 8px;
   background-color: #fff;
   width: 200px;
-  height: 500px; /* Set height to 500px */
-  overflow-y: auto; /* Add scrolling if content overflows */
+  height: 604px; 
+  overflow-y: auto; 
 }
 
 .item-list {

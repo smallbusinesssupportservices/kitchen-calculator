@@ -17,9 +17,8 @@ const saveToServer = async () => {
 </script>
 
 <template>
+  <h3>Calculator Settings</h3>
   <div class="calculator-settings">
-    <h3>Calculator Settings</h3>
-
     <div class="input-group">
       <label for="lowside">Lowside Buffer:</label>
       <input type="number" id="lowside" v-model="settings.lowBuffer" />
@@ -34,7 +33,7 @@ const saveToServer = async () => {
       <label for="rng">RNG Value:</label>
       <input type="number" id="rng" v-model="settings.rng" />
     </div>
-    <button @click="saveToServer">Save to Server</button>
+    <button @click="saveToServer">Save</button>
   </div>
 </template>
 
