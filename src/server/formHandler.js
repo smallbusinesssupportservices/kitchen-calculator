@@ -1,5 +1,6 @@
 import dbItems from '../components/adminView/items/items.json' assert { type: "json" };
 import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' assert { type: "json" };
+import calculatorSetting from '../components/adminView/calculator/calculatorSettings.json' assert { type: "json"};
 
 export const processFormData = (req, res) => {
 
@@ -14,7 +15,6 @@ export const processFormData = (req, res) => {
 
     // Function to calculate total cost
     const calculateTotalCost = (dbItems, formData) => {
-        console.log("dbItems: ", dbItems)
         const estimate = {
             categories: [],
             overallTotal: 0
@@ -57,9 +57,6 @@ export const processFormData = (req, res) => {
                     : (categoryItem == 'cabinetType') 
                         ? `${formData[cat][categoryItem]}` 
                         : categoryItem);
-
-                console.log("categoryItem ", categoryItem, " Value", formCategory[categoryItem])
-                console.log("dbNeddle: ",dbNeddle, "itemsNeddle: ", itemsNeddle)
 
                 if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {  
 
@@ -133,10 +130,6 @@ export const processFormData = (req, res) => {
                     } else {
                         
                         unitPrice = (sqftPrice == null ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
-                        if (dbNeddle == 'cleanKitchen'){
-                            console.log("calculate unit price\nItem: ", dbItem[dbNeddle])
-                            console.log("sqftPrice: ", sqftPrice, "\nunitCost: ", unitCost, "\nmarkup: ", markup, "\nunitPrice: ", unitPrice)
-                        }
                     }
 
                     let subtotal = 0;
@@ -215,12 +208,10 @@ export const processFormData = (req, res) => {
             estimate.overallTotal += category.categoryTotal;
         };
 
-        const lowSideBuffer = 0.06
-        const highSideBuffer = 0.1
         const rng = (Math.floor(Math.random() * 75) + 1) / 10000;
-
-        estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (lowSideBuffer + rng))
-        estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (highSideBuffer + rng))
+        console.log("rng: ", rng, "\nlowBuffer: ", calculatorSetting.lowBuffer, "\nhighBuffer: ", calculatorSetting.highBuffer)
+        estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSetting.lowBuffer + rng))
+        estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSetting.highBuffer + rng))
 
         return estimate;
     }
@@ -228,9 +219,9 @@ export const processFormData = (req, res) => {
     const estimate = calculateTotalCost(dbItems, formData);
 
     // Output estimate as a JSON response
-    estimate.categories.forEach(cat => {
-        // console.log(cat)
-    })
+    // estimate.categories.forEach(cat => {
+    //     console.log(cat)
+    // })
     // console.log(JSON.stringify(estimate, null, 2));
 
     // Send a response back to the client
