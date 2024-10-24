@@ -1,4 +1,3 @@
-
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { dirname } from 'path';

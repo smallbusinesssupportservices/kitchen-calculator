@@ -1,6 +1,8 @@
 import dbItems from '../components/adminView/items/items.json' assert { type: "json" };
 import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' assert { type: "json" };
-import calculatorSetting from '../components/adminView/calculator/calculatorSettings.json' assert { type: "json"};
+import calculatorSettings from '../components/adminView/calculator/calculatorSettings.json' assert { type: "json"};
+import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
+
 
 export const processFormData = (req, res) => {
 
@@ -209,10 +211,24 @@ export const processFormData = (req, res) => {
         };
 
         const rng = (Math.floor(Math.random() * 75) + 1) / 10000;
-        console.log("rng: ", rng, "\nlowBuffer: ", calculatorSetting.lowBuffer, "\nhighBuffer: ", calculatorSetting.highBuffer)
-        estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSetting.lowBuffer + rng))
-        estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSetting.highBuffer + rng))
+        console.log("rng: ", rng, "\nlowBuffer: ", calculatorSettings.lowBuffer, "\nhighBuffer: ", calculatorSettings.highBuffer)
+        estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSettings.lowBuffer + rng))
+        estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSettings.highBuffer + rng))
 
+        const calculatorSettingsValue = {
+            rng,
+            lowBuffer: calculatorSettings.lowBuffer,
+            highBuffer: calculatorSettings.highBuffer
+        }
+        const  { id, ...contactInfo} = formData.user
+
+        const visitor = {
+            contactInfo,
+            calculatorSettingsValue,
+            estimate
+        }
+        console.log({[formData.user.id]:visitor})
+        updateVisitor({body:{id: [formData.user.id], data:visitor}})
         return estimate;
     }
 

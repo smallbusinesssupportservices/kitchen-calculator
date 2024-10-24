@@ -6,6 +6,7 @@ import { sendEmail } from './sendEmail.js';
 import { updateCalculatorSetting } from '../components/adminView/calculator/updateCalculatorSettings.js'
 import { updateCategorySetting } from '../components/adminView/categories/updateCategorySetting.js'
 import { updateItem } from '../components/adminView/items/updateItem.js'
+import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
 
 const app = express();
 const PORT = 3000;
@@ -19,10 +20,7 @@ app.post('/send-email', sendEmail);
 app.post('/update-calculator-setting', updateCalculatorSetting);
 app.post('/update-category-setting', updateCategorySetting);
 app.post('/update-item', updateItem);
-
-
-
-
+app.post('/add-visitor', updateVisitor);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -1,0 +1,262 @@
+{
+  "12345": {
+    "contactInfo": {
+      "name": "william",
+      "phone": "4106102350",
+      "email": "w@w.com",
+      "address": "3151 w manor cir sw",
+      "city": "atlanta",
+      "state": "GA",
+      "zip": "30311"
+    },
+    "calculatorSettingsValue": {
+      "rng": 0.0058,
+      "lowBuffer": 0.3,
+      "highBuffer": 0.4
+    },
+    "estimate": {
+      "categories": [
+        {
+          "category": "demo",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "dumpster",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "plumbing",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "electrical",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "drywall",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "cabinets",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "noCabinets",
+              "unitCost": "0",
+              "calculatedUnits": 1,
+              "unitPrice": 0,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "countertops",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newSink",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newFixtures",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newFixtures",
+              "unitCost": "200",
+              "calculatedUnits": 0,
+              "unitPrice": 200,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "exhaustHoodDucting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newAppliances",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "installation",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "backsplash",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "flooring",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "interiorPainting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "finalCleaning",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "user",
+          "items": [],
+          "categoryTotal": 0
+        }
+      ],
+      "overallTotal": 9500,
+      "lowRange": 8999,
+      "highRange": 10000
+    }
+  },
+  "98765": {
+    "contactInfo": {
+      "name": "bob",
+      "phone": "5555555555",
+      "email": "q@q.com",
+      "address": "3151 w test cir sw",
+      "city": "atlanta",
+      "state": "GA",
+      "zip": "30333"
+    },
+    "calculatorSettingsValue": {
+      "rng": 0.0051,
+      "lowBuffer": 0.3,
+      "highBuffer": 0.4
+    },
+    "estimate": {
+      "categories": [
+        {
+          "category": "demo",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "dumpster",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "plumbing",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "electrical",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "drywall",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "cabinets",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "noCabinets",
+              "unitCost": "0",
+              "calculatedUnits": 1,
+              "unitPrice": 0,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "countertops",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newSink",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newFixtures",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newFixtures",
+              "unitCost": "200",
+              "calculatedUnits": 0,
+              "unitPrice": 200,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "exhaustHoodDucting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newAppliances",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "installation",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "backsplash",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "flooring",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "interiorPainting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "finalCleaning",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "user",
+          "items": [],
+          "categoryTotal": 0
+        }
+      ],
+      "overallTotal": 99895,
+      "lowRange": 85000,
+      "highRange": 107000
+    }
+  }
+}
