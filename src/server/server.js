@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { processFormData } from './formHandler.js';
 import { sendEmail } from './sendEmail.js';
+import { updateCalculatorSetting } from '../components/adminView/calculator/updateCalculatorSettings.js'
 
 const app = express();
 const PORT = 3000;
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 app.post('/submit-form', processFormData);
 app.post('/send-email', sendEmail);
+app.post('/update-calculator-setting', updateCalculatorSetting);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
