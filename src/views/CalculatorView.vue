@@ -3,20 +3,20 @@
   <div v-if="!hasServerResponded">
     <form @submit.prevent="handleSubmit">
       <KitchenSize v-model="formData.kitchenSize" />
+      <Cabinets v-model="formData.cabinets" />
+      <Countertops v-model="formData.countertops" />
+      <NewSink v-model="formData.newSink" />
+      <Plumbing v-model="formData.plumbing" />
       <Electrical v-model="formData.electrical" />
       <NewAppliances v-model="formData.newAppliances" />
-      <InteriorPainting v-model="formData.interiorPainting" />
-      <FinalCleaning v-model="formData.finalCleaning" />
-      <Plumbing v-model="formData.plumbing" />
-      <NewSink v-model="formData.newSink" />
-      <Countertops v-model="formData.countertops" />
-      <Cabinets v-model="formData.cabinets" />
       <Backsplash v-model="formData.backsplash" />
+      <InteriorPainting v-model="formData.interiorPainting" />
       <Flooring v-model="formData.flooring" />
-      <UserForm v-model="formData.user" />
       <Demo v-model="formData.demo" :demoSink="formData.newSink.sinkType"
         :demoCountertops="formData.countertops.countertopType" :demoBacksplash="formData.backsplash.backsplash"
         :demoCabinets="formData.cabinets.cabinetType" :demoFlooring="formData.flooring.flooringType" />
+      <FinalCleaning v-model="formData.finalCleaning" />
+      <UserForm v-model="formData.user" />
       <ProgressButton :progress="progress" :disabled="isDisabled" :loading="isLoading" @click="handleSubmit" />
     </form>
   </div>
