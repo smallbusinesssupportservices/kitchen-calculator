@@ -7,6 +7,8 @@
     <nav class="horizontal-nav">
       <div><router-link to="/">Calculator</router-link></div>
       <div><router-link to="/admin">Admin</router-link></div>
+      <div><router-link to="/make-appointment">Appointment</router-link></div>
+      <div><router-link to="/email">Email</router-link></div>
     </nav>
     <router-view />
   </div>

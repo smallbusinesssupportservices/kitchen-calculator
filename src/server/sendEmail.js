@@ -14,8 +14,8 @@ export const sendEmail = (req, res) => {
             pass: process.env.GMAIL_PASS,
         },
     });
-
-    let mailOptions = { from, to, subject, text};
+    console.log(JSON.stringify({ from: 'william@smallbusinessessupport.services', to, subject, text},null,2))
+    let mailOptions = { from: 'william@smallbusinessessupport.services', to, subject, text};
 
     // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
