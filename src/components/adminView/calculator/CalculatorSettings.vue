@@ -1,6 +1,5 @@
 <script setup>
 import { reactive } from 'vue';
-
 import axios from 'axios';
 import calculatorSettings from './calculatorSettings.json' with { type: 'json' };
 

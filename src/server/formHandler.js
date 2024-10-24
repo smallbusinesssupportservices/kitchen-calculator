@@ -1,5 +1,5 @@
 import dbItems from '../db/items.json' assert { type: "json" };
-import categoryMinimums from '../db/categoryMinimums.json' assert { type: "json" };
+import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' assert { type: "json" };
 
 export const processFormData = (req, res) => {
 

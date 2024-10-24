@@ -1,30 +1,16 @@
-<script>
-export default {
-  data() {
-    return {
-      categoryMinimums: {
-        kitchenSize: 0,
-        scopeOfWork: 500,
-        plumbing: 600,
-        electrical: 1250,
-        cabinets: 0,
-        countertops: 0,
-        newSink: 0,
-        newFixtures: 0,
-        exhaustHoodDucting: 0,
-        newAppliances: 0,
-        installation: 0,
-        backsplash: 700,
-        flooring: 0,
-        interiorPainting: 700,
-        finalCleaning: 0
-      }
-    };
-  },
-  methods: {
-    updateCategoryMinimums() {
-      console.log("Updated Category Minimums:", this.categoryMinimums);
-    }
+<script setup>
+import { reactive } from 'vue';
+import axios from 'axios';
+import categoryMinimums from './categoryMinimums.json' with { type: 'json' };
+
+const settings = reactive({ ...categoryMinimums });
+
+const saveToServer = async () => {
+  try {
+    const response = await axios.post('http://localhost:3000/update-category-setting', settings);
+    console.log("Saved successfully", response.data);
+  } catch (error) {
+    console.error("Error saving settings", error);
   }
 };
 </script>
@@ -38,10 +24,10 @@ export default {
       <input 
         type="number" 
         :id="key" 
-        v-model.number="categoryMinimums[key]"
-        @input="updateCategoryMinimums"
+        v-model="settings[key]"
       />
     </div>
+    <button @click="saveToServer">Save to Server</button>
   </div>
 </template>
 
