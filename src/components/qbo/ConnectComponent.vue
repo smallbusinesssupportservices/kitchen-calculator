@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
       <h1>
         <a href="http://developer.intuit.com">
           <img src="./images/quickbooks_logo_horz.png" id="headerLogo" alt="QuickBooks Logo">
@@ -199,10 +199,6 @@
   
   /* Import custom CSS */
   @import "./common.css";
-  
-  .container {
-    /* You can add custom styles here if needed */
-  }
   
   #headerLogo {
     max-width: 100%;
