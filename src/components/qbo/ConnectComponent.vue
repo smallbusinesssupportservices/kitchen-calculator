@@ -166,6 +166,7 @@
     } catch (error) {
       console.error('Error retrieving token:', error)
     }
+    
   }
   
   // Function to refresh token
