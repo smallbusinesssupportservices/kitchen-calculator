@@ -25,3 +25,4 @@ dist-ssr
 .env
 config.json
 notes.txt
+token.json
