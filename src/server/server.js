@@ -6,7 +6,7 @@ import { updateCalculatorSetting } from '../components/adminView/calculator/upda
 import { updateCategorySetting } from '../components/adminView/categories/updateCategorySetting.js'
 import { updateItem } from '../components/adminView/items/updateItem.js'
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
-import { callback, authUri, refreshAccessToken, disconnect, companyInfo, showToken } from '../components/qbo/qbo.js'
+import { callback, authUri, refreshAccessToken, disconnect, companyInfo } from '../components/qbo/qbo.js'
 const app = express();
 const PORT = 3000;
 
@@ -18,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 //QBO
 app.get('/authUri', authUri);
 app.get('/callback', callback);
-app.get('/retrieveToken', showToken);
 app.get('/refreshAccessToken', refreshAccessToken);
 app.get('/getCompanyInfo', companyInfo);
 app.get('/disconnect', disconnect);
