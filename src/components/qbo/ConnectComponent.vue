@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container">
       <h1>
         <a href="http://developer.intuit.com">
           <img src="./images/quickbooks_logo_horz.png" id="headerLogo" alt="QuickBooks Logo">
@@ -60,7 +60,7 @@
       <a class="imgLink" href="#" @click.prevent="authorizeUri">
         <img src="./images/C2QB_green_btn_lg_default.png" width="178" alt="Connect to QuickBooks" />
       </a>
-      <button type="button" @click.prevent="retrieveToken" class="btn btn-success">
+      <button type="button" @click.prevent="getCustomer" class="btn btn-success">
         Display Access Token
       </button>
       <button type="button" @click.prevent="refreshToken" class="btn btn-success">
@@ -82,8 +82,8 @@
         If there is no access token or the access token is invalid, click either the
         <b>Connect to QuickBooks</b> or <b>Sign with Intuit</b> button above.
       </p>
-      <pre>{{ apiCall }}</pre>
-      <button type="button" @click.prevent="makeAPICall" class="btn btn-success">
+      <pre>{{ company }}</pre>
+      <button type="button" @click.prevent="getCompany" class="btn btn-success">
         Get Company Info
       </button>
   
@@ -118,7 +118,7 @@
   const environment = ref('sandbox')
   const redirectUri = ref('')
   const accessToken = ref('')
-  const apiCall = ref('')
+  const company = ref('')
   
   // Function to authorize URI
   const authorizeUri = async () => {
@@ -141,17 +141,17 @@
       },top=${(window.screen.height - 650) / 2}`
       const win = window.open(uri, 'connectPopup', parameters)
   
-      const pollOAuth = setInterval(() => {
-        try {
-          if (win.document.URL.includes('code')) {
-            clearInterval(pollOAuth)
-            win.close()
-            window.location.reload()
-          }
-        } catch (e) {
-          console.log(e)
-        }
-      }, 100)
+    //   const pollOAuth = setInterval(() => {
+    //     try {
+    //       if (win.document.URL.includes('code')) {
+    //         clearInterval(pollOAuth)
+    //         win.close()
+    //         window.location.reload()
+    //       }
+    //     } catch (e) {
+    //       console.log(e)
+    //     }
+    //   }, 100)
     } catch (error) {
       console.error('Error fetching authUri:', error)
     }
@@ -166,7 +166,16 @@
     } catch (error) {
       console.error('Error retrieving token:', error)
     }
-    
+  }
+
+  const getCustomer = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/getCustomer')
+      const token = response.data
+      accessToken.value = !token ? 'Please authorize using Connect to QuickBooks first!' : token
+    } catch (error) {
+      console.error('Error retrieving token:', error)
+    }
   }
   
   // Function to refresh token
@@ -181,11 +190,11 @@
   }
   
   // Function to make API call
-  const makeAPICall = async () => {
+  const getCompany = async () => {
     try {
       const response = await axios.get('http://localhost:3000/getCompanyInfo')
       const data = response.data
-      apiCall.value = JSON.stringify(data, null, 4)
+      company.value = !data ?  'Please authorize using Connect to QuickBooks first!' :JSON.stringify(data, null, 4)
     } catch (error) {
       console.error('Error making API call:', error)
     }
@@ -208,5 +217,10 @@
   .imgLink img {
     cursor: pointer;
   }
+
+  .container {
+
+  }
+  
   </style>
   
