@@ -156,8 +156,6 @@ app.post('/addCustomer', async (req, res) => {
       },
     });
 
-    console.log("response: ", response.body)
-
     // Parse the response
     const addedCustomer = response.body;
 
@@ -175,6 +173,48 @@ app.post('/addCustomer', async (req, res) => {
   }
 });
 
+app.post('/createEstimate', async (req, res) => {
+  console.log("createEstimate:, ", oauthClient)
+  try {
+
+    // Validate and retrieve company ID
+    const companyID = oauthClient.getToken().realmId;
+
+    // Determine the environment URL
+    const url =
+      oauthClient.environment === 'sandbox'
+        ? OAuthClient.environment.sandbox
+        : OAuthClient.environment.production;
+
+    // Retrieve customer data from the request body
+    const estimateData = req.body;
+
+    // Make the API call to add the customer
+    const response = await oauthClient.makeApiCall({
+      url: `${url}v3/company/${companyID}/estimate`,
+      method: 'POST',
+      body: JSON.stringify(estimateData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Parse the response
+    const addEstimate = response.body;
+
+    // Send the added estimte data back to the client
+    res.status(200).send(addEstimate);
+  } catch (error) {
+    console.error('Error adding estimate:', error);
+
+    // Handle specific OAuth errors if needed
+    if (error.response && error.response.text) {
+      return res.status(500).json({ error: JSON.parse(error.response.text()) });
+    }
+
+    res.status(500).json({ error: 'An error occurred while adding the estimate.' });
+  }
+});
 
 //calculator
 app.post('/submit-form', processFormData);

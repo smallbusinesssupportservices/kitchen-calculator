@@ -258,5 +258,303 @@
       "lowRange": 85000,
       "highRange": 107000
     }
+  },
+  "a9509452-6adc-484f-994b-575d0fbd0c89": {
+    "contactInfo": {
+      "name": "william",
+      "phone": "4106102350",
+      "email": "",
+      "address": "3151 w manor cir sw",
+      "city": "atlanta",
+      "state": "GA",
+      "zip": "30311"
+    },
+    "calculatorSettingsValue": {
+      "rng": 0.004,
+      "lowBuffer": 0.3,
+      "highBuffer": 0.4
+    },
+    "estimate": {
+      "categories": [
+        {
+          "category": "demo",
+          "items": [
+            {
+              "sqftPrice": "",
+              "markup": 0.65,
+              "name": "removeSink",
+              "unitCost": "150",
+              "calculatedUnits": 1,
+              "unitPrice": 0,
+              "subtotal": 0
+            },
+            {
+              "sqftPrice": "2",
+              "markup": 0.65,
+              "name": "removeCountertops",
+              "unitCost": 1,
+              "calculatedUnits": 1,
+              "unitPrice": 3.3,
+              "subtotal": 330
+            },
+            {
+              "sqftPrice": "4",
+              "markup": 0.65,
+              "name": "removeCabinets",
+              "unitCost": 1,
+              "calculatedUnits": 1,
+              "unitPrice": 6.6,
+              "subtotal": 660
+            },
+            {
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "removeBacksplash",
+              "unitCost": "300",
+              "calculatedUnits": 1,
+              "unitPrice": 495,
+              "subtotal": 495
+            },
+            {
+              "sqftPrice": "2",
+              "markup": 0.65,
+              "name": "removeFlooring",
+              "unitCost": 1,
+              "calculatedUnits": 1,
+              "unitPrice": 3.3,
+              "subtotal": 330
+            }
+          ],
+          "categoryTotal": 1815
+        },
+        {
+          "category": "dumpster",
+          "items": [
+            {
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "dumpster",
+              "unitCost": "425",
+              "calculatedUnits": 1,
+              "unitPrice": 701.25,
+              "subtotal": 701.25
+            }
+          ],
+          "categoryTotal": 701.25
+        },
+        {
+          "category": "plumbing",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "electrical",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": "5",
+              "markup": 0.65,
+              "name": "addCanLights",
+              "unitCost": 1,
+              "calculatedUnits": 1,
+              "unitPrice": 8.25,
+              "subtotal": 825
+            },
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "drywallRepair",
+              "unitCost": "850",
+              "calculatedUnits": 1,
+              "unitPrice": 1402.5,
+              "subtotal": 1402.5
+            }
+          ],
+          "categoryTotal": 2227.5
+        },
+        {
+          "category": "drywall",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "cabinets",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "fullCustomCabinets",
+              "unitCost": "1060",
+              "calculatedUnits": 19,
+              "unitPrice": 1749,
+              "subtotal": 33231
+            }
+          ],
+          "categoryTotal": 33231
+        },
+        {
+          "category": "countertops",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "countertops",
+              "unitCost": "50",
+              "calculatedUnits": 40,
+              "unitPrice": 82.5,
+              "subtotal": 3300
+            }
+          ],
+          "categoryTotal": 3300
+        },
+        {
+          "category": "newSink",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "newSink",
+              "unitCost": "650",
+              "calculatedUnits": 1,
+              "unitPrice": 1072.5,
+              "subtotal": 1072.5
+            }
+          ],
+          "categoryTotal": 1072.5
+        },
+        {
+          "category": "newFixtures",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newFixtures",
+              "unitCost": "200",
+              "calculatedUnits": 0,
+              "unitPrice": 200,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "exhaustHoodDucting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newAppliances",
+          "items": [
+            {
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "installAppliances",
+              "unitCost": "600",
+              "calculatedUnits": 1,
+              "unitPrice": 990,
+              "subtotal": 990
+            },
+            {
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newRange_new",
+              "unitCost": "1000",
+              "calculatedUnits": 1,
+              "unitPrice": 1000,
+              "subtotal": 1000
+            },
+            {
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newCooktop_new",
+              "unitCost": "1250",
+              "calculatedUnits": 1,
+              "unitPrice": 1250,
+              "subtotal": 1250
+            }
+          ],
+          "categoryTotal": 3240
+        },
+        {
+          "category": "installation",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "backsplash",
+          "items": [
+            {
+              "sqftPrice": "20",
+              "markup": 0.65,
+              "name": "backsplash",
+              "unitCost": 1,
+              "calculatedUnits": 32,
+              "unitPrice": 33,
+              "subtotal": 1539
+            }
+          ],
+          "categoryTotal": 1539
+        },
+        {
+          "category": "flooring",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": "13.5",
+              "markup": 0.65,
+              "name": "flooring",
+              "unitCost": 1,
+              "calculatedUnits": 1,
+              "unitPrice": 22.275,
+              "subtotal": 3427.5
+            }
+          ],
+          "categoryTotal": 3427.5
+        },
+        {
+          "category": "interiorPainting",
+          "items": [
+            {
+              "sqftPrice": "6",
+              "markup": 0.65,
+              "name": "paintKitchen",
+              "unitCost": 600,
+              "calculatedUnits": 1,
+              "unitPrice": 9.899999999999999,
+              "subtotal": 989.9999999999999
+            }
+          ],
+          "categoryTotal": 989.9999999999999
+        },
+        {
+          "category": "finalCleaning",
+          "items": [
+            {
+              "sqftPrice": "1.1",
+              "markup": 0.65,
+              "name": "cleanKitchen",
+              "unitCost": 110.00000000000001,
+              "calculatedUnits": 1,
+              "unitPrice": 1.815,
+              "subtotal": 181.5
+            }
+          ],
+          "categoryTotal": 181.5
+        },
+        {
+          "category": "user",
+          "items": [],
+          "categoryTotal": 0
+        }
+      ],
+      "overallTotal": 51725.25,
+      "lowRange": 36000.774000000005,
+      "highRange": 72622.251
+    }
   }
 }

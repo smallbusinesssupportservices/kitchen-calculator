@@ -176,20 +176,17 @@ const refreshToken = async () => {
 const addCustomer = async () => {
     const customer = {
         "BillAddr": {
-            "Id": "2",
             "Line1": "4581 Finch St.",
             "City": "Bayshore",
             "CountrySubDivisionCode": "CA",
-            "PostalCode": "94326",
-            "Lat": "INVALID",
-            "Long": "INVALID"
+            "PostalCode": "94326"
         },
         "CurrencyRef": {
             "value": "USD",
             "name": "United States Dollar"
         },
         "IsProject": false,
-        "DisplayName": "Abcdefghijk",
+        "DisplayName": "A customer",
         "Active": true,
         "PrimaryPhone": {
             "FreeFormNumber": "(650) 555-3991"
@@ -199,18 +196,143 @@ const addCustomer = async () => {
         }
     }
 
-    try {
 
-        const response = await axios.post('http://localhost:3000/addCustomer', customer);
 
-        if (response.status === 200) {
-            console.log(response.data)
-            accessToken.value = response.data;
-        }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('There was an error submitting the form. Please try again.');
+    const response = await axios.post('http://localhost:3000/addCustomer', customer);
+    let projectResponse = null;
+    let customerCreated = false;
+    let projectCreated = false;
+    let estimateCreated = false;
+
+    if (response.status === 200) {
+        customerCreated = true;
+        accessToken.value = response.data.Customer;
     }
+
+    if (customerCreated) {
+        console.log("customerCreated: ", customerCreated)
+        const project = {
+            "Job": true,
+            "ParentRef": {
+                "value": response.data.Customer.Id
+            },
+            "DisplayName": "Kitchen project",
+            "Active": true,
+            "BillWithParent": true,
+        }
+        projectResponse = await axios.post('http://localhost:3000/addCustomer', project);
+
+        if (projectResponse.status === 200) {
+            projectCreated = true;
+            accessToken.value = projectResponse.data.Customer;
+        }
+    }
+
+    if (projectCreated) {
+        console.log("projectCreated: ", projectCreated)
+        let estimate = {
+            "CustomField": [
+                {
+                    "DefinitionId": "1",
+                    "Name": "companyId",
+                    "Type": "StringType"
+                }
+            ],
+            "Line": [
+                {
+                    "Id": "1",
+                    "LineNum": 1,
+                    "Description": "Rock Fountain",
+                    "Amount": 275,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "5",
+                            "name": "Rock Fountain"
+                        },
+                        "UnitPrice": 275,
+                        "Qty": 1,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                },
+                {
+                    "Id": "2",
+                    "LineNum": 2,
+                    "Description": "Fountain Pump",
+                    "Amount": 12.75,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "11",
+                            "name": "Pump"
+                        },
+                        "UnitPrice": 12.75,
+                        "Qty": 1,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                },
+                {
+                    "Id": "3",
+                    "LineNum": 3,
+                    "Description": "Concrete for fountain installation",
+                    "Amount": 47.5,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "3",
+                            "name": "Concrete"
+                        },
+                        "UnitPrice": 9.5,
+                        "Qty": 5,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                },
+                {
+                    "Amount": 335.25,
+                    "DetailType": "SubTotalLineDetail",
+                    "SubTotalLineDetail": {}
+                }
+            ],
+            "CustomerRef": {
+                "value": projectResponse.data.Customer.Id,
+            },
+            "CustomerMemo": {
+                "value": "Thank you for your business and have a great day!"
+            },
+            "PrintStatus": "NeedToPrint",
+            "EmailStatus": "NotSet"
+        }
+        console.log("estimate: ", estimate)
+
+        const esitmateResponse = await axios.post('http://localhost:3000/createEstimate', estimate);
+
+        if (esitmateResponse.status === 200) {
+            estimateCreated = true;
+            console.log(esitmateResponse.data)
+            accessToken.value = esitmateResponse.data.Estimate;
+        }else {
+            console.log(esitmateResponse);
+        }
+    }
+
 }
 
 // Function to make API call
@@ -221,6 +343,94 @@ const getCompany = async () => {
         company.value = !data ? 'Please authorize using Connect to QuickBooks first!' : JSON.stringify(data, null, 4)
     } catch (error) {
         console.error('Error making API call:', error)
+    }
+}
+
+const createEstimate = async () => {
+    {
+        let estimate = {
+            "Line": [
+                {
+                    "Id": "1",
+                    "LineNum": 1,
+                    "Description": "Rock Fountain",
+                    "Amount": 275,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "5",
+                            "name": "Rock Fountain"
+                        },
+                        "UnitPrice": 275,
+                        "Qty": 1,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                },
+                {
+                    "Id": "2",
+                    "LineNum": 2,
+                    "Description": "Fountain Pump",
+                    "Amount": 12.75,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "11",
+                            "name": "Pump"
+                        },
+                        "UnitPrice": 12.75,
+                        "Qty": 1,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                },
+                {
+                    "Id": "3",
+                    "LineNum": 3,
+                    "Description": "Concrete for fountain installation",
+                    "Amount": 47.5,
+                    "DetailType": "SalesItemLineDetail",
+                    "SalesItemLineDetail": {
+                        "ItemRef": {
+                            "value": "3",
+                            "name": "Concrete"
+                        },
+                        "UnitPrice": 9.5,
+                        "Qty": 5,
+                        "ItemAccountRef": {
+                            "value": "48",
+                            "name": "Landscaping Services:Job Materials:Fountains and Garden Lighting"
+                        },
+                        "TaxCodeRef": {
+                            "value": "TAX"
+                        }
+                    }
+                }
+            ],
+            "CustomerRef": {
+                "value": 104,
+            }
+        }
+        console.log("estimate: ", estimate)
+        esitmateResponse = await axios.post('http://localhost:3000/createEstimate', estimate);
+
+        if (esitmateResponse.status === 200) {
+            estimateCreated = true;
+            console.log(esitmateResponse.data)
+            accessToken.value = esitmateResponse.data.Customer;
+        }else {
+            console.log(esitmateResponse);
+        }
     }
 }
 </script>
