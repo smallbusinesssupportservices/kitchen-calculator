@@ -452,5 +452,7 @@ const createEstimate = async () => {
     cursor: pointer;
 }
 
-.container {}
+.container {
+    max-width: 100%;
+}
 </style>
