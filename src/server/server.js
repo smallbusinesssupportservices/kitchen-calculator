@@ -8,6 +8,7 @@ import { updateItem } from '../components/adminView/items/updateItem.js'
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
 import bodyParser from 'body-parser';
 import OAuthClient from 'intuit-oauth';
+import { getStoredToken } from '../components/qbo/qbo.js'
 // import { callback, authUri, refreshAccessToken, disconnect, companyInfo, /*getCustomer*/ } from '../components/qbo/qbo.js'
 
 const app = express();
@@ -80,9 +81,15 @@ app.get('/refreshAccessToken', function (req, res) {
     });
 });
 
-app.get('/getCompanyInfo', function (req, res) {
-  const companyID = oauthClient.getToken().realmId;
+app.get('/getCompanyInfo', async function (req, res) {
 
+
+  if (oauthClient === null){
+    oauthClient = new OAuthClient(await getStoredToken());
+  }
+
+  const companyID = oauthClient?.getToken().realmId;
+  console.log("companyID: ", companyID)
   const url =
     oauthClient.environment == 'sandbox'
       ? OAuthClient.environment.sandbox
