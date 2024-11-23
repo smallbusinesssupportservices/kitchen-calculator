@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kitchen Calculator</title>
+    <style>
+        .progress-button {
+            position: relative;
+            overflow: hidden;
+            padding: 10px 20px;
+            /* Match original padding */
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            /* Original blue color */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: 100%;
+            height: 50px;
+            /* Match original height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .progress-button:hover:not(.disabled):not(.loading) {
+            background-color: #0056b3;
+            /* Darker blue on hover */
+        }
+
+        .progress-button.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .progress-button.loading {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .progress-overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+            z-index: 1;
+        }
+
+        .progress-text {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+
+        .progress-button:focus {
+            outline: 2px solid #0056b3;
+            outline-offset: 2px;
+        }
+
+        .user-form {
+            grid-column: 6 / 6;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-info label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .contact-info input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .cleaning {
+            grid-column: 4 / 4;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .radio-label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .demo {
+            grid-column: 5 / 5;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-label input {
+            margin-right: 8px;
+        }
+
+        /* Style for disabled labels */
+        .checkbox-label .disabled {
+            color: #888;
+            /* Grey out the label text when disabled */
+            cursor: not-allowed;
+        }
+
+        .flooring {
+            grid-column: 3 / 3;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .interior-paint {
+            grid-column: 2 / 2;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .radio-label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .backsplash {
+            grid-column: 3 / 3;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-label input {
+            margin-right: 8px;
+        }
+
+        .new-appliance {
+            grid-column: 2 / 2;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .keep-new-options {
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            /* Adjust based on the layout */
+            margin-left: 20px;
+            /* Align with the main checkbox */
+            margin-bottom: 10px;
+        }
+
+        /* Modal Styles */
+        /* .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            position: relative;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        } 
+
+        .sub-section {
+            margin-left: 20px;
+        } */
+        .electric {
+            grid-column: 6 / 6;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-label input {
+            margin-right: 10px;
+        }
+
+        .sub-section {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .drywall .checkbox-label input[disabled] {
+            cursor: not-allowed;
+            opacity: 0.6;
+            /* Indicates disabled state visually */
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 700px) {
+            .combined {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .plumbing {
+            grid-column: 7 / 7;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .new-sink {
+            grid-column: 5 / 5;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .countertops {
+            grid-column: 4 / 4;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .waterfall-input {
+            width: 25px;
+            margin-left: 10px;
+        }
+
+        .cabinets {
+            grid-column: 1 / 1;
+            grid-row: 2 / 2;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .radio-label input {
+            margin-right: 8px;
+        }
+
+        .checkbox-label input:disabled+span {
+            color: #888;
+            /* Grey out the label text when disabled */
+            cursor: not-allowed;
+        }
+
+        .sub-section {
+            margin-left: 20px;
+        }
+
+        .kitchen-size {
+            grid-column: 1 / 1;
+            grid-row: 1 / 1;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        label input[type='number'] {
+            display: block;
+            margin-top: 5px;
+            width: 195px;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .unit-toggle {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .unit-toggle .unit-label {
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: '';
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .kitchen-area,
+        .island-area {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <div id="app"></div>
+    <h1>Kitchen Calculator</h1>
+    <form>
+        <div class="kitchen-size">
+            <h2>Kitchen Size</h2>
+            <label>
+                Length:
+                <br />
+                <input type="float" v-model="displayedLength" required min="0" />
+            </label>
+
+            <!-- Width Input -->
+            <label>
+                Width:
+                <br />
+                <input type="float" v-model="displayedWidth" required min="0" />
+            </label>
+
+            <!-- Display the kitchen area -->
+            <div v-if="kitchenArea !== null" class="kitchen-area">
+                <strong>Area:</strong>
+                {{ kitchenArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
+            </div>
+
+            <!-- Island Section -->
+            <div style="padding-top:10px;">
+                <h2>Island</h2>
+                <label>
+                    <input type="checkbox" v-model="localValue.hasIsland" />
+                    Island?
+                </label>
+                <div v-if="localValue.hasIsland" class="sub-section island">
+                    <!-- Island Length Input -->
+                    <label>
+                        Length:
+                        <br />
+                        <input type="number" v-model="displayedIslandLength" min="0" />
+                    </label>
+
+                    <!-- Island Width Input -->
+                    <label>
+                        Width:
+                        <br />
+                        <input type="number" v-model="displayedIslandWidth" min="0" />
+                    </label>
+
+                    <!-- Display the island area -->
+                    <div v-if="islandArea !== null" class="island-area">
+                        <strong>Island Area:</strong>
+                        {{ islandArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cabinets">
+            <h2>Cabinets</h2>
+            <!-- Main Cabinet Options as Radio Buttons -->
+            <label class="radio-label">
+                <input type="radio" name="cabinetOptions" value="noCabinets" v-model="localValue.cabinetType" />
+                No cabinets
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="cabinetOptions" value="paintStainedCabinets" v-model="localValue.cabinetType"
+                    :disabled="isOptionDisabled('paintStainedCabinets')" />
+                Paint stained cabinets
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="cabinetOptions" value="paintPaintedCabinets" v-model="localValue.cabinetType"
+                    :disabled="isOptionDisabled('paintPaintedCabinets')" />
+                Repaint cabinets
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="cabinetOptions" value="standardLineCabinets" v-model="localValue.cabinetType"
+                    :disabled="isOptionDisabled('standardLineCabinets')" />
+                Standard Line Cabinets
+            </label>
+            <div class="sub-section" v-if="localValue.cabinetType == 'standardLineCabinets'">
+                <label class="checkbox-label">
+                    <input type="checkbox" v-model="localValue.customColorBase" :disabled="isSubOptionDisabled" />
+                    Custom Color for standard line Shaker base cabinets
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" v-model="localValue.customColorWall" :disabled="isSubOptionDisabled" />
+                    Custom Color for standard line Shaker wall cabinets
+                </label>
+            </div>
+            <label class="radio-label">
+                <input type="radio" name="cabinetOptions" value="fullCustomCabinets" v-model="localValue.cabinetType"
+                    :disabled="isOptionDisabled('fullCustomCabinets')" />
+                Full custom cabinets
+            </label>
+        </div>
+        <div class="countertops">
+            <h2>Countertops</h2>
+            <label class="checkbox-label">
+                <input type="radio" value="noCountertop" v-model="localValue.countertopType" />
+                No countertops
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Quartz" v-model="localValue.countertopType" />
+                Quartz
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Granite" v-model="localValue.countertopType" />
+                Granite
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Solid-Surface" v-model="localValue.countertopType" />
+                Solid-Surface
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Butcher Block" v-model="localValue.countertopType" />
+                Butcher Block
+            </label>
+            <label>
+                Waterfall edges:
+                <input type="number" v-model="localValue.waterfallEdges" min="0" class="waterfall-input" />
+            </label>
+        </div>
+        <div class="new-sink">
+            <h2>New Sink</h2>
+            <label class="checkbox-label">
+                <input type="radio" value="false" v-model="localValue.sinkType" />
+                No sink
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Standard" v-model="localValue.sinkType" @change="onSinkChange" />
+                Standard Sink
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Workstation" v-model="localValue.sinkType" @change="onSinkChange" />
+                Workstation Sink
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Farmhouse" v-model="localValue.sinkType" @change="onSinkChange" />
+                Farmhouse Sink
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Custom Finish" v-model="localValue.sinkType" @change="onSinkChange" />
+                Custom finish sink
+            </label>
+        </div>
+        <div class="plumbing">
+            <h2>Plumbing</h2>
+            <label class="checkbox-label">
+                <input type="checkbox" v-model="localValue.noPlumbing" />
+                No plumbing
+            </label>
+            <div class="checkbox-group">
+                <label v-for="option in plumbingOptions" :key="option.name" class="checkbox-label">
+                    <input type="checkbox" v-model="localValue[option.name]" :disabled="localValue.noPlumbing" />
+                    {{ option.label }}
+                </label>
+            </div>
+        </div>
+        <div class="electric">
+            <h2>Electrical</h2>
+            <label class="checkbox-label">
+                <input type="checkbox" v-model="localValue.noElectrical" />
+                No electrical
+            </label>
+
+            <!-- Swap Fixtures -->
+            <div class="checkbox-group">
+                <label class="checkbox-label" for="swapFixtures">
+                    <input type="checkbox" id="swapFixtures" v-model="localValue.swapFixtures"
+                        :disabled="localValue.noElectrical" />
+                    Swap fixtures
+                </label>
+            </div>
+
+            <!-- Fixture Count Input -->
+            <div v-if="localValue.swapFixtures" class="sub-section">
+                <label for="fixtureCount">
+                    Fixture count:
+                    <input type="number" id="fixtureCount" v-model="localValue.fixtureCount" min="0"
+                        :required="localValue.swapFixtures" placeholder="Enter fixture count" />
+                </label>
+                <!-- Error Message -->
+                <div v-if="fixtureCountError" class="error-message" role="alert">
+                    Fixture count is required and must be a positive number.
+                </div>
+            </div>
+
+            <!-- Electrical Options -->
+            <div class="checkbox-group">
+                <label v-for="option in electricalOptions" :key="option.name" class="checkbox-label"
+                    :for="`electrical-${option.name}`">
+                    <input type="checkbox" :id="`electrical-${option.name}`" v-model="localValue[option.name]"
+                        :disabled="localValue.noElectrical || (option.name === 'drywallRepair' && localValue.addCanLights)" />
+                    {{ option.label }}
+                </label>
+            </div>
+            <div v-if="localValue.addCanLights">
+                <label class="checkbox-label" for="drywallRepair">
+                    <input type="checkbox" id="drywallRepair" v-model="localValue.drywallRepair"
+                        :disabled="localValue.addCanLights" />
+                    Drywall Repair
+                </label>
+            </div>
+        </div>
+        <div class="new-appliance">
+            <h2>Appliances</h2>
+            <h4>Select your current appliances and any new ones.</h4>
+            <p>This calculator assumes we will install the appliances as part of the renovation project, unless you opt
+                to install them yourself.</p>
+            <!-- Loop through appliances -->
+            <div v-for="appliance in appliances" :key="appliance.name" class="appliance-item">
+
+                <!-- Render regular appliance checkboxes -->
+                <template v-if="appliance.name !== 'RangeHoodSubSection'">
+                    <label class="checkbox-label">
+                        <input type="checkbox" v-model="localValue[appliance.name]"
+                            :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' " />
+                        {{ appliance.label }}
+                    </label>
+
+                    <!-- Added Keep and New checkboxes -->
+                    <div class="keep-new-options"
+                        v-if="localValue[appliance.name] && appliance.name !== 'installationOptout'">
+                        <label>
+                            <input type="checkbox" v-model="localValue[`${appliance.name}_keep`]"
+                                :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_new`]" />
+                            Keep
+                        </label>
+                        <label>
+                            <input type="checkbox" v-model="localValue[`${appliance.name}_new`]"
+                                :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_keep`]" />
+                            New
+                        </label>
+                    </div>
+                </template>
+
+                <!-- Render sub-section after Exhaust Hood -->
+                <template v-else>
+                    <div class="sub-section" v-if="localValue.newRangeHood_new">
+                        <label class="checkbox-label">
+                            <input type="checkbox" v-model="localValue.runExhaustDucting"
+                                :disabled="localValue.noExhaustHood" />
+                            Run new exhaust ducting from range hood to exterior
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" v-model="localValue.runDuctingThroughBrick"
+                                :disabled="localValue.noExhaustHood" />
+                            Run ducting through brick
+                        </label>
+                    </div>
+                </template>
+
+            </div>
+
+            <!-- Installation Opt Out Modal -->
+            <div v-if="showOptOutModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" @click="showOptOutModal = false">&times;</span>
+                    <p>
+                        Installation opt out means you the client are responsible for the installation of the
+                        appliances, new or original, excluding the Exhaust Hood and Wall Oven.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- New appliance Opt Out Modal -->
+        <div v-if="showNewApplianceModal" class="modal">
+            <div class="modal-content">
+                <span class="close" @click="showNewApplianceModal = false">&times;</span>
+                <p>
+                    You have chosen to keep There will be a reinstall
+                </p>
+            </div>
+        </div>
+        <div class="backsplash">
+            <h2>Backsplash</h2>
+            <label class="checkbox-label" for="noBacksplash">
+                <input type="radio" id="noBacksplash" :value="false" v-model="localValue.backsplash" />
+                No backsplash
+            </label>
+            <label class="checkbox-label" for="backsplash">
+                <input type="radio" id="backsplash" :value="true" v-model="localValue.backsplash" />
+                Backsplash
+            </label>
+        </div>
+        <div class="interior-paint">
+            <h2>Interior Painting</h2>
+            <h3></h3>
+            <label class="checkbox-label">
+                <input type="radio" v-model="localValue.paintKitchen" :value="false" />
+                <span>No paint</span>
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" v-model="localValue.paintKitchen" :value="true" />
+                Paint the kitchen
+            </label>
+        </div>
+        <div class="flooring">
+            <h2>Flooring</h2>
+            <label class="checkbox-label">
+                <input type="radio" value="false" v-model="localValue.flooringType" />
+                No flooring
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="LVP/Engineered" v-model="localValue.flooringType" />
+                LVP/Engineered
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Hardwood" v-model="localValue.flooringType" />
+                Hardwood
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" value="Tile" v-model="localValue.flooringType" />
+                Tile
+            </label>
+        </div>
+        <div class="demo">
+            <h2>Demo</h2>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" v-model="localValue.noDemo" value="clientDemo" />
+                    Client will demo
+                </label>
+                <template v-for="option in demoOptions" :key="option.name">
+                    <label v-if="shouldShowOption(option)" class="checkbox-label">
+                        <input type="checkbox" v-model="localValue[option.name]" :disabled="isOptionDisabled(option)" />
+                        <span :class="{ disabled: isOptionDisabled(option) }">
+                            {{ option.label }}
+                        </span>
+                    </label>
+                </template>
+            </div>
+        </div>
+        <div class="cleaning">
+            <h2>Final Cleaning</h2>
+            <label class="checkbox-label">
+                <input type="radio" v-model="localValue.cleanKitchen" :value="false" />
+                No cleaning
+            </label>
+            <label class="checkbox-label">
+                <input type="radio" v-model="localValue.cleanKitchen" :value="true" />
+                Clean the kitchen
+            </label>
+        </div>
+        <div class="user-form">
+            <h2>Contact info</h2>
+            <!-- Contact Info Fields -->
+            <div class="contact-info">
+                <label for="name">Name:</label>
+                <input required v-model="localValue.name" type="text" id="name" placeholder="First Last" />
+
+                <label for="phone">Phone:</label>
+                <input required v-model="localValue.phone" type="text" id="phone" placeholder="Phone number" />
+
+                <label for="email">Email:</label>
+                <input required v-model="localValue.email" type="email" id="email" placeholder="Email" />
+                <label for="address">Address:</label>
+                <input v-model="localValue.address" type="text" id="address" placeholder="Street Address" />
+
+                <label for="city">City:</label>
+                <input v-model="localValue.city" type="text" id="city" placeholder="City" />
+                <label for="state">State:</label>
+                <input v-model="localValue.state" type="text" id="state" placeholder="State" />
+
+                <label for="zip">Zip Code:</label>
+                <input v-model="localValue.zip" type="text" id="zip" placeholder="Zip Code" />
+            </div>
+        </div>
+        <button :class="['progress-button', { disabled: isDisabled }, { loading: isLoading }]"
+            :disabled="isDisabled || isLoading" @click="handleClick" aria-disabled="isDisabled || isLoading"
+            aria-live="polite">
+            <div class="progress-overlay" :style="{ width: `${progress}%` }"></div>
+            <span class="progress-text">
+                <span v-if="isLoading">Submitting...</span>
+                <span v-else-if="progress > 0 && progress < 100">Progress: {{ progress }}%</span>
+                <span v-else>{{ buttonText }}</span>
+            </span>
+        </button>
+    </form>
+
+</body>
+
+</html>

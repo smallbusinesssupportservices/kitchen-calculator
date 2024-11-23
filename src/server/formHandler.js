@@ -52,15 +52,15 @@ export const processFormData = (req, res) => {
 
             for (let categoryItem in formCategory) {
                 const item = {};
-                const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}`: categoryItem);
+                const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}` : categoryItem);
                 const itemsNeddle = (
-                    (categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType')) 
-                    ? cat 
-                    : (categoryItem == 'cabinetType') 
-                        ? `${formData[cat][categoryItem]}` 
-                        : categoryItem);
+                    (categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType'))
+                        ? cat
+                        : (categoryItem == 'cabinetType')
+                            ? `${formData[cat][categoryItem]}`
+                            : categoryItem);
 
-                if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {  
+                if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {
 
                     const dbItem = dbItems[dbNeddle];
                     const markup = parseFloat(dbItem?.markup) ?? 1;
@@ -130,7 +130,7 @@ export const processFormData = (req, res) => {
                         unitPrice = (!sqftPrice ? (unitCost * (1 + markup) + (multiplier * calculatedUnits)) : (sqftPrice * ((1 + markup))));
 
                     } else {
-                        
+
                         unitPrice = (sqftPrice == null ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
                     }
 
@@ -176,7 +176,7 @@ export const processFormData = (req, res) => {
                         let allowance = dbNeddle == 'flooring:Tile' ? 12 : 0;
                         subtotal = (!sqftPrice ? unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : (unitPrice + allowance) * kitchenArea * a)
                     } else {
-                        const a = 1 
+                        const a = 1
                         subtotal = (!sqftPrice ? unitPrice * a * calculatedUnits : unitPrice * kitchenArea * a)
                     }
 
@@ -202,7 +202,7 @@ export const processFormData = (req, res) => {
             }
 
             // Apply category minimum if applicable
-            if (categoryMinimums[cat] && category.categoryTotal > 0 && category.categoryTotal < categoryMinimums[cat] ) {
+            if (categoryMinimums[cat] && category.categoryTotal > 0 && category.categoryTotal < categoryMinimums[cat]) {
                 category.categoryTotal = categoryMinimums[cat];
             }
 
@@ -220,15 +220,15 @@ export const processFormData = (req, res) => {
             lowBuffer: calculatorSettings.lowBuffer,
             highBuffer: calculatorSettings.highBuffer
         }
-        const  { id, ...contactInfo} = formData.user
+        const { id, ...contactInfo } = formData.user
 
         const visitor = {
             contactInfo,
             calculatorSettingsValue,
             estimate
         }
-        console.log({[formData.user.id]:visitor})
-        updateVisitor({body:{id: [formData.user.id], data:visitor}})
+        console.log({ [formData.user.id]: visitor })
+        updateVisitor({ body: { id: [formData.user.id], data: visitor } })
         return estimate;
     }
 
