@@ -1467,5 +1467,154 @@
       "lowRange": 35723.0258,
       "highRange": 72185.9992
     }
+  },
+  "2e8fe023-6b87-457d-8510-9fb7b55fc9ae": {
+    "contactInfo": {
+      "name": "William Brewer",
+      "phone": "",
+      "email": "william.joseph.brewer@gmail.com",
+      "address": "181 powell st se",
+      "city": "Atlanta",
+      "state": "GA",
+      "zip": "30316"
+    },
+    "calculatorSettingsValue": {
+      "rng": 0.0043,
+      "lowBuffer": 0.3,
+      "highBuffer": 0.4
+    },
+    "estimate": {
+      "categories": [
+        {
+          "category": "demo",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "dumpster",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "plumbing",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "electrical",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "drywall",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "cabinets",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "noCabinets",
+              "unitCost": "0",
+              "calculatedUnits": 1,
+              "unitPrice": 0,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "countertops",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newSink",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newFixtures",
+          "items": [
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newFixtures",
+              "unitCost": "200",
+              "calculatedUnits": 0,
+              "unitPrice": 200,
+              "subtotal": 0
+            }
+          ],
+          "categoryTotal": 0
+        },
+        {
+          "category": "exhaustHoodDucting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "newAppliances",
+          "items": [
+            {
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "installAppliances",
+              "unitCost": "600",
+              "calculatedUnits": 1,
+              "unitPrice": 990,
+              "subtotal": 990
+            },
+            {
+              "sqftPrice": null,
+              "markup": 0,
+              "name": "newRange_new",
+              "unitCost": "1000",
+              "calculatedUnits": 1,
+              "unitPrice": 1000,
+              "subtotal": 1000
+            }
+          ],
+          "categoryTotal": 1990
+        },
+        {
+          "category": "installation",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "backsplash",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "flooring",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "interiorPainting",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "finalCleaning",
+          "items": [],
+          "categoryTotal": 0
+        },
+        {
+          "category": "user",
+          "items": [],
+          "categoryTotal": 0
+        }
+      ],
+      "overallTotal": 1990,
+      "lowRange": 1384.443,
+      "highRange": 2794.5570000000002
+    }
   }
 }
