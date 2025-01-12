@@ -140,7 +140,7 @@
       "zip": "30311"
     },
     "calculatorSettingsValue": {
-      "rng": 0.0061,
+      "rng": 0.0019,
       "lowBuffer": 0.3,
       "highBuffer": 0.4
     },
@@ -219,6 +219,36 @@
               "qboId": "",
               "sqftPrice": null,
               "markup": 0.65,
+              "name": "moveSink",
+              "unitCost": "650",
+              "calculatedUnits": 1,
+              "unitPrice": 1072.5,
+              "subtotal": 1072.5
+            },
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "moveFridgeWater",
+              "unitCost": "650",
+              "calculatedUnits": 1,
+              "unitPrice": 1072.5,
+              "subtotal": 1072.5
+            },
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
+              "name": "installPotFiller",
+              "unitCost": "1050",
+              "calculatedUnits": 1,
+              "unitPrice": 1732.5,
+              "subtotal": 1732.5
+            },
+            {
+              "qboId": "",
+              "sqftPrice": null,
+              "markup": 0.65,
               "name": "installFaucet",
               "unitCost": "400",
               "calculatedUnits": 1,
@@ -226,7 +256,7 @@
               "subtotal": 660
             }
           ],
-          "categoryTotal": 660
+          "categoryTotal": 4537.5
         },
         {
           "category": "electrical",
@@ -306,12 +336,12 @@
               "markup": 0,
               "name": "newFixtures",
               "unitCost": "200",
-              "calculatedUnits": 1,
+              "calculatedUnits": 2,
               "unitPrice": 200,
-              "subtotal": 200
+              "subtotal": 400
             }
           ],
-          "categoryTotal": 200
+          "categoryTotal": 400
         },
         {
           "category": "exhaustHoodDucting",
@@ -324,7 +354,7 @@
             {
               "sqftPrice": null,
               "markup": 0.65,
-              "name": "installAppliances",
+              "name": "installWallOven",
               "unitCost": "600",
               "calculatedUnits": 1,
               "unitPrice": 990,
@@ -333,14 +363,14 @@
             {
               "sqftPrice": null,
               "markup": 0,
-              "name": "newDishwasher_new",
-              "unitCost": "700",
+              "name": "newWallOven_new",
+              "unitCost": "1500",
               "calculatedUnits": 1,
-              "unitPrice": 700,
-              "subtotal": 700
+              "unitPrice": 1500,
+              "subtotal": 1500
             }
           ],
-          "categoryTotal": 1690
+          "categoryTotal": 2490
         },
         {
           "category": "installation",
@@ -367,16 +397,16 @@
           "items": [
             {
               "qboId": "",
-              "sqftPrice": "13.5",
+              "sqftPrice": "5",
               "markup": 0.65,
               "name": "flooring",
               "unitCost": 1,
               "calculatedUnits": 1,
-              "unitPrice": 22.275,
-              "subtotal": 3427.5
+              "unitPrice": 8.25,
+              "subtotal": 825
             }
           ],
-          "categoryTotal": 3427.5
+          "categoryTotal": 825
         },
         {
           "category": "interiorPainting",
@@ -414,9 +444,9 @@
           "categoryTotal": 0
         }
       ],
-      "overallTotal": 24053.75,
-      "lowRange": 16690.897125,
-      "highRange": 33821.977875
+      "overallTotal": 26328.75,
+      "lowRange": 18380.100375,
+      "highRange": 36910.274625
     }
   },
   "a9509452-6adc-484f-994b-575d0fbd0c89": {
