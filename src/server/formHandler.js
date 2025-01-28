@@ -131,7 +131,7 @@ export const processFormData = (req, res) => {
 
                     } else {
 
-                        unitPrice = (sqftPrice == null ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
+                        unitPrice = ((sqftPrice == null || sqftPrice == "") ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
                     }
 
                     let subtotal = 0;

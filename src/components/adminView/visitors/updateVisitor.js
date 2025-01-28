@@ -36,7 +36,7 @@ export async function updateVisitor(req, res) {
     // Write the updated visitors data back to the file
     await writeFile(filePath, JSON.stringify(visitors, null, 2));
 
-    res.status(200).json({ message: 'Visitor data saved successfully' });
+    // res.status(200).json({ message: 'Visitor data saved successfully' });
   } catch (err) {
     console.error('Error writing to file:', err);
     res.status(500).json({ message: 'Failed to save visitor data' });
