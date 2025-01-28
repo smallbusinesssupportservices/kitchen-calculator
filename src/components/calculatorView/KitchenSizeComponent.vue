@@ -1,117 +1,132 @@
 <template>
   <div class="kitchen-size">
-    <h2>Kitchen Size</h2>
+    <div class="dimensions-wrapper">
+      <!-- Kitchen Dimensions Container -->
+      <div class="kitchen-container">
+        <h2>Kitchen Dimensions</h2>
+        <div class="kitchen-section">
+          <div style="height:40px"></div>
+          <div class="section-content">
+            <div class="inputs-container">
+              <!-- Length (Feet / Inches) -->
+              <div class="dimension-row">
+                <label>Length:</label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    v-model="lengthFeet"
+                    min="0"
+                    placeholder="0"
+                  />
+                  <span>ft.</span>
+                  <input
+                    type="number"
+                    v-model="lengthInches"
+                    min="0"
+                    placeholder="0"
+                  />
+                  <span>in.</span>
+                </div>
+              </div>
 
-    <!-- (Optional) Toggle for sq.in / sq.ft. -->
-    <!--
-    <h3>
-      <div class="unit-toggle">
-        <span class="unit-label">in.</span>
-        <label class="toggle-switch">
-          <input type="checkbox" v-model="isSquareFeet" />
-          <span class="slider"></span>
-        </label>
-        <span class="unit-label">ft.</span>
+              <!-- Width (Feet / Inches) -->
+              <div class="dimension-row">
+                <label>Width:</label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    v-model="widthFeet"
+                    min="0"
+                    placeholder="0"
+                  />
+                  <span>ft.</span>
+                  <input
+                    type="number"
+                    v-model="widthInches"
+                    min="0"
+                    placeholder="0"
+                  />
+                  <span>in.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Display the kitchen area -->
+            <div v-if="kitchenArea !== null" class="area-display">
+              <strong>Area:</strong>
+              {{ kitchenArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
+            </div>
+          </div>
+        </div>
       </div>
-    </h3>
-    -->
 
-    <!-- Length (Feet / Inches) -->
-    <div class="length-row">
-      <label>Length:</label>
-      <input
-        type="number"
-        v-model="lengthFeet"
-        min="0"
-        placeholder="0"
-      />
-      <span>ft.</span>
-      <input
-        type="number"
-        v-model="lengthInches"
-        min="0"
-        placeholder="0"
-      />
-      <span>in.</span>
-    </div>
+      <!-- Island Container -->
+      <div class="island-container">
+        <h2>Island</h2>
+        <div class="island-section">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              v-model="localValue.hasIsland"
+            />
+            Include Island
+          </label>
 
-    <!-- Width (Feet / Inches) -->
-    <div class="width-row">
-      <label>Width:</label>
-      <input
-        type="number"
-        v-model="widthFeet"
-        min="0"
-        placeholder="0"
-      />
-      <span>ft.</span>
-      <input
-        type="number"
-        v-model="widthInches"
-        min="0"
-        placeholder="0"
-      />
-      <span>in.</span>
-    </div>
+          <div class="section-content" :class="{ 'disabled': !localValue.hasIsland }">
+            <div class="inputs-container">
+              <!-- Island Length -->
+              <div class="dimension-row">
+                <label>Length:</label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    v-model="islandLengthFeet"
+                    min="0"
+                    placeholder="0"
+                    :disabled="!localValue.hasIsland"
+                  />
+                  <span>ft.</span>
+                  <input
+                    type="number"
+                    v-model="islandLengthInches"
+                    min="0"
+                    placeholder="0"
+                    :disabled="!localValue.hasIsland"
+                  />
+                  <span>in.</span>
+                </div>
+              </div>
 
-    <!-- Display the kitchen area -->
-    <div v-if="kitchenArea !== null" class="kitchen-area">
-      <strong>Area:</strong>
-      {{ kitchenArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
-    </div>
+              <!-- Island Width -->
+              <div class="dimension-row">
+                <label>Width:</label>
+                <div class="input-group">
+                  <input
+                    type="number"
+                    v-model="islandWidthFeet"
+                    min="0"
+                    placeholder="0"
+                    :disabled="!localValue.hasIsland"
+                  />
+                  <span>ft.</span>
+                  <input
+                    type="number"
+                    v-model="islandWidthInches"
+                    min="0"
+                    placeholder="0"
+                    :disabled="!localValue.hasIsland"
+                  />
+                  <span>in.</span>
+                </div>
+              </div>
+            </div>
 
-    <!-- Island Section -->
-    <div style="padding-top:10px;">
-      <h2>Island</h2>
-      <label>
-        <input
-          type="checkbox"
-          v-model="localValue.hasIsland"
-        />
-        Island?
-      </label>
-
-      <!-- Island dimensions (Feet / Inches) -->
-      <div v-if="localValue.hasIsland" class="sub-section island">
-        <div class="island-row">
-          <label>Length:</label>
-          <input
-            type="number"
-            v-model="islandLengthFeet"
-            min="0"
-            placeholder="0"
-          />
-          <span>ft.</span>
-          <input
-            type="number"
-            v-model="islandLengthInches"
-            min="0"
-            placeholder="0"
-          />
-          <span>in.</span>
-        </div>
-        <div class="island-row">
-          <label>Width:</label>
-          <input
-            type="number"
-            v-model="islandWidthFeet"
-            min="0"
-            placeholder="0"
-          />
-          <span>ft.</span>
-          <input
-            type="number"
-            v-model="islandWidthInches"
-            min="0"
-            placeholder="0"
-          />
-          <span>in.</span>
-        </div>
-
-        <!-- Display the island area -->
-        <div v-if="islandArea !== null" class="island-area">
-          <strong>Island Area:</strong>
-          {{ islandArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
+            <!-- Display the island area -->
+            <div v-if="islandArea !== null" class="area-display">
+              <strong>Area:</strong>
+              {{ islandArea }} {{ isSquareFeet ? 'sq.ft.' : 'sq.in.' }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -130,21 +145,15 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-/**
- * We store:
- *   length, width, islandLength, islandWidth
- * all in inches, internally.
- */
 const localValue = reactive({
-  length: props.modelValue.length || '',         // total inches
-  width: props.modelValue.width || '',           // total inches
+  length: props.modelValue.length || '',
+  width: props.modelValue.width || '',
   hasIsland: props.modelValue.hasIsland || false,
   islandLength: props.modelValue.islandLength || '',
   islandWidth: props.modelValue.islandWidth || '',
 });
 
-// Toggle between sq.in. or sq.ft. displays
-const isSquareFeet = ref(false);
+const isSquareFeet = ref(true);
 
 /* -------------------------------------------------------------------
    LENGTH (feet + inches)
@@ -345,127 +354,113 @@ watch(
 </script>
 
 <style scoped>
-/* Center the entire container */
 .kitchen-size {
-  margin: 0 auto;
-  max-width: 850px;
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  border: 1px solid var(--border-color);
+}
+
+.dimensions-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.kitchen-container,
+.island-container {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.kitchen-section,
+.island-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgb(248, 250, 252);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+}
+
+.section-content {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dimension-row {
+  margin-bottom: 0.5rem;
+}
+
+.dimension-row label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-group input {
+  width: 80px;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.input-group input:disabled {
+  opacity: 0.6;
+  background-color: var(--border-color);
+  cursor: not-allowed;
+}
+
+.input-group span {
+  min-width: 30px;
+}
+
+.area-display {
+  padding: 0.75rem;
+  background-color: var(--background-color);
+  border-radius: var(--radius);
   text-align: center;
-
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  height: fit-content;
 }
 
-/* Flex row for Length */
-.length-row {
+.checkbox-label {
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-.length-row label {
-  margin-right: 8px;
-}
-.length-row input[type='number'] {
-  width: 60px;
-  margin-right: 5px;
-}
-.length-row span {
-  margin-right: 12px;
+  gap: 0.5rem;
 }
 
-/* Flex row for Width */
-.width-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-.width-row label {
-  margin-right: 8px;
-}
-.width-row input[type='number'] {
-  width: 60px;
-  margin-right: 5px;
-}
-.width-row span {
-  margin-right: 12px;
+.disabled {
+  opacity: 0.6;
 }
 
-/* Island rows (feet + inches) */
-.island-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-.island-row label {
-  margin-right: 8px;
-}
-.island-row input[type='number'] {
-  width: 60px;
-  margin-right: 5px;
-}
-.island-row span {
-  margin-right: 12px;
-}
-
-.unit-toggle {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.unit-toggle .unit-label {
-  font-weight: bold;
-  margin: 0 10px;
-}
-
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;  
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 24px;
-}
-.slider:before {
-  position: absolute;
-  content: '';
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
-}
-input:checked + .slider {
-  background-color: #2196F3;
-}
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.kitchen-area,
-.island-area {
-  margin-top: 20px;
+@media (max-width: 768px) {
+  .dimensions-wrapper {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .section-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 </style>

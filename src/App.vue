@@ -5,10 +5,12 @@
 <template>
   <div class="calculator-app">
     <nav class="horizontal-nav">
+      ** Nav for testing **
       <div><router-link to="/">Calculator</router-link></div>
       <div><router-link to="/admin">Admin</router-link></div>
       <div><router-link to="/make-appointment">Appointment</router-link></div>
       <div><router-link to="/email">Email</router-link></div>
+      ** Nav for testing **
     </nav>
     <router-view />
   </div>

@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import axios from 'axios';
-import ItemSettings from './itemSettings.vue' 
+import ItemSettings from "./ItemSettings.vue" 
 import Items from './items.json' with { type: 'json' };
 
 

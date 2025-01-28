@@ -6,10 +6,10 @@
       <Cabinets v-model="formData.cabinets" />
       <Countertops v-model="formData.countertops" />
       <NewSink v-model="formData.newSink" />
+      <Backsplash v-model="formData.backsplash" />
       <Plumbing v-model="formData.plumbing" />
       <Electrical v-model="formData.electrical" />
       <NewAppliances v-model="formData.newAppliances" />
-      <Backsplash v-model="formData.backsplash" />
       <InteriorPainting v-model="formData.interiorPainting" />
       <Flooring v-model="formData.flooring" />
       <Demo v-model="formData.demo" :demoSink="formData.newSink.sinkType"

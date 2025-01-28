@@ -3,84 +3,80 @@
     <h2>Appliances</h2>
     <h4>Select your current appliances and any new ones.</h4>
     <p>This calculator assumes we will install the appliances as part of the renovation project, unless you opt to install them yourself.</p>
+    
     <!-- Loop through appliances -->
-    <div v-for="appliance in appliances" :key="appliance.name" class="appliance-item">
-      
-      <!-- Render regular appliance checkboxes -->
-      <template v-if="appliance.name !== 'RangeHoodSubSection'">
-        <label class="checkbox-label">
-          <input 
-            type="checkbox" 
-            v-model="localValue[appliance.name]"
-            :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' " 
-          />
-          {{ appliance.label }}
-        </label>
-
-        <!-- Added Keep and New checkboxes -->
-        <div class="keep-new-options" v-if="localValue[appliance.name] && appliance.name !== 'installationOptout'">
-          <label>
-            <input 
-              type="checkbox" 
-              v-model="localValue[`${appliance.name}_keep`]"
-              :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_new`]"
-            />
-            Keep
-          </label>
-          <label>
-            <input 
-              type="checkbox" 
-              v-model="localValue[`${appliance.name}_new`]"
-              :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_keep`]"
-            />
-            New
-          </label>
-        </div>
-      </template>
-      
-      <!-- Render sub-section after Exhaust Hood -->
-      <template v-else>
-        <div class="sub-section" v-if="localValue.newRangeHood_new">
+    <div class="appliance-list">
+      <div v-for="appliance in appliances" :key="appliance.name" class="appliance-item">
+        <!-- Render regular appliance checkboxes -->
+        <template v-if="appliance.name !== 'RangeHoodSubSection'">
           <label class="checkbox-label">
             <input 
               type="checkbox" 
-              v-model="localValue.runExhaustDucting" 
-              :disabled="localValue.noExhaustHood" 
+              v-model="localValue[appliance.name]"
+              :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout'"
             />
-            Run new exhaust ducting from range hood to exterior
+            {{ appliance.label }}
           </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="localValue.runDuctingThroughBrick" 
-              :disabled="localValue.noExhaustHood" 
-            />
-            Run ducting through brick
-          </label>
-        </div>
-      </template>
 
+          <!-- Keep and New options -->
+          <div class="keep-new-options" v-if="localValue[appliance.name] && appliance.name !== 'installationOptout'">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                v-model="localValue[`${appliance.name}_keep`]"
+                :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_new`]"
+              />
+              Keep
+            </label>
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                v-model="localValue[`${appliance.name}_new`]"
+                :disabled="localValue.noAppliances && appliance.name != 'noAppliances' && appliance.name != 'installationOptout' || localValue[`${appliance.name}_keep`]"
+              />
+              New
+            </label>
+          </div>
+        </template>
+        
+        <!-- Range Hood Sub-section -->
+        <template v-else>
+          <div class="sub-section" v-if="localValue.newRangeHood_new">
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                v-model="localValue.runExhaustDucting" 
+                :disabled="localValue.noExhaustHood"
+              />
+              Run new exhaust ducting from range hood to exterior
+            </label>
+            <label class="checkbox-label">
+              <input 
+                type="checkbox" 
+                v-model="localValue.runDuctingThroughBrick" 
+                :disabled="localValue.noExhaustHood"
+              />
+              Run ducting through brick
+            </label>
+          </div>
+        </template>
+      </div>
     </div>
 
     <!-- Installation Opt Out Modal -->
     <div v-if="showOptOutModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="showOptOutModal = false">&times;</span>
-        <p>
-          Installation opt out means you the client are responsible for the installation of the
-          appliances, new or original, excluding the Exhaust Hood and Wall Oven.
-        </p>
+        <p>Installation opt out means you the client are responsible for the installation of the appliances, new or original, excluding the Exhaust Hood and Wall Oven.</p>
       </div>
     </div>
-  </div>
 
-  <!-- New appliance Opt Out Modal -->
-  <div v-if="showNewApplianceModal" class="modal">
-    <div class="modal-content">
-      <span class="close" @click="showNewApplianceModal = false">&times;</span>
-      <p>
-        You have chosen to keep There will be a reinstall 
-      </p>
+    <!-- New appliance Opt Out Modal -->
+    <div v-if="showNewApplianceModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showNewApplianceModal = false">&times;</span>
+        <p>You have chosen to keep. There will be a reinstall.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -105,8 +101,6 @@ const appliances = [
   { name: 'newRangeHood', label: 'Exhaust Hood' },
   { name: 'RangeHoodSubSection', label: null },
   { name: 'installationOptout', label: 'Installation opt out' },
-  // { name: 'noAppliances', label: 'Keep my appliances' },
-  
 ];
 
 const localValue = reactive(
@@ -126,16 +120,9 @@ const localValue = reactive(
   })
 );
 
-// // Computed property to determine noAppliances
-// const noAppliances = computed(() => {
-//   return appliances.every(appliance => !localValue[`${appliance.name}_new`]);
-// });
-
-// Control Modal Visibility
 const showOptOutModal = ref(false);
 const showNewApplianceModal = ref(false);
 
-// Watcher for 'installationOptout
 watch(
   () => localValue.installationOptout,
   (newVal) => {
@@ -148,7 +135,6 @@ watch(
   }
 );
 
-// Watcher for 'installWallOven' 
 watch(
   () => localValue.newWallOven_new,
   (newVal) => {
@@ -156,7 +142,6 @@ watch(
   }
 );
 
-// Watcher for 'installVentHood' 
 watch(
   () => localValue.newRangeHood_new,
   (newVal) => {
@@ -164,7 +149,6 @@ watch(
   }
 );
 
-// Watcher for appliance install thats not rangeHood or wallOven
 watch(
   () => [localValue.newRange_new, localValue.newDishwasher_new, localValue.newFridge_new, localValue.newMicrowave_new, localValue.newCooktop_new],
   ([newRangeVal_new, newDishwasherVal_new, newFridgeVal_new, newMicrowaveVal_new, newCooktopVal_new]) => {
@@ -176,7 +160,6 @@ watch(
   }
 );
 
-// Watcher to Reset "Keep" and "New" when appliance checkbox is unchecked
 appliances.forEach(appliance => {
   watch(
     () => localValue[appliance.name],
@@ -193,7 +176,6 @@ appliances.forEach(appliance => {
   );
 });
 
-// Watcher to Reset Other Appliances When "No appliances" is Checked
 watch(
   () => localValue.noAppliances,
   (newVal) => {
@@ -206,7 +188,6 @@ watch(
           localValue[`${appliance.name}_new`] = false;
         }
       });
-      // Optionally, reset installation responsibilities when no appliances are selected
       localValue.installAppliances = false;
       localValue.installVentHood = false;
       localValue.installWallOven = false;
@@ -225,20 +206,48 @@ watch(
 
 <style scoped>
 .new-appliance {
-  grid-column: 2 / 2;
-  grid-row: 2 / 2;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  border: 1px solid var(--border-color);
+}
+
+h4 {
+  margin: 1rem 0;
+  color: var(--text-color);
+}
+
+p {
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.appliance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.appliance-item {
+  padding: 0.5rem 0;
 }
 
 .keep-new-options {
   display: flex;
-  justify-content: space-between;
-  width: 200px; /* Adjust based on the layout */
-  margin-left: 20px; /* Align with the main checkbox */
-  margin-bottom: 10px;
+  gap: var(--input-spacing);
+  margin-left: calc(1.25rem + var(--input-spacing));
+  margin-top: 0.5rem;
+}
+
+.sub-section {
+  margin-left: calc(1.25rem + var(--input-spacing));
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 /* Modal Styles */
@@ -256,23 +265,33 @@ watch(
 }
 
 .modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
+  background-color: var(--card-background);
+  padding: 2rem;
+  border-radius: var(--radius);
+  width: min(90%, 400px);
   position: relative;
-  text-align: center;
+  box-shadow: var(--shadow);
 }
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 20px;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.7;
+  transition: var(--transition);
 }
 
-.sub-section {
-  margin-left: 20px;
+.close:hover {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .keep-new-options {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 </style>

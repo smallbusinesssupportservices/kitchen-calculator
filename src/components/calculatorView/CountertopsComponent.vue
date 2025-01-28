@@ -1,81 +1,80 @@
 <template>
   <div class="countertops">
     <h2>Countertops</h2>
-
-    <!-- Quartz -->
-    <div class="countertop-option">
-      <div class="option-title">Quartz</div>
-      <div class="image-wrapper">
-        <!-- Radio button: absolutely positioned on left, centered vertically -->
-        <input
-          type="radio"
-          value="Quartz"
-          v-model="localValue.countertopType"
-          class="option-radio"
-        />
-        <img
-          src="../../assets/countertop_images/calacatta-laza-stonemark-quartz-countertops-p-qsl-calalaza-4x4-64_300.avif"
-          alt="Quartz countertop"
-        />
+    <div class="countertop-grid">
+      <!-- Quartz -->
+      <div class="countertop-option">
+        <div class="option-title">Quartz</div>
+        <div class="image-wrapper">
+          <input
+            type="radio"
+            value="Quartz"
+            v-model="localValue.countertopType"
+            class="option-radio"
+          />
+          <img
+            src="../../assets/countertop_images/calacatta-laza-stonemark-quartz-countertops-p-qsl-calalaza-4x4-64_300.avif"
+            alt="Quartz countertop"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Granite -->
-    <div class="countertop-option">
-      <div class="option-title">Granite</div>
-      <div class="image-wrapper">
-        <input
-          type="radio"
-          value="Granite"
-          v-model="localValue.countertopType"
-          class="option-radio"
-        />
-        <img
-          src="../../assets/countertop_images/white-antico-stonemark-granite-countertops-dt-g062-64_300.avif"
-          alt="Granite countertop"
-        />
+      <!-- Granite -->
+      <div class="countertop-option">
+        <div class="option-title">Granite</div>
+        <div class="image-wrapper">
+          <input
+            type="radio"
+            value="Granite"
+            v-model="localValue.countertopType"
+            class="option-radio"
+          />
+          <img
+            src="../../assets/countertop_images/white-antico-stonemark-granite-countertops-dt-g062-64_300.avif"
+            alt="Granite countertop"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Solid-Surface -->
-    <div class="countertop-option">
-      <div class="option-title">Solid-Surface</div>
-      <div class="image-wrapper">
-        <input
-          type="radio"
-          value="Solid-Surface"
-          v-model="localValue.countertopType"
-          class="option-radio"
-        />
-        <img
-          src="../../assets/countertop_images/cosmos-hi-macs-solid-surface-countertops-lg-t002-hm-64_300.avif"
-          alt="Solid-Surface countertop"
-        />
+      <!-- Solid-Surface -->
+      <div class="countertop-option">
+        <div class="option-title">Solid-Surface</div>
+        <div class="image-wrapper">
+          <input
+            type="radio"
+            value="Solid-Surface"
+            v-model="localValue.countertopType"
+            class="option-radio"
+          />
+          <img
+            src="../../assets/countertop_images/cosmos-hi-macs-solid-surface-countertops-lg-t002-hm-64_300.avif"
+            alt="Solid-Surface countertop"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Butcher Block -->
-    <div class="countertop-option">
-      <div class="option-title">Butcher Block</div>
-      <div class="image-wrapper">
-        <input
-          type="radio"
-          value="Butcher Block"
-          v-model="localValue.countertopType"
-          class="option-radio"
-        />
-        <img
-          src="../../assets/countertop_images/unfinished-hampton-bay-butcher-block-countertops-tp-10ft-64_300.avif"
-          alt="Butcher Block countertop"
-        />
+      <!-- Butcher Block -->
+      <div class="countertop-option">
+        <div class="option-title">Butcher Block</div>
+        <div class="image-wrapper">
+          <input
+            type="radio"
+            value="Butcher Block"
+            v-model="localValue.countertopType"
+            class="option-radio"
+          />
+          <img
+            src="../../assets/countertop_images/unfinished-hampton-bay-butcher-block-countertops-tp-10ft-64_300.avif"
+            alt="Butcher Block countertop"
+          />
+        </div>
       </div>
     </div>
 
     <!-- Waterfall edges -->
-    <div class="countertop-option">
-      <div class="option-title">Waterfall edges</div>
-      <!-- Input for Waterfall edges -->
-      <div class="option-waterfall">
+    <div class="waterfall-section">
+      <div class="waterfall-title">
+        <span class="option-title">Waterfall edges</span>
         <input
           type="number"
           v-model="localValue.waterfallEdges"
@@ -83,18 +82,24 @@
           class="waterfall-input"
         />
       </div>
-      <!-- Image, if desired -->
-      <div class="image-wrapper">
-        <img
-          src="../../assets/countertop_images/kitchen-waterfall-corner-close-web-1018x1024.jpg"
-          alt="Waterfall countertop"
-          style="width:300px;height:300px;"
-        />
+      
+      <div class="waterfall-content">
+        <div class="waterfall-info">
+          <p class="waterfall-description">
+            A waterfall edge countertop is where the countertop material continues seamlessly down the sides of an island or cabinetry, creating a dramatic, modern statement. This design highlights the beauty of the materials while offering added protection for the corners and sides of the cabinets.
+          </p>
+        </div>
+        <div class="waterfall-image">
+          <img
+            src="../../assets/countertop_images/waterfall_edge.webp"
+            alt="Waterfall countertop"
+          />
+        </div>
       </div>
     </div>
 
     <!-- No Countertops -->
-    <label class="checkbox-label">
+    <label class="checkbox-label no-countertops">
       <input type="radio" value="noCountertop" v-model="localValue.countertopType" />
       No countertops
     </label>
@@ -117,7 +122,6 @@ const localValue = reactive({
   waterfallEdges: props.modelValue.waterfallEdges || 0,
 });
 
-// Watch for changes in props and update localValue
 watch(
   () => props.modelValue,
   (newVal) => {
@@ -126,7 +130,6 @@ watch(
   { deep: true, immediate: true }
 );
 
-// Reset waterfall edges if "No countertops" is chosen
 watch(
   () => localValue.countertopType,
   (newVal) => {
@@ -136,7 +139,6 @@ watch(
   }
 );
 
-// Emit updated values to the parent
 watch(
   localValue,
   () => {
@@ -148,59 +150,152 @@ watch(
 
 <style scoped>
 .countertops {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  /* If you want them side-by-side, uncomment:
-     display: flex;
-     flex-wrap: wrap;
-     gap: 20px; 
-  */
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background-color: var(--card-background);
+  box-shadow: var(--shadow);
+  width: 100%;
 }
 
-/* Each individual option box */
+.countertop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
 .countertop-option {
-  margin-bottom: 20px;
-  text-align: center; /* So the title is centered above the image */
+  text-align: center;
+  background-color: var(--background-color);
+  padding: 1rem;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  min-width: 200px;
 }
 
-/* The text (countertop name) above the image */
+.countertop-option:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
 .option-title {
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
-/* Container that holds the image and the (absolute) radio button */
 .image-wrapper {
   position: relative;
-  display: inline-block; /* For correct absolute positioning */
+  display: inline-block;
+  border-radius: calc(var(--radius) - 4px);
+  overflow: hidden;
 }
 
-/* The radio button: left side, centered vertically */
+.image-wrapper img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition);
+}
+
 .option-radio {
   position: absolute;
-  left: -30px; /* Move further left if needed */
-  top: 50%;
-  transform: translateY(-50%);
+  left: 0.5rem;
+  top: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
   z-index: 2;
+  cursor: pointer;
 }
 
-/* Sizing for images */
-.image-wrapper img {
-  width: 200px;  /* Adjust as needed */
-  height: auto;
-  display: block; /* Remove extra bottom space in inline-block context */
+.waterfall-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
 }
 
-/* Waterfall edges container */
-.option-waterfall {
-  margin-bottom: 8px; /* space between input and image below */
+.waterfall-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Waterfall input styling */
+.waterfall-title .option-title {
+  margin-bottom: 0;
+}
+
+.waterfall-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.waterfall-info {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.waterfall-description {
+  color: var(--text-color);
+  line-height: 1.8;
+  font-size: 17px;
+  margin: 0;
+}
+
 .waterfall-input {
-  width: 40px;
-  text-align: center;
+  width: 80px;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+}
+
+.waterfall-image {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.waterfall-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-countertops {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 1024px) {
+  .countertop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .countertop-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .waterfall-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .waterfall-description {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .waterfall-image {
+    width: 100%;
+  }
 }
 </style>
