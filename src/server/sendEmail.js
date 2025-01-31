@@ -4,10 +4,7 @@ dotenv.config();
 
 export const sendEmail = (req, res) => {
     const { from, to, subject, text, html } = req.body;
-    console.log("** sendEmail **");
-    console.log("req.body: ", req.body)
-    console.log("process.env.GMAIL_USER: ", process.env.GMAIL_USER);
-    console.log("process.env.GMAIL_PASS: ", process.env.GMAIL_PASS)
+
     // Gmail SMTP settings
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
