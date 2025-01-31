@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const sendEmail = (req, res) => {
-
-    const { from, to, subject, text } = req.body;
-
+    const { from, to, subject, text, html } = req.body;
+    console.log("** sendEmail **");
+    console.log("req.body: ", req.body)
+    console.log("process.env.GMAIL_USER: ", process.env.GMAIL_USER);
+    console.log("process.env.GMAIL_PASS: ", process.env.GMAIL_PASS)
     // Gmail SMTP settings
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -14,19 +16,21 @@ export const sendEmail = (req, res) => {
             pass: process.env.GMAIL_PASS,
         },
     });
-    console.log(JSON.stringify({ from: 'william@smallbusinessessupport.services', to, subject, text},null,2))
-    let mailOptions = { from: 'william@smallbusinessessupport.services', to, subject, text};
+
+    let mailOptions = {
+        from: 'william@smallbusinessessupport.services',
+        to,
+        subject,
+        text, // Plain text version
+        html  // HTML version
+    };
 
     // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
+            console.error('Error sending email:', error);
             return res.status(500).send(error.toString());
         }
         res.status(200).json({ message: 'Email sent successfully' });
     });
 }
-
-// sendEmail(
-//     { body : {email: 'william@smallbusinessessupport.services', subject: "Email from Kitchen Calculator", message: "Here is your kitchen estimate: $10,000 - $15,000" }},
-//     {}
-// )

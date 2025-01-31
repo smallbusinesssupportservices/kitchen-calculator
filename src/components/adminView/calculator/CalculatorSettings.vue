@@ -33,6 +33,10 @@ const saveToServer = async () => {
       <label for="rng">RNG Value:</label>
       <input type="number" id="rng" v-model="settings.rng" />
     </div>
+    <div class="input-group">
+      <label for="rng">Mark up:</label>
+      <input type="number" id="markUp" v-model="settings.rng" />
+    </div>
     <button @click="saveToServer">Save</button>
   </div>
 </template>
