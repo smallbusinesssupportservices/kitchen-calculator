@@ -35,7 +35,25 @@ const saveToServer = async () => {
     </div>
     <div class="input-group">
       <label for="rng">Mark up:</label>
-      <input type="number" id="markUp" v-model="settings.rng" />
+      <input type="number" id="markUp" v-model="settings.markUp" />
+    </div>
+
+    <div class="input-group">
+      <label for="rng">Cabinet Multiplier:</label>
+      <input type="number" id="cabinetMultiplier" v-model="settings.cabinet_multiplier" />
+    </div>
+    <div class="input-group">
+      <label for="rng">Contertop Multiplier:</label>
+      <input type="number" id="countertopMultiplier" v-model="settings.countertop_multiplier" />
+    </div>
+    <div class="input-group">
+      <label for="rng">Window Constant:</label>
+      <input type="number" id="windowConstant" v-model="settings.window_constant" />
+    </div>
+
+    <div class="input-group">
+      <label for="rng">Appiance Constant:</label>
+      <input type="number" id="applianceConstant" v-model="settings.appliance_constant" />
     </div>
     <button @click="saveToServer">Save</button>
   </div>

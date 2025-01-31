@@ -17,6 +17,7 @@ export const processFormData = (req, res) => {
 
     // Function to calculate total cost
     const calculateTotalCost = (dbItems, formData) => {
+        const MARK_UP = calculatorSettings.markUp;
         const estimate = {
             categories: [],
             overallTotal: 0
@@ -63,23 +64,23 @@ export const processFormData = (req, res) => {
                 if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {
 
                     const dbItem = dbItems[dbNeddle];
-                    const markup = parseFloat(dbItem?.markup) ?? 1;
+                    const markup = isNaN(parseFloat(dbItem?.markup)) ? parseFloat(dbItem?.markup) :  MARK_UP;
                     const sqftPrice = dbItem?.sqftPrice;
 
                     // calculate units
                     let calculatedUnits = 1;
 
                     if (['paintStainedCabinets', 'paintPaintedCabinets', 'standardLineCabinets', 'fullCustomCabinets'].includes(dbNeddle)) {
-
-                        calculatedUnits = ((kitchenLength + kitchenWidth) * 1.75 - 9 - 3 - 4 + (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0))
+                        
+                        calculatedUnits = ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant + (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0))
 
                     } else if (dbNeddle == 'backsplash') {
 
-                        calculatedUnits = ((((kitchenLength + kitchenWidth) * 1.6 - 9 - 3 - 4)) * 2);
+                        calculatedUnits = ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant)) * 2);
 
                     } else if (dbNeddle == 'customColorBase') {
 
-                        calculatedUnits = (((kitchenLength + kitchenWidth) * 1.75 - 9 - 3 - 4) / 2 + ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)))
+                        calculatedUnits = (((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant) / 2 + ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)))
 
                     } else if (dbNeddle == 'customColorWall') {
 
