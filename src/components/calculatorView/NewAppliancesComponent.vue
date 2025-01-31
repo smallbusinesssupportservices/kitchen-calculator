@@ -100,7 +100,7 @@ const appliances = [
   { name: 'newWallOven', label: 'Wall Oven' },
   { name: 'newRangeHood', label: 'Exhaust Hood' },
   { name: 'RangeHoodSubSection', label: null },
-  { name: 'installationOptout', label: 'Installation opt out' },
+  { name: 'installationOptout', label: 'Customer to install appliances' },
 ];
 
 const localValue = reactive(
