@@ -3,49 +3,49 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "150",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "removeCountertops": {
     "calculatedUnits": null,
     "sqftPrice": "2",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "removeCabinets": {
     "calculatedUnits": null,
     "sqftPrice": "4",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "removeBacksplash": {
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "300",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "removeFlooring": {
     "calculatedUnits": null,
     "sqftPrice": "2",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "lightDemo": {
     "calculatedUnits": null,
     "sqftPrice": "9",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "dumpster": {
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "425",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "moveSink": {
@@ -53,7 +53,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "650",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "moveFridgeWater": {
@@ -61,7 +61,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "650",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "installPotFiller": {
@@ -69,7 +69,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "1050",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "installFaucet": {
@@ -77,7 +77,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "400",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "installDisposal": {
@@ -85,7 +85,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "400",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newDisposal_new": {
@@ -101,7 +101,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "1500",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "swapFixtures": {
@@ -109,7 +109,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "150",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "addCanLights": {
@@ -117,7 +117,7 @@
     "calculatedUnits": null,
     "sqftPrice": "5",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "addUnderCabinetLights": {
@@ -125,7 +125,7 @@
     "calculatedUnits": null,
     "sqftPrice": "2",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "switchesAndOutlets": {
@@ -133,7 +133,7 @@
     "calculatedUnits": null,
     "sqftPrice": "3",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "applianceOutlets": {
@@ -141,7 +141,7 @@
     "calculatedUnits": null,
     "sqftPrice": "6",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "drywallRepair": {
@@ -149,7 +149,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "850",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "paintStainedCabinets": {
@@ -157,7 +157,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "220",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "paintPaintedCabinets": {
@@ -165,7 +165,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "175",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "standardLineCabinets": {
@@ -173,7 +173,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "317.5",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "customColorBase": {
@@ -181,7 +181,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "80",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "customColorWall": {
@@ -189,7 +189,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "80",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "fullCustomCabinets": {
@@ -197,7 +197,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "1060",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "noCabinets": {
@@ -213,7 +213,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "60",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "countertops:Quartz": {
@@ -221,7 +221,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "60",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "countertops:Solid-Surface": {
@@ -229,7 +229,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "55",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "countertops:Butcher Block": {
@@ -237,7 +237,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "50",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newSink:Standard": {
@@ -245,7 +245,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "450",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newSink:Workstation": {
@@ -253,7 +253,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "850",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newSink:Farmhouse": {
@@ -261,7 +261,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "1050",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newSink:Custom Finish": {
@@ -269,7 +269,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "650",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "newRange_new": {
@@ -325,42 +325,42 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "600",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "installVentHood": {
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "450",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "installWallOven": {
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "600",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "backsplash": {
     "calculatedUnits": null,
     "sqftPrice": "20",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "paintKitchen": {
     "calculatedUnits": null,
     "sqftPrice": "6",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "cleanKitchen": {
     "calculatedUnits": null,
     "sqftPrice": "1.1",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "flooring:Hardwood": {
@@ -368,7 +368,7 @@
     "calculatedUnits": null,
     "sqftPrice": "9",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "flooring:Tile": {
@@ -376,7 +376,7 @@
     "calculatedUnits": null,
     "sqftPrice": "13.5",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "flooring:LVP/Engineered": {
@@ -384,7 +384,7 @@
     "calculatedUnits": null,
     "sqftPrice": "5",
     "unitCost": null,
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "runExhaustDucting": {
@@ -392,7 +392,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "750",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "runDuctingThroughBrick": {
@@ -400,7 +400,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "450",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "waterfallEdges": {
@@ -408,7 +408,7 @@
     "calculatedUnits": null,
     "sqftPrice": null,
     "unitCost": "540",
-    "markup": "0.65",
+    "markup": null,
     "unitPrice": null
   },
   "fixtureCount": {
