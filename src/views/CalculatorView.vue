@@ -12,12 +12,22 @@
       <NewAppliances v-model="formData.newAppliances" />
       <InteriorPainting v-model="formData.interiorPainting" />
       <Flooring v-model="formData.flooring" />
-      <Demo v-model="formData.demo" :demoSink="formData.newSink.sinkType"
-        :demoCountertops="formData.countertops.countertopType" :demoBacksplash="formData.backsplash.backsplash"
-        :demoCabinets="formData.cabinets.cabinetType" :demoFlooring="formData.flooring.flooringType" />
+      <Demo
+        v-model="formData.demo"
+        :demoSink="formData.newSink.sinkType"
+        :demoCountertops="formData.countertops.countertopType"
+        :demoBacksplash="formData.backsplash.backsplash"
+        :demoCabinets="formData.cabinets.cabinetType"
+        :demoFlooring="formData.flooring.flooringType"
+      />
       <FinalCleaning v-model="formData.finalCleaning" />
       <UserForm v-model="formData.user" />
-      <ProgressButton :progress="progress" :disabled="isDisabled" :loading="isLoading" @click="handleSubmit" />
+      <ProgressButton
+        :progress="progress"
+        :disabled="isDisabled"
+        :loading="isLoading"
+        @click="handleSubmit"
+      />
     </form>
   </div>
   <div v-else>
@@ -59,7 +69,6 @@ onMounted(() => {
 
 // Temporarily set hasServerResponded and serverResponse for testing purposes
 onMounted(() => {
-
   let storedUserId = localStorage.getItem('atlhm');
   if (!storedUserId) {
     storedUserId = uuidv4();
@@ -78,7 +87,6 @@ onMounted(() => {
   //   message: "Here is the estimated cost for your kitchen renovation."
   // };
 });
-
 
 const hasServerResponded = ref(false);
 const serverResponse = ref(null);
@@ -100,12 +108,12 @@ const formData = reactive({
   flooring: {},
   interiorPainting: {},
   finalCleaning: {},
-  user: {}
+  user: {},
 });
 
 // Configuration for excluded subfields
 const excludedSubFields = {
-  user: ['id']
+  user: ['id'],
 };
 
 // Define required fields for progress calculation
@@ -141,7 +149,7 @@ const progress = computed(() => {
         .map(([, value]) => value);
 
       // Check if any of the remaining subfield values are filled
-      const isFilled = values.some(value => {
+      const isFilled = values.some((value) => {
         if (typeof value === 'string') {
           return value.trim() !== '';
         } else if (typeof value === 'boolean') {
@@ -169,11 +177,11 @@ const isSubmitted = ref(false);
 
 const handleSubmit = async () => {
   let allFilled = true;
-  requiredFields.value.forEach(field => {
+  requiredFields.value.forEach((field) => {
     const fieldData = formData[field];
     if (typeof fieldData === 'object') {
       // If fieldData is an object, ensure at least one property is filled
-      const isFilled = Object.values(fieldData).some(value => {
+      const isFilled = Object.values(fieldData).some((value) => {
         if (typeof value === 'string') {
           return value.trim() !== '';
         } else if (typeof value === 'boolean') {
@@ -185,13 +193,11 @@ const handleSubmit = async () => {
         allFilled = false;
         // add visual feedback here ?
       }
-
     } else if (typeof fieldData === 'string') {
       if (fieldData.trim() === '') {
         allFilled = false;
         // Optionally, you can add visual feedback here
       }
-
     } else {
       if (!fieldData) {
         allFilled = false;
@@ -208,15 +214,17 @@ const handleSubmit = async () => {
   isSubmitted.value = false;
 
   try {
-
-    const response = await axios.post('http://localhost:3000/submit-form', formData);
+    const response = await axios.post(
+      'http://localhost:3000/submit-form',
+      formData
+    );
 
     if (response.status === 200) {
-      console.log(response.data.estimate)
+      console.log(response.data.estimate);
       serverResponse.value = response.data; // Store server response
       serverResponse.value.high = response.data.estimate.highRange;
-      serverResponse.value.low = response.data.estimate.lowRange
-      hasServerResponded.value = true; // Switch content when server responds 
+      serverResponse.value.low = response.data.estimate.lowRange;
+      hasServerResponded.value = true; // Switch content when server responds
     }
   } catch (error) {
     console.error('Error submitting form:', error);
@@ -233,7 +241,7 @@ watch(
     if (newVal && typeof newVal === 'object') {
       const { noDemo, ...rest } = newVal;
       const restValues = Object.values(rest);
-      const anySelected = restValues.some(value => value);
+      const anySelected = restValues.some((value) => value);
 
       console.log("anySelected (excluding 'noDemo'): ", anySelected);
       formData.dumpster = { dumpster: anySelected };
@@ -241,8 +249,6 @@ watch(
   },
   { deep: true } // Ensures that nested changes are detected
 );
-
-
 </script>
 
 <style>
@@ -258,7 +264,6 @@ form {
   gap: 1px;
   padding: 1px;*/
   width: 100%;
-
 }
 
 .button-container {
@@ -273,6 +278,5 @@ form {
   text-align: center;
 }
 </style>
-
 
 <!-- test -->

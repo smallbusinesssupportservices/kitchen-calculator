@@ -1,25 +1,33 @@
 <template>
-  <div>
-    <h3>
-      Your Project Estimate {{ formatCurrency(response.estimate.lowRange) }} - {{
-        formatCurrency(response.estimate.highRange) }}
-    </h3>
+  <div class="container">
+    <div class="content">
+      <div class="estimate-box text-center">
+        <h2>Your Estimate Range</h2>
+        <p>Based on your selections, here's your estimated price range:</p>
+        <h3 class="estimate-amount">{{ formatCurrency(response.estimate.lowRange) }} - {{
+          formatCurrency(response.estimate.highRange) }}</h3>
+        <p><small>*This estimate is based on the specifications you provided and may vary based on final design choices and site conditions.</small></p>
+      </div>
+      
+      <p><strong>Ready to take the next step?</strong></p>
+      
+      <p class="text-center">Schedule a free consultation with one of our kitchen design experts to discuss your project in detail.</p>
+              
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="#schedule" class="button primary-button">Start Your Kitchen Transformation Now!</a>
+      </div>
+              
+      <p class="text-center">Not quite ready to commit? We understand the importance of careful planning. Let's explore your design ideas and selections together.</p>
+              
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="#feedback" class="button secondary-button">I'm still thinking through designs and selections</a>
+      </div>
 
-    <!-- Disclaimer section -->
-    <p>
-      <strong>
-        This kitchen renovation cost calculator provided by 7 Day Kitchen is intended to give a general estimate based on the information you provide. The actual cost of your renovation will vary depending on factors such as the complexity of the renovation, the ease of access to any plumbing and electrical systems being relocated, the specific kitchen layout, materials and accessories chosen, and any unique aspects of your kitchen. While we strive for accuracy, please note that this tool is for informational purposes only and does not constitute a final quote or guarantee. For a more precise estimate, we recommend scheduling a consultation with our team to assess your kitchen's unique requirements and preferences.
-      </strong>
-    </p>
-
-    <br>
-    <div class="call-to-action"> 
-      <button @click="scheduleAppointment" class="cta-button schedule">
-        Schedule an Appointment
-      </button>
-      <button @click="handleUnexpected" class="cta-button unexpected">
-        Not What I Was Expecting
-      </button>
+      <p class="text-center">Concerned about the budget? We offer flexible options and can help you find solutions that match your financial goals while still achieving your dream kitchen.</p>
+              
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="#feedback" class="button secondary-button">This is way above my budget, what are my other options</a>
+      </div>
     </div>
   </div>
 </template>
@@ -61,65 +69,92 @@ const handleUnexpected = () => {
 </script>
 
 <style scoped>
-h3 {
-  color: #2a2a2a;
-}
+  body, table, td, div, p, a {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Container styles */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        
+        /* Header styles */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        /* Content styles */
+        .content {
+            padding: 30px 0;
+        }
+        
+        .estimate-box {
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        /* Button styles */
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px 0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .primary-button {
+            background-color: rgb(173,49,52);
+            color: #ffffff !important;
+        }
+        
+        .secondary-button {
+            background-color: rgb(173,49,52);
+            color: #ffffff !important;
+        }
+        
+        /* Footer styles */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            color: #64748b;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
 
-p {
-  font-size: 1.1em;
-}
+        .text-center {
+          text-align: center;
+        }
 
-.range-change-info {
-  font-style: italic;
-  color: #6c757d;
-}
+        .estimate-box {
+          background-color: #f1f5f9;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 20px 0;
+          text-align: center;
+        }
 
-strong {
-  font-weight: bold;
-  font-size: 1.2em;
-}
-
-.contact-info {
-  margin-top: 20px;
-}
-
-label {
-  display: block;
-  margin: 10px 0 5px;
-}
-
-input {
-  padding: 8px;
-  font-size: 1em;
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 10px;
-}
-
-.disclosure {
-  margin-top: 20px;
-}
-
-input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 10px; /* Added spacing between buttons */
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.call-to-action {
-  display: flex;
-  gap: 10px; /* Add space between buttons */
-}
+        .estimate-amount {
+          font-size: 2rem;
+          font-weight: bold;
+          color: rgb(173,49,52);
+          margin: 1rem 0;
+        }
 </style>
