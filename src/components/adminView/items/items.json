@@ -357,10 +357,11 @@
     "unitPrice": null
   },
   "cleanKitchen": {
+    "qboId": "3",
     "calculatedUnits": null,
     "sqftPrice": "1.1",
     "unitCost": null,
-    "markup": null,
+    "markup": "0.4",
     "unitPrice": null
   },
   "flooring:Hardwood": {
