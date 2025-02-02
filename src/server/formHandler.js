@@ -123,7 +123,7 @@ export const processFormData = async (req, res) => {
             calculatedUnits = cabinetUnits - customColorBase;
           } else if (['countertops:Granite', 'countertops:Quartz', 'countertops:Solid-Surface', 'countertops:Butcher Block'].includes(dbNeddle)) {
             const a = 1;
-            calculatedUnits = ((((kitchenLength + kitchenWidth) * 1.6 - 9 - 3 - 4) + (hasIsland ? islandLength * islandWidth : 0)) * 2.5);
+            calculatedUnits = ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? islandLength * islandWidth : 0)) * 2.5);
           } else if (dbNeddle == 'waterfallEdges') {
             calculatedUnits = formCategory[categoryItem]
           } else if (dbNeddle == 'swapFixtures') {
