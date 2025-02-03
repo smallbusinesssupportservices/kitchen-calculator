@@ -21,13 +21,15 @@ const authorizeUri = async () => {
 
 <template>
   <div class="connect-to-qbo">
-    <h3>QBO</h3>
+    <h3>Services</h3>
     <div class="connect-to-qbo-button">
       <a class="imgLink" href="#" @click.prevent="authorizeUri">
         <img src="./images/C2QB_green_btn_lg_default.png" width="178" alt="Connect to QuickBooks" />
       </a>
     </div>
+    
   </div>
+ 
 </template>
 
 <style scoped>
@@ -60,4 +62,12 @@ const authorizeUri = async () => {
 .imgLink:hover img {
   opacity: 0.9;
 }
+
+  .input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
 </style>

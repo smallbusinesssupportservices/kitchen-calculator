@@ -64,7 +64,17 @@ onMounted(() => {
     storedUserId = uuidv4();
     localStorage.setItem('atlhm', storedUserId);
   }
-  formData.user = { id: storedUserId };
+  formData.user = { 
+    id: storedUserId,
+    name: 'John Doe',
+    email: 'john@example.com', 
+    phone: '555-123-4567', 
+    address: '123 Main St', 
+    city: 'Atlanta', 
+    state: 'GA', 
+    zip: '30301' 
+  };
+
 });
 
 // Temporarily set hasServerResponded and serverResponse for testing purposes

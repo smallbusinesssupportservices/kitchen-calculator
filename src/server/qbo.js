@@ -159,9 +159,6 @@ class QBOClient {
   async refreshTokens() {
     try {
       console.log('Refreshing tokens...');
-      if (this.oauthClient.isAccessTokenValid()) {
-        console.log('1 The access_token is valid');
-      }
       const authResponse = await this.oauthClient.refresh();
       const json = authResponse.getJson();
       
@@ -179,9 +176,7 @@ class QBOClient {
       
       console.log('Setting refreshed token:', token);
       this.oauthClient.setToken(token);
-      if (this.oauthClient.isAccessTokenValid()) {
-        console.log('2 The access_token is valid');
-      }
+      
       // Save the refreshed token
       await this.saveTokenToFile({ token });
       

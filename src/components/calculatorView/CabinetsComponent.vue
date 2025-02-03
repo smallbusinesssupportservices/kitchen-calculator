@@ -3,7 +3,7 @@
     <h2>Cabinets</h2>
     <div class="cabinet-container">
       <!-- Cabinet Options Section -->
-      <div class="cabinet-section" :class="{ 'show-styles': showStyles }">
+      <div class="cabinet-section">
         <!-- Main Cabinet Options as Radio Buttons -->
         <label class="radio-label">
           <input type="radio" name="cabinetOptions" value="noCabinets" v-model="localValue.cabinetType" />
@@ -42,7 +42,7 @@
       </div>
 
       <!-- Cabinet Styles Section -->
-      <div class="cabinet-styles" :class="{ 'show': showStyles }">
+      <div v-if="localValue.cabinetType === 'standardLineCabinets'" class="cabinet-styles">
         <div class="styles-count">{{ cabinetImages.length }} Cabinet Styles Available</div>
         <Carousel v-if="showStyles" :items-to-show="1" :wrap-around="true" :transition="500">
           <Slide v-for="(image, index) in cabinetImages" :key="index">
@@ -66,7 +66,6 @@
           </Slide>
           <template #addons>
             <Navigation />
-
           </template>
         </Carousel>
       </div>
@@ -216,24 +215,14 @@ watch(
   transition: width 0.5s ease-in-out;
 }
 
-.cabinet-section.show-styles {
-  width: 50%;
-}
-
 .cabinet-styles {
   background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: all 0.5s ease-in-out;
-}
-
-.cabinet-styles.show {
-  width: 50%;
-  opacity: 1;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .radio-label {
@@ -264,8 +253,8 @@ watch(
 
 .image-wrapper {
   position: relative;
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   margin: 0 auto;
   border-radius: 8px;
   overflow: hidden;
@@ -303,6 +292,7 @@ watch(
   text-align: center;
 }
 
+/* Modal Styles */
 .modal {
   position: fixed;
   top: 0;
@@ -356,23 +346,11 @@ watch(
   font-weight: bold;
 }
 
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.checkbox-label input {
-  margin-right: 8px;
-}
-
-.checkbox-label input:disabled+span {
-  color: #888;
-  cursor: not-allowed;
-}
-
+/* Carousel Styles */
 :deep(.carousel__slide) {
-  padding: 1rem;
+  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
 }
 
 :deep(.carousel__prev),
@@ -403,30 +381,23 @@ watch(
   background-color: #0056b3;
 }
 
-:deep(.carousel__pagination) {
-  margin-top: 1rem;
-}
+@media (max-width: 768px) {
+  .cabinet-container {
+    flex-direction: column;
+  }
 
-:deep(.carousel__pagination-button) {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #ccc;
-  margin: 0 4px;
-  transition: all 0.3s ease;
-}
+  .cabinet-section {
+    width: 100% !important;
+  }
 
-:deep(.carousel__pagination-button--active) {
-  background-color: #007bff;
-  transform: scale(1.2);
-}
+  .cabinet-styles {
+    width: 100% !important;
+    max-width: 300px;
+  }
 
-/* Hide the dash-style pagination */
-:deep(.carousel__track) {
-  margin-bottom: 0 !important;
-}
-
-:deep(.carousel__pagination--sliding) {
-  display: none;
+  .image-wrapper {
+    width: 250px;
+    height: 250px;
+  }
 }
 </style>

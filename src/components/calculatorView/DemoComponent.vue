@@ -1,4 +1,3 @@
-<!-- DemoComponent.vue -->
 <template>
   <div class="demo">
     <h2>Demo</h2>
@@ -19,6 +18,15 @@
           </span>
         </label>
       </template>
+      <!-- Only show drywall repair when lightDemo is checked -->
+      <label v-if="localValue.lightDemo" class="checkbox-label">
+        <input 
+          type="checkbox" 
+          v-model="localValue.drywallRepair" 
+          disabled
+        />
+        <span class="disabled">Drywall Repair</span>
+      </label>
     </div>
   </div>
 </template>
@@ -64,8 +72,7 @@ const demoOptions = [
   { name: 'removeCabinets', label: 'Remove cabinets' }, 
   { name: 'removeBacksplash', label: 'Remove backsplash' },
   { name: 'removeFlooring', label: 'Remove flooring' },
-  { name: 'lightDemo', label: 'Light non-structural demo (e.g., removing pantry, bar wall)'},
-  { name: 'drywallRepair', label: 'Drywall Repair' }
+  { name: 'lightDemo', label: 'Light non-structural demo (e.g., removing pantry, bar wall)'}
 ];
 
 // Initialize local state
@@ -80,7 +87,6 @@ const localValue = reactive({
   noDemo: props.modelValue.noDemo || false,
 });
 
-
 // Function to determine if a demo option should be disabled
 const isOptionDisabled = (option) => {
   if (localValue.noDemo) return true;
@@ -89,7 +95,6 @@ const isOptionDisabled = (option) => {
     removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
     removeBacksplash: localValue.removeBacksplash,
     removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
-    drywallRepair: localValue.lightDemo,
     removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
   };
 
@@ -98,23 +103,8 @@ const isOptionDisabled = (option) => {
 
 // Function to determine if a demo option should be shown
 const shouldShowOption = (option) => {
-  return true
-  const showConditions = {
-    removeSink: props.demoSink && props.demoSink !== 'false',
-    removeCountertops: props.demoCountertops && props.demoCountertops !== 'noCountertop',
-    removeBacksplash: props.demoBacksplash === 'backsplash',
-    removeCabinets: ['fullCustomCabinets', 'standardLineCabinets'].includes(props.demoCabinets),
-    drywallRepair: localValue.lightDemo,
-    removeFlooring: props.demoFlooring && props.demoFlooring !== 'false',
-  };
-
-  return showConditions[option?.name] || false;
+  return true;
 };
-
-// Computed property to check if any demo option is selected
-const anyDemoSelected = computed(() => {
-    return demoOptions.some(option => localValue[option.name]);
-  });
 
 // Watcher to synchronize props with localValue
 watch(
@@ -130,15 +120,7 @@ watch(
 watch(
   () => localValue.lightDemo,
   (newVal) => {
-    if (newVal) {
-      if (!localValue.drywallRepair) {
-        localValue.drywallRepair = true;
-      }
-    } else {
-      if (localValue.drywallRepair) {
-        localValue.drywallRepair = false;
-      }
-    }
+    localValue.drywallRepair = newVal;
   }
 );
 
@@ -147,7 +129,6 @@ watch(
   () => props.demoBacksplash,
   (newVal) => {
     if (newVal) {
-
       if (!localValue.removeBacksplash) {
         localValue.removeBacksplash = true;
       }
@@ -162,7 +143,6 @@ watch(
   () => props.demoCountertops,
   (newVal) => {
     if (newVal) {
-
       if (!localValue.removeCountertops) {
         localValue.removeCountertops = true;
       }
@@ -172,8 +152,6 @@ watch(
 
     if (newVal == 'noCountertop') localValue.removeCountertops = false;
   }
-
-
 );
 
 // Watcher to automatically set and disable removeSink
@@ -185,7 +163,6 @@ watch(
     } else {
       localValue.removeSink = false;
     }
-
   }
 );
 
@@ -201,11 +178,10 @@ watch(
   }
 );
 
-// Watchers to Handle removeCabinets Based on demoStandardLineCabinets and demoFullCustomCabinets**
+// Watchers to Handle removeCabinets Based on demoStandardLineCabinets and demoFullCustomCabinets
 watch(
   () => props.demoCabinets,
   (newVal) => {
-
     if (newVal === 'Standard Line Cabinets' || newVal === 'Full custom cabinets') {
       localValue.removeCabinets = false;
     } else {
@@ -234,7 +210,6 @@ watch(
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
-  
 }
 
 h2 {
@@ -259,8 +234,6 @@ h2 {
 /* Style for disabled labels */
 .checkbox-label .disabled {
   color: #888;
-  /* Grey out the label text when disabled */
   cursor: not-allowed;
 }
 </style>
-

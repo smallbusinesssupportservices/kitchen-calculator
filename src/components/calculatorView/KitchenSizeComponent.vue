@@ -62,7 +62,7 @@
 
       <!-- Island Container -->
       <div class="island-container">
-        <h2>Island Dimensions</h2>
+        <h2>Island</h2>
         <div class="island-section">
           <label class="checkbox-label">
             <input

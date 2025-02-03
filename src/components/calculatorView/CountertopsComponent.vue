@@ -1,73 +1,43 @@
 <template>
   <div class="countertops">
     <h2>Countertops</h2>
-    <div class="countertop-grid">
-      <!-- Quartz -->
-      <div class="countertop-option">
-        <div class="option-title">Quartz</div>
-        <div class="image-wrapper">
-          <input
-            type="radio"
-            value="Quartz"
-            v-model="localValue.countertopType"
-            class="option-radio"
-          />
-          <img
-            src="../../assets/countertop_images/calacatta-laza-stonemark-quartz-countertops-p-qsl-calalaza-4x4-64_300.avif"
-            alt="Quartz countertop"
-          />
-        </div>
+    <div class="countertop-container">
+      <!-- Countertop Options Section -->
+      <div class="countertop-section">
+        <label class="radio-label">
+          <input type="radio" value="noCountertop" v-model="localValue.countertopType" />
+          No countertops
+        </label>
+        <label class="radio-label">
+          <input type="radio" value="Granite" v-model="localValue.countertopType" />
+          Granite
+        </label>
+        <label class="radio-label">
+          <input type="radio" value="Quartz" v-model="localValue.countertopType" />
+          Quartz
+        </label>
+        <label class="radio-label">
+          <input type="radio" value="Butcher Block" v-model="localValue.countertopType" />
+          Butcher Block
+        </label>
       </div>
 
-      <!-- Granite -->
-      <div class="countertop-option">
-        <div class="option-title">Granite</div>
-        <div class="image-wrapper">
-          <input
-            type="radio"
-            value="Granite"
-            v-model="localValue.countertopType"
-            class="option-radio"
-          />
-          <img
-            src="../../assets/countertop_images/white-antico-stonemark-granite-countertops-dt-g062-64_300.avif"
-            alt="Granite countertop"
-          />
-        </div>
-      </div>
-
-      <!-- Solid-Surface -->
-      <div class="countertop-option">
-        <div class="option-title">Solid-Surface</div>
-        <div class="image-wrapper">
-          <input
-            type="radio"
-            value="Solid-Surface"
-            v-model="localValue.countertopType"
-            class="option-radio"
-          />
-          <img
-            src="../../assets/countertop_images/cosmos-hi-macs-solid-surface-countertops-lg-t002-hm-64_300.avif"
-            alt="Solid-Surface countertop"
-          />
-        </div>
-      </div>
-
-      <!-- Butcher Block -->
-      <div class="countertop-option">
-        <div class="option-title">Butcher Block</div>
-        <div class="image-wrapper">
-          <input
-            type="radio"
-            value="Butcher Block"
-            v-model="localValue.countertopType"
-            class="option-radio"
-          />
-          <img
-            src="../../assets/countertop_images/unfinished-hampton-bay-butcher-block-countertops-tp-10ft-64_300.avif"
-            alt="Butcher Block countertop"
-          />
-        </div>
+      <!-- Countertop Styles Section -->
+      <div v-if="localValue.countertopType && localValue.countertopType !== 'noCountertop'" class="countertop-styles">
+        <div class="styles-count">{{ currentCountertopImages.length }} Styles Available</div>
+        <Carousel :items-to-show="1" :wrap-around="true" :transition="500">
+          <Slide v-for="(image, index) in currentCountertopImages" :key="index">
+            <div class="carousel-slide">
+              <div class="option-title">{{ image.title }}</div>
+              <div class="image-wrapper">
+                <img :src="image.src" :alt="image.title" @click="openImageModal(image)" />
+              </div>
+            </div>
+          </Slide>
+          <template #addons>
+            <Navigation />
+          </template>
+        </Carousel>
       </div>
     </div>
 
@@ -82,11 +52,15 @@
           class="waterfall-input"
         />
       </div>
-      
+
       <div class="waterfall-content">
         <div class="waterfall-info">
           <p class="waterfall-description">
-            A waterfall edge countertop is where the countertop material continues seamlessly down the sides of an island or cabinetry, creating a dramatic, modern statement. This design highlights the beauty of the materials while offering added protection for the corners and sides of the cabinets.
+            A waterfall edge countertop is where the countertop material
+            continues seamlessly down the sides of an island or cabinetry,
+            creating a dramatic, modern statement. This design highlights the
+            beauty of the materials while offering added protection for the
+            corners and sides of the cabinets.
           </p>
         </div>
         <div class="waterfall-image">
@@ -98,16 +72,21 @@
       </div>
     </div>
 
-    <!-- No Countertops -->
-    <label class="checkbox-label no-countertops">
-      <input type="radio" value="noCountertop" v-model="localValue.countertopType" />
-      No countertops
-    </label>
+    <!-- Image Modal -->
+    <div v-if="selectedImage" class="modal" @click="closeModal">
+      <div class="modal-content" @click.stop>
+        <button class="modal-close" @click="closeModal">&times;</button>
+        <img :src="selectedImage.src" :alt="selectedImage.title" />
+        <div class="modal-title">{{ selectedImage.title }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive, computed, ref, watch } from 'vue';
+import { Carousel, Navigation, Slide } from 'vue3-carousel';
+import 'vue3-carousel/dist/carousel.css';
 
 const props = defineProps({
   modelValue: {
@@ -115,6 +94,7 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+
 const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
@@ -122,21 +102,92 @@ const localValue = reactive({
   waterfallEdges: props.modelValue.waterfallEdges || 0,
 });
 
+const selectedImage = ref(null);
+
+const graniteImages = [
+  {
+    src: new URL('../../assets/countertop_images/Granite.png', import.meta.url).href,
+    title: 'Granite Style 1',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Granite 2.png', import.meta.url).href,
+    title: 'Granite Style 2',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Granite 3.png', import.meta.url).href,
+    title: 'Granite Style 3',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Granite 4.png', import.meta.url).href,
+    title: 'Granite Style 4',
+  },
+];
+
+const quartzImages = [
+  {
+    src: new URL('../../assets/countertop_images/Quartz.png', import.meta.url).href,
+    title: 'Quartz Style 1',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Quartz 2.png', import.meta.url).href,
+    title: 'Quartz Style 2',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Quartz Soapstone.png', import.meta.url).href,
+    title: 'Quartz Soapstone',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Quartz Waterfall.png', import.meta.url).href,
+    title: 'Quartz Waterfall',
+  },
+];
+
+const butcherBlockImages = [
+  {
+    src: new URL('../../assets/countertop_images/Butcher_Birch.png', import.meta.url).href,
+    title: 'Birch Butcher Block',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Butcher_Maple.png', import.meta.url).href,
+    title: 'Maple Butcher Block',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Butcher_Oak.png', import.meta.url).href,
+    title: 'Oak Butcher Block',
+  },
+  {
+    src: new URL('../../assets/countertop_images/Butcher_Walnut.png', import.meta.url).href,
+    title: 'Walnut Butcher Block',
+  },
+];
+
+const currentCountertopImages = computed(() => {
+  switch (localValue.countertopType) {
+    case 'Granite':
+      return graniteImages;
+    case 'Quartz':
+      return quartzImages;
+    case 'Butcher Block':
+      return butcherBlockImages;
+    default:
+      return [];
+  }
+});
+
+const openImageModal = (image) => {
+  selectedImage.value = image;
+};
+
+const closeModal = () => {
+  selectedImage.value = null;
+};
+
 watch(
   () => props.modelValue,
   (newVal) => {
     Object.assign(localValue, newVal);
   },
   { deep: true, immediate: true }
-);
-
-watch(
-  () => localValue.countertopType,
-  (newVal) => {
-    if (newVal === 'noCountertop') {
-      localValue.waterfallEdges = 0;
-    }
-  }
 );
 
 watch(
@@ -150,63 +201,83 @@ watch(
 
 <style scoped>
 .countertops {
-  border: 1px solid var(--border-color);
+  background-color: var(--card-background);
   padding: 1.5rem;
   border-radius: var(--radius);
-  background-color: var(--card-background);
   box-shadow: var(--shadow);
   width: 100%;
+  border: 1px solid var(--border-color);
 }
 
-.countertop-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+.countertop-container {
+  display: flex;
+  gap: 2rem;
+  position: relative;
+  transition: all 0.5s ease-in-out;
 }
 
-.countertop-option {
-  text-align: center;
-  background-color: var(--background-color);
+.countertop-section {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.countertop-styles {
+  background: linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.radio-label:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.carousel-slide {
   padding: 1rem;
-  border-radius: var(--radius);
-  transition: var(--transition);
-  min-width: 200px;
+  text-align: center;
 }
 
-.countertop-option:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
+.image-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.05);
 }
 
 .option-title {
   font-weight: 600;
   margin-bottom: 1rem;
-}
-
-.image-wrapper {
-  position: relative;
-  display: inline-block;
-  border-radius: calc(var(--radius) - 4px);
-  overflow: hidden;
-}
-
-.image-wrapper img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-  transition: var(--transition);
-}
-
-.option-radio {
-  position: absolute;
-  left: 0.5rem;
-  top: 0.5rem;
-  width: 1.25rem;
-  height: 1.25rem;
-  z-index: 2;
-  cursor: pointer;
 }
 
 .waterfall-section {
@@ -222,10 +293,6 @@ watch(
   margin-bottom: 1.5rem;
 }
 
-.waterfall-title .option-title {
-  margin-bottom: 0;
-}
-
 .waterfall-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -236,14 +303,11 @@ watch(
 .waterfall-info {
   display: flex;
   align-items: center;
-  height: 100%;
 }
 
 .waterfall-description {
+  line-height: 1.6;
   color: var(--text-color);
-  line-height: 1.8;
-  font-size: 17px;
-  margin: 0;
 }
 
 .waterfall-input {
@@ -251,7 +315,6 @@ watch(
   padding: 0.5rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
-  font-size: 0.95rem;
 }
 
 .waterfall-image {
@@ -267,35 +330,111 @@ watch(
   object-fit: cover;
 }
 
-.no-countertops {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.modal-content img {
+  max-width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+.modal-title {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Carousel Styles */
+:deep(.carousel__slide) {
+  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+:deep(.carousel__viewport) {
+  display: flex;
+  align-items: center;
+}
+
+:deep(.carousel__track) {
+  display: flex;
+  align-items: center;
+}
+
+:deep(.carousel__prev),
+:deep(.carousel__next) {
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+:deep(.carousel__prev:hover),
+:deep(.carousel__next:hover) {
+  background-color: var(--primary-hover);
 }
 
 @media (max-width: 1024px) {
-  .countertop-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .countertop-container {
+    flex-direction: column;
   }
-}
 
-@media (max-width: 640px) {
-  .countertop-grid {
-    grid-template-columns: 1fr;
+  .countertop-section,
+  .countertop-styles {
+    width: 100%;
+  }
+
+  .image-wrapper {
+    width: 250px;
+    height: 250px;
   }
 
   .waterfall-content {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .waterfall-description {
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
-  .waterfall-image {
-    width: 100%;
   }
 }
 </style>
