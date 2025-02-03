@@ -25,18 +25,10 @@ class QBOClient {
       
       try {
         const tokenData = JSON.parse(await readFile(tokenPath, 'utf8'));
-        if (tokenData.token) {
-          this.oauthClient.token = {
-            ...tokenData.token,
-            realmId: tokenData.token.realmId,
-            access_token: tokenData.token.access_token,
-            refresh_token: tokenData.token.refresh_token,
-            token_type: tokenData.token.token_type,
-            expires_in: tokenData.token.expires_in,
-            x_refresh_token_expires_in: tokenData.token.x_refresh_token_expires_in,
-            id_token: tokenData.token.id_token,
-            latency: tokenData.token.latency || 60000
-          };
+        if (tokenData && tokenData.token) {
+          console.log('Loading token from file:', tokenData.token);
+          this.oauthClient.token = tokenData.token;
+          this.oauthClient.setToken(tokenData.token); // Explicitly set token
         }
         return tokenData;
       } catch (readError) {
@@ -104,18 +96,23 @@ class QBOClient {
       console.log('Processing callback URL:', fullUrl);
       
       const authResponse = await this.oauthClient.createToken(fullUrl);
+      const json = authResponse.getJson();
+      console.log('Auth response received:', json);
       
       const token = {
-        realmId: authResponse.token.realmId,
-        token_type: authResponse.token.token_type,
-        access_token: authResponse.token.access_token,
-        refresh_token: authResponse.token.refresh_token,
-        expires_in: authResponse.token.expires_in,
-        x_refresh_token_expires_in: authResponse.token.x_refresh_token_expires_in,
-        id_token: authResponse.token.id_token || '',
+        realmId: json.realmId,
+        token_type: json.token_type,
+        access_token: json.access_token,
+        refresh_token: json.refresh_token,
+        expires_in: json.expires_in,
+        x_refresh_token_expires_in: json.x_refresh_token_expires_in,
+        id_token: json.id_token || '',
         latency: 60000,
         createdAt: Date.now()
       };
+
+      console.log('Setting new token:', token);
+      this.oauthClient.setToken(token);
 
       // Save the token with the base structure
       await this.saveTokenToFile({ token });
@@ -130,35 +127,29 @@ class QBOClient {
 
   async createQBClient() {
     try {
-      let token = await this.loadTokenFromFile();
-      console.log("** this.oauthClient ** ", this.oauthClient)
+      await this.loadTokenFromFile();
+      
+      console.log('Checking token validity...');
+      const token = this.oauthClient.getToken();
+      console.log('Current token:', token);
 
-      // if (!this.oauthClient.isAccessTokenValid()) {
-      //   console.log('Access token expired, refreshing...');
-      //   await this.refreshTokens();
-      // }
-      console.log("********",new Date().getTime() > (this.oauthClient.token.createdAt + this.oauthClient.token.expires_in))
-
-      if(new Date().getTime() > (this.oauthClient.token.createdAt + this.oauthClient.token.expires_in)){
-        token = await this.refreshTokens();
-       
+      if (!this.oauthClient.isAccessTokenValid()) {
+        console.log('Access token expired, refreshing...');
+        await this.refreshTokens();
       }
 
-      const client = new QuickBooks(
-        token.clientId, 
-        token.clientSecret, 
-        token.token.access_token, 
+      return new QuickBooks(
+        process.env.QBO_CLIENT_ID,
+        process.env.QBO_CLIENT_SECRET,
+        this.oauthClient.getToken().access_token,
         false,
-        token.token.realmId, 
-        token.environment, 
+        this.oauthClient.getToken().realmId,
+        process.env.QBO_ENVIRONMENT === 'sandbox',
         true,
         null,
         '2.0',
-        token.token.refresh_token 
+        this.oauthClient.getToken().refresh_token
       );
-
-      return client
-
     } catch (error) {
       console.error('Error creating QB client:', error);
       throw error;
@@ -168,27 +159,32 @@ class QBOClient {
   async refreshTokens() {
     try {
       console.log('Refreshing tokens...');
+      if (this.oauthClient.isAccessTokenValid()) {
+        console.log('1 The access_token is valid');
+      }
       const authResponse = await this.oauthClient.refresh();
-      const tokenData = await this.loadTokenFromFile();
+      const json = authResponse.getJson();
       
       const token = {
-        realmId: authResponse.token.realmId,
-        token_type: authResponse.token.token_type,
-        access_token: authResponse.token.access_token,
-        refresh_token: authResponse.token.refresh_token,
-        expires_in: authResponse.token.expires_in,
-        x_refresh_token_expires_in: authResponse.token.x_refresh_token_expires_in,
-        id_token: authResponse.token.id_token || '',
+        realmId: this.oauthClient.getToken().realmId,
+        token_type: json.token_type,
+        access_token: json.access_token,
+        refresh_token: json.refresh_token,
+        expires_in: json.expires_in,
+        x_refresh_token_expires_in: json.x_refresh_token_expires_in,
+        id_token: json.id_token || '',
         latency: 60000,
         createdAt: Date.now()
       };
       
-      const updatedData = {
-        ...tokenData,
-        token
-      };
+      console.log('Setting refreshed token:', token);
+      this.oauthClient.setToken(token);
+      if (this.oauthClient.isAccessTokenValid()) {
+        console.log('2 The access_token is valid');
+      }
+      // Save the refreshed token
+      await this.saveTokenToFile({ token });
       
-      await this.saveTokenToFile(updatedData);
       console.log('Tokens refreshed successfully');
       return token;
     } catch (error) {
@@ -200,7 +196,6 @@ class QBOClient {
   async findCustomerByEmail(email) {
     try {
       const qbo = await this.createQBClient();
-      // TODO check for token valid
       return new Promise((resolve, reject) => {
         qbo.findCustomers([
           { field: 'PrimaryEmailAddr', value: email }

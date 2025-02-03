@@ -1,16 +1,16 @@
 {
   "98765": {
     "contactInfo": {
-      "name": "williamggg",
+      "name": "william",
       "phone": "4106102350",
-      "email": "w@w.com",
+      "email": "",
       "address": "3151 w manor cir sw",
       "city": "atlanta",
       "state": "GA",
       "zip": "30311"
     },
     "calculatorSettingsValue": {
-      "rng": 0.0021,
+      "rng": 0.0026,
       "lowBuffer": 0.3,
       "highBuffer": 0.4
     },
@@ -18,101 +18,23 @@
       "categories": [
         {
           "category": "demo",
-          "items": [
-            {
-              "sqftPrice": null,
-              "markup": null,
-              "name": "removeSink",
-              "unitCost": "150",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "sqftPrice": "2",
-              "markup": null,
-              "name": "removeCountertops",
-              "unitCost": 1,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "sqftPrice": "4",
-              "markup": null,
-              "name": "removeCabinets",
-              "unitCost": 1,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "sqftPrice": null,
-              "markup": null,
-              "name": "removeBacksplash",
-              "unitCost": "300",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "sqftPrice": "2",
-              "markup": null,
-              "name": "removeFlooring",
-              "unitCost": 1,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "dumpster",
-          "items": [
-            {
-              "sqftPrice": null,
-              "markup": null,
-              "name": "dumpster",
-              "unitCost": "425",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "plumbing",
-          "items": [
-            {
-              "qboId": "",
-              "sqftPrice": null,
-              "markup": null,
-              "name": "moveFridgeWater",
-              "unitCost": "650",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "electrical",
-          "items": [
-            {
-              "qboId": "",
-              "sqftPrice": "6",
-              "markup": null,
-              "name": "applianceOutlets",
-              "unitCost": 1,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "drywall",
@@ -125,57 +47,25 @@
             {
               "qboId": "",
               "sqftPrice": null,
-              "markup": null,
-              "name": "fullCustomCabinets",
-              "unitCost": "1060",
-              "calculatedUnits": 21,
-              "unitPrice": null,
-              "subtotal": null
+              "markup": 0.65,
+              "name": "noCabinets",
+              "unitCost": "0",
+              "calculatedUnits": 1,
+              "unitPrice": 0,
+              "subtotal": 0
             }
           ],
-          "categoryTotal": null
+          "categoryTotal": 0
         },
         {
           "category": "countertops",
-          "items": [
-            {
-              "qboId": "",
-              "sqftPrice": null,
-              "markup": null,
-              "name": "countertops",
-              "unitCost": "60",
-              "calculatedUnits": 50,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "qboId": "",
-              "sqftPrice": null,
-              "markup": null,
-              "name": "waterfallEdges",
-              "unitCost": 360,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "newSink",
-          "items": [
-            {
-              "qboId": "",
-              "sqftPrice": null,
-              "markup": null,
-              "name": "newSink",
-              "unitCost": "650",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "newFixtures",
@@ -200,27 +90,8 @@
         },
         {
           "category": "newAppliances",
-          "items": [
-            {
-              "sqftPrice": null,
-              "markup": null,
-              "name": "installAppliances",
-              "unitCost": "600",
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            },
-            {
-              "sqftPrice": null,
-              "markup": 0.65,
-              "name": "newRange_new",
-              "unitCost": "1000",
-              "calculatedUnits": 1,
-              "unitPrice": 1650,
-              "subtotal": 1650
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "installation",
@@ -229,49 +100,18 @@
         },
         {
           "category": "backsplash",
-          "items": [
-            {
-              "sqftPrice": "20",
-              "markup": null,
-              "name": "backsplash",
-              "unitCost": 1,
-              "calculatedUnits": 32,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "flooring",
-          "items": [
-            {
-              "qboId": "",
-              "sqftPrice": "13.5",
-              "markup": null,
-              "name": "flooring",
-              "unitCost": 1,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "interiorPainting",
-          "items": [
-            {
-              "sqftPrice": "6",
-              "markup": null,
-              "name": "paintKitchen",
-              "unitCost": 600,
-              "calculatedUnits": 1,
-              "unitPrice": null,
-              "subtotal": null
-            }
-          ],
-          "categoryTotal": null
+          "items": [],
+          "categoryTotal": 0
         },
         {
           "category": "finalCleaning",
@@ -295,10 +135,10 @@
           "categoryTotal": 0
         }
       ],
-      "overallTotal": null,
-      "lowRange": null,
-      "highRange": null,
-      "rng": 0.0021
+      "overallTotal": 181.5,
+      "lowRange": 126.5781,
+      "highRange": 254.5719,
+      "rng": 0.0026
     }
   }
 }

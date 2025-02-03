@@ -3,6 +3,7 @@ import categoryMinimums from '../components/adminView/categories/categoryMinimum
 import calculatorSettings from '../components/adminView/calculator/calculatorSettings.json' assert { type: "json"};
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
 import qboClient from './qbo.js';
+import { sendToHatch } from "./hatch.js";
 
 // Convert calculator estimate to QBO estimate format
 const createQboEstimateData = (calculatorEstimate, customerId) => {
@@ -273,6 +274,21 @@ export const processFormData = async (req, res) => {
           }
         };
         customer = await qboClient.createCustomer(customerData);
+      }
+
+      // Send customer data to Hatch
+      try {
+        await sendToHatch({
+          ...customer,
+          estimate: {
+            lowRange: estimate.lowRange,
+            highRange: estimate.highRange
+          }
+        });
+        console.log('Successfully sent customer data to Hatch');
+      } catch (hatchError) {
+        console.error('Error sending to Hatch:', hatchError);
+        // Continue with QBO estimate creation even if Hatch fails
       }
 
       // Create QBO estimate
