@@ -30,7 +30,18 @@
             <div class="carousel-slide">
               <div class="option-title">{{ image.title }}</div>
               <div class="image-wrapper">
-                <img :src="image.src" :alt="image.title" @click="openImageModal(image)" />
+                <input 
+                  type="radio" 
+                  :value="image.value" 
+                  v-model="localValue.countertopStyle"
+                  name="countertopStyle"
+                  class="option-radio"
+                />
+                <img 
+                  :src="image.src" 
+                  :alt="image.title" 
+                  @click="openImageModal(image)"
+                />
               </div>
             </div>
           </Slide>
@@ -99,6 +110,7 @@ const emit = defineEmits(['update:modelValue']);
 
 const localValue = reactive({
   countertopType: props.modelValue.countertopType || '',
+  countertopStyle: props.modelValue.countertopStyle || '',
   waterfallEdges: props.modelValue.waterfallEdges || 0,
 });
 
@@ -108,18 +120,22 @@ const graniteImages = [
   {
     src: new URL('../../assets/countertop_images/Granite.png', import.meta.url).href,
     title: 'Granite Style 1',
+    value: 'granite-style-1'
   },
   {
     src: new URL('../../assets/countertop_images/Granite 2.png', import.meta.url).href,
     title: 'Granite Style 2',
+    value: 'granite-style-2'
   },
   {
     src: new URL('../../assets/countertop_images/Granite 3.png', import.meta.url).href,
     title: 'Granite Style 3',
+    value: 'granite-style-3'
   },
   {
     src: new URL('../../assets/countertop_images/Granite 4.png', import.meta.url).href,
     title: 'Granite Style 4',
+    value: 'granite-style-4'
   },
 ];
 
@@ -127,18 +143,22 @@ const quartzImages = [
   {
     src: new URL('../../assets/countertop_images/Quartz.png', import.meta.url).href,
     title: 'Quartz Style 1',
+    value: 'quartz-style-1'
   },
   {
     src: new URL('../../assets/countertop_images/Quartz 2.png', import.meta.url).href,
     title: 'Quartz Style 2',
+    value: 'quartz-style-2'
   },
   {
     src: new URL('../../assets/countertop_images/Quartz Soapstone.png', import.meta.url).href,
     title: 'Quartz Soapstone',
+    value: 'quartz-soapstone'
   },
   {
     src: new URL('../../assets/countertop_images/Quartz Waterfall.png', import.meta.url).href,
     title: 'Quartz Waterfall',
+    value: 'quartz-waterfall'
   },
 ];
 
@@ -146,18 +166,22 @@ const butcherBlockImages = [
   {
     src: new URL('../../assets/countertop_images/Butcher_Birch.png', import.meta.url).href,
     title: 'Birch Butcher Block',
+    value: 'butcher-birch'
   },
   {
     src: new URL('../../assets/countertop_images/Butcher_Maple.png', import.meta.url).href,
     title: 'Maple Butcher Block',
+    value: 'butcher-maple'
   },
   {
     src: new URL('../../assets/countertop_images/Butcher_Oak.png', import.meta.url).href,
     title: 'Oak Butcher Block',
+    value: 'butcher-oak'
   },
   {
     src: new URL('../../assets/countertop_images/Butcher_Walnut.png', import.meta.url).href,
     title: 'Walnut Butcher Block',
+    value: 'butcher-walnut'
   },
 ];
 
@@ -221,7 +245,7 @@ watch(
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 50%;
+  width: 100%;
 }
 
 .countertop-styles {
@@ -229,7 +253,9 @@ watch(
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 50%;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .radio-label {
@@ -246,7 +272,7 @@ watch(
 }
 
 .carousel-slide {
-  padding: 1rem;
+  padding: 0.25rem;
   text-align: center;
 }
 
@@ -261,6 +287,16 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.option-radio {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .image-wrapper img {
