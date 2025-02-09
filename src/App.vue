@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="calculator-app">
     <nav class="horizontal-nav">
@@ -10,6 +6,7 @@
       <div><router-link to="/admin">Admin</router-link></div>
       <div><router-link to="/make-appointment">Appointment</router-link></div>
       <div><router-link to="/email">Email</router-link></div>
+      <div><router-link to="/portal">Customer Portal</router-link></div>
       ** Nav for testing **
     </nav>
     <router-view />

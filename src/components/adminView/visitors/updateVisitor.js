@@ -1,3 +1,4 @@
+
 import { writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 import { dirname } from 'path';
@@ -27,18 +28,44 @@ export async function updateVisitor(req, res) {
     // Parse the existing data
     const visitors = JSON.parse(fileData);
 
-    // Update the visitor data or add if new
-    visitors[newVisitorId] = {
-      ...(visitors[newVisitorId] || {}), // Preserve existing data for this visitor if it exists
-      ...newVisitorData, // Update with new data
-    };
+    if (visitors[newVisitorId]) {
+      // If visitor exists, handle the estimates array
+      const existingVisitor = visitors[newVisitorId];
+      
+      // Initialize estimates array if it doesn't exist
+      if (!existingVisitor.estimates) {
+        existingVisitor.estimates = [];
+      }
+
+      // If new data has estimates, add them to the existing array
+      if (newVisitorData.estimates && Array.isArray(newVisitorData.estimates)) {
+        existingVisitor.estimates.push(...newVisitorData.estimates);
+      }
+
+      // Update other visitor data while preserving estimates
+      visitors[newVisitorId] = {
+        ...existingVisitor,
+        contactInfo: newVisitorData.contactInfo || existingVisitor.contactInfo,
+        calculatorSettingsValue: newVisitorData.calculatorSettingsValue || existingVisitor.calculatorSettingsValue
+      };
+    } else {
+      // If visitor doesn't exist, create new entry
+      visitors[newVisitorId] = {
+        ...newVisitorData,
+        estimates: newVisitorData.estimates || [] // Ensure estimates is always an array
+      };
+    }
 
     // Write the updated visitors data back to the file
     await writeFile(filePath, JSON.stringify(visitors, null, 2));
 
-    // res.status(200).json({ message: 'Visitor data saved successfully' });
+    if (res) {
+      res.status(200).json({ message: 'Visitor data saved successfully' });
+    }
   } catch (err) {
     console.error('Error writing to file:', err);
-    res.status(500).json({ message: 'Failed to save visitor data' });
+    if (res) {
+      res.status(500).json({ message: 'Failed to save visitor data' });
+    }
   }
 }

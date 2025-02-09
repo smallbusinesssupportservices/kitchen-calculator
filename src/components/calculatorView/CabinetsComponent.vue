@@ -172,6 +172,26 @@ const closeModal = () => {
   selectedImage.value = null;
 };
 
+// Watch for changes in cabinet style to ensure it's included in form data
+watch(
+  () => localValue.cabinetStyle,
+  (newStyle) => {
+    if (newStyle) {
+      const selectedImage = cabinetImages.find(img => img.value === newStyle);
+      if (selectedImage) {
+        localValue.selectedStyle = {
+          style: newStyle,
+          title: selectedImage.title,
+          imagePath: selectedImage.src
+        };
+      }
+    } else {
+      localValue.selectedStyle = null;
+    }
+    emit('update:modelValue', { ...localValue });
+  }
+);
+
 watch(
   () => props.modelValue,
   (newVal) => {

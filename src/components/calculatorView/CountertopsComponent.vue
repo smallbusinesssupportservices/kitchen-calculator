@@ -187,14 +187,10 @@ const butcherBlockImages = [
 
 const currentCountertopImages = computed(() => {
   switch (localValue.countertopType) {
-    case 'Granite':
-      return graniteImages;
-    case 'Quartz':
-      return quartzImages;
-    case 'Butcher Block':
-      return butcherBlockImages;
-    default:
-      return [];
+    case 'Granite': return graniteImages;
+    case 'Quartz': return quartzImages;
+    case 'Butcher Block': return butcherBlockImages;
+    default: return [];
   }
 });
 
@@ -205,6 +201,27 @@ const openImageModal = (image) => {
 const closeModal = () => {
   selectedImage.value = null;
 };
+
+// Watch for changes in countertop style to ensure it's included in form data
+watch(
+  () => localValue.countertopStyle,
+  (newStyle) => {
+    if (newStyle) {
+      const images = currentCountertopImages.value;
+      const selectedImage = images.find(img => img.value === newStyle);
+      if (selectedImage) {
+        localValue.selectedStyle = {
+          style: newStyle,
+          title: selectedImage.title,
+          imagePath: selectedImage.src
+        };
+      }
+    } else {
+      localValue.selectedStyle = null;
+    }
+    emit('update:modelValue', { ...localValue });
+  }
+);
 
 watch(
   () => props.modelValue,

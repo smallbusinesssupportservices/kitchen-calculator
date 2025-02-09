@@ -89,6 +89,10 @@
     name: props.modelValue.name || '',
     phone: props.modelValue.phone || '',
     email: props.modelValue.email || '',
+    address: props.modelValue.address || '',
+    city: props.modelValue.city || '',
+    state: props.modelValue.state || '',
+    zip: props.modelValue.zip || '',
   });
   
   // Watch for changes in props.modelValue and update localValue accordingly
