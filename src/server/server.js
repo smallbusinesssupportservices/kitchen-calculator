@@ -21,9 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // QBO Routes
-app.get('/authUri', urlencodedParser, function (req, res) {
+app.get('/authUri', function (req, res) {
   try {
-    const data = JSON.parse(req.query.json);
     const authUri = qboClient.getAuthorizationUrl('intuit-test');
     res.send(authUri);
   } catch (error) {

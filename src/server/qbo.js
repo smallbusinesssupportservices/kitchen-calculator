@@ -25,14 +25,13 @@ class QBOClient {
       
       try {
         const tokenData = JSON.parse(await readFile(tokenPath, 'utf8'));
-        if (tokenData && tokenData.token) {
+        if (tokenData?.token) {
           console.log('Loading token from file:', tokenData.token);
           this.oauthClient.token = tokenData.token;
-          this.oauthClient.setToken(tokenData.token); // Explicitly set token
+          this.oauthClient.setToken(tokenData.token);
         }
         return tokenData;
       } catch (readError) {
-        // If file doesn't exist or is empty, return default structure
         return {
           environment: process.env.QBO_ENVIRONMENT || 'sandbox',
           clientId: process.env.QBO_CLIENT_ID,
@@ -54,7 +53,6 @@ class QBOClient {
       const __dirname = path.dirname(__filename);
       const tokenPath = path.join(__dirname, '..', 'components', 'qbo', 'token.json');
       
-      // Ensure we have the base structure
       const baseData = {
         environment: process.env.QBO_ENVIRONMENT || 'sandbox',
         clientId: process.env.QBO_CLIENT_ID,
@@ -63,12 +61,10 @@ class QBOClient {
         logging: true
       };
 
-      const dataToSave = {
-        ...baseData,
-        ...tokenData
-      };
-
-      await writeFile(tokenPath, JSON.stringify(dataToSave, null, 2));
+      await writeFile(
+        tokenPath, 
+        JSON.stringify({ ...baseData, token: tokenData.token }, null, 2)
+      );
       console.log('Token saved to file successfully');
     } catch (error) {
       console.error('Error saving token to file:', error);
@@ -79,7 +75,7 @@ class QBOClient {
   getAuthorizationUrl(state) {
     try {
       return this.oauthClient.authorizeUri({
-        scope: [OAuthClient.scopes.Accounting],
+        scope: [OAuthClient.scopes.Accounting, OAuthClient.scopes.Payment, OAuthClient.scopes.OpenId],
         state: state
       });
     } catch (error) {
@@ -96,28 +92,24 @@ class QBOClient {
       console.log('Processing callback URL:', fullUrl);
       
       const authResponse = await this.oauthClient.createToken(fullUrl);
-      const json = authResponse.getJson();
-      console.log('Auth response received:', json);
+      console.log('Auth response received');
       
       const token = {
-        realmId: json.realmId,
-        token_type: json.token_type,
-        access_token: json.access_token,
-        refresh_token: json.refresh_token,
-        expires_in: json.expires_in,
-        x_refresh_token_expires_in: json.x_refresh_token_expires_in,
-        id_token: json.id_token || '',
+        realmId: authResponse.token.realmId,
+        token_type: authResponse.token.token_type,
+        access_token: authResponse.token.access_token,
+        refresh_token: authResponse.token.refresh_token,
+        expires_in: authResponse.token.expires_in,
+        x_refresh_token_expires_in: authResponse.token.x_refresh_token_expires_in,
+        id_token: authResponse.token.id_token || '',
         latency: 60000,
         createdAt: Date.now()
       };
 
-      console.log('Setting new token:', token);
+      console.log('Setting new token');
       this.oauthClient.setToken(token);
-
-      // Save the token with the base structure
       await this.saveTokenToFile({ token });
       
-      console.log('Token saved successfully');
       return token;
     } catch (error) {
       console.error('Error in handleCallback:', error);
@@ -131,7 +123,6 @@ class QBOClient {
       
       console.log('Checking token validity...');
       const token = this.oauthClient.getToken();
-      console.log('Current token:', token);
 
       if (!this.oauthClient.isAccessTokenValid()) {
         console.log('Access token expired, refreshing...');
@@ -160,27 +151,25 @@ class QBOClient {
     try {
       console.log('Refreshing tokens...');
       const authResponse = await this.oauthClient.refresh();
-      const json = authResponse.getJson();
+      console.log('Refresh response received:', authResponse);
       
+      // Construct the full token object
       const token = {
         realmId: this.oauthClient.getToken().realmId,
-        token_type: json.token_type,
-        access_token: json.access_token,
-        refresh_token: json.refresh_token,
-        expires_in: json.expires_in,
-        x_refresh_token_expires_in: json.x_refresh_token_expires_in,
-        id_token: json.id_token || '',
+        token_type: authResponse.token_type,
+        access_token: authResponse.access_token,
+        refresh_token: authResponse.refresh_token,
+        expires_in: authResponse.expires_in,
+        x_refresh_token_expires_in: authResponse.x_refresh_token_expires_in,
+        id_token: authResponse.id_token || '',
         latency: 60000,
         createdAt: Date.now()
       };
       
-      console.log('Setting refreshed token:', token);
+      console.log('Setting refreshed token');
       this.oauthClient.setToken(token);
-      
-      // Save the refreshed token
       await this.saveTokenToFile({ token });
       
-      console.log('Tokens refreshed successfully');
       return token;
     } catch (error) {
       console.error('Error refreshing tokens:', error);
