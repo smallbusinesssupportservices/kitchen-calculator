@@ -5,7 +5,211 @@ import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js
 import qboClient from './qbo.js';
 import { sendToHatch } from './hatch.js';
 
-// Convert calculator estimate to QBO estimate format
+/**
+ * Gets the database lookup key for an item
+ * @param {string} itemName - Name of the item
+ * @param {string} categoryName - Name of the category
+ * @param {Object} formData - Form data
+ * @returns {string} Database lookup key
+ */
+const getDbNeddle = (itemName, categoryName, formData) => {
+  console.log("** getDbNeddle **");
+  if (itemName === 'countertopType' || itemName === 'flooringType' || itemName === 'sinkType') {
+    console.log(`${categoryName}:${formData[categoryName][itemName]}`);
+    return `${categoryName}:${formData[categoryName][itemName]}`;
+  }
+  if (itemName === 'cabinetType') {
+    return formData[categoryName][itemName];
+  }
+  return itemName;
+};
+
+/**
+ * Gets the normalized item name for the estimate
+ * @param {string} itemName - Name of the item
+ * @param {string} categoryName - Name of the category
+ * @param {Object} formData - Form data
+ * @returns {string} Normalized item name
+ */
+const getItemsNeddle = (itemName, categoryName, formData) => {
+  console.log("** getItemsNeddle **")
+  if (itemName === 'countertopType' || itemName === 'flooringType' || itemName === 'sinkType') {
+    console.log(`${formData[categoryName][itemName]} `);
+    return formData[categoryName][itemName];
+  }
+  if (itemName === 'cabinetType') {
+    return formData[categoryName][itemName];
+  }
+  return itemName;
+};
+
+/**
+ * Creates an estimate item from database item and form data
+ * @param {Object} dbItem - Database item
+ * @param {string} itemsNeddle - Normalized item name
+ * @param {Object} formData - Form data
+ * @param {Object} dimensions - Kitchen dimensions
+ * @param {Object} category - Category data
+ * @returns {Object} Estimate item
+ */
+const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category) => {
+  console.log("** createEstimateItem **");
+  console.log(itemsNeddle)
+  const markup = isNaN(parseFloat(dbItem?.markup)) ? calculatorSettings.markUp : parseFloat(dbItem.markup);
+  const calculatedUnits = calculateUnits(itemsNeddle, dimensions, formData, category);
+  let unitCost = calculateUnitCost(dbItem, itemsNeddle, dimensions);
+  const sqftPrice = dbItem?.sqftPrice;
+
+  let unitPrice = 0;
+
+  if (itemsNeddle === 'backsplash') {
+    const multiplier = 12;
+    unitPrice = (!sqftPrice ? 
+      (unitCost * (1 + markup) + (multiplier * calculatedUnits)) : 
+      (sqftPrice * ((1 + markup))));
+  }else {
+    unitPrice = (!sqftPrice ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
+  }
+
+  unitPrice += (itemsNeddle === 'Tile' ? 12 : 0) 
+
+  let subtotal = calculateSubtotal(itemsNeddle, unitPrice, calculatedUnits, dimensions, formData);
+
+  // Add style description for cabinets and countertops
+  const description = getItemDescription(itemsNeddle, formData);
+
+  console.log({
+    qboId: dbItem?.qboId,
+    sqftPrice,
+    markup,
+    name: itemsNeddle,
+    unitCost,
+    calculatedUnits,
+    unitPrice,
+    subtotal,
+    ...(description && { description })
+  })
+
+  return {
+    qboId: dbItem?.qboId,
+    sqftPrice,
+    markup,
+    name: itemsNeddle,
+    unitCost,
+    calculatedUnits,
+    unitPrice,
+    subtotal,
+    ...(description && { description })
+  };
+};
+
+/**
+ * Calculates subtotal for an item
+ * @param {string} itemType - Type of item
+ * @param {number} unitPrice - Price per unit
+ * @param {number} calculatedUnits - Number of units
+ * @param {Object} dimensions - Kitchen dimensions
+ * @param {Object} formData - Form data
+ * @returns {number} Calculated subtotal
+ */
+const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, formData) => {
+  const { kitchenArea } = dimensions.kitchen;
+
+  switch (itemType) {
+    case 'swapFixtures':
+      return (!dbItems[itemType]?.sqftPrice ? 
+        unitPrice * calculatedUnits : 
+        unitPrice * kitchenArea * formData.electrical.fixtureCount);
+
+    case 'backsplash': {
+      const categoryMinimum = 700;
+      const allowance = 12;
+      const a = 1;
+
+      return (dbItems[itemType]?.sqftPrice === undefined ? 
+        unitPrice * a :
+        (calculatedUnits * dbItems[itemType].sqftPrice) > categoryMinimum ?
+          ((unitPrice + allowance) * a * calculatedUnits) :
+          (categoryMinimum * (1 + calculatorSettings.markUp) + (allowance * calculatedUnits)) * a);
+    }
+
+    case 'waterfallEdges': {
+      const edges = parseInt(formData.countertops.waterfallEdges);
+      return (!dbItems[itemType]?.sqftPrice ? 
+        unitPrice * (!calculatedUnits ? 1 : calculatedUnits) : 
+        unitPrice * kitchenArea * edges);
+    }
+
+    case 'fixtureCount':
+      return ((formData.electrical.addCanLights || formData.electrical.switchesAndOutlets) ? 1500 : 0);
+
+    case 'flooring:Tile':
+    case 'flooring:LVP/Engineered': {
+      const a = 1;
+      const allowance = itemType === 'flooring:Tile' ? 12 : 0;
+      return (!dbItems[itemType]?.sqftPrice ? 
+        unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : 
+        (unitPrice + allowance) * kitchenArea * a);
+    }
+
+    default: {
+      const a = 1;
+      return (!dbItems[itemType]?.sqftPrice ? 
+        unitPrice * a * calculatedUnits : 
+        unitPrice * kitchenArea * a);
+    }
+  }
+};
+
+/**
+ * Gets description for cabinet and countertop items
+ * @param {string} itemType - Type of item
+ * @param {Object} formData - Form data
+ * @returns {Object|null} Item description
+ */
+const getItemDescription = (itemType, formData) => {
+  if (formData.cabinets?.selectedStyle && 
+      ['standardLineCabinets', 'paintStainedCabinets', 'paintPaintedCabinets', 'fullCustomCabinets'].includes(itemType)) {
+    return {
+      style: formData.cabinets.selectedStyle.style,
+      imagePath: `/cabinet_images/${formData.cabinets.selectedStyle.style}.webp`,
+      title: formData.cabinets.selectedStyle.title
+    };
+  }
+
+  if (formData.countertops?.selectedStyle && itemType === 'countertops') {
+    const style = formData.countertops.selectedStyle;
+    const extension = style.style.includes('butcher') ? 'png' : 'webp';
+    return {
+      style: style.style,
+      imagePath: `/countertop_images/${style.style}.${extension}`,
+      title: style.title
+    };
+  }
+
+  return null;
+};
+
+/**
+ * Updates category total based on item and type
+ * @param {number} currentTotal - Current category total
+ * @param {Object} item - Item being added
+ * @param {string} itemType - Type of item
+ * @returns {number} Updated category total
+ */
+const updateCategoryTotal = (currentTotal, item, itemType) => {
+  if (itemType === 'backsplash') {
+    return item.subtotal;
+  }
+  return currentTotal + item.subtotal;
+};
+
+/**
+ * Converts calculator estimate data to QuickBooks Online estimate format
+ * @param {Object} calculatorEstimate - The calculator's estimate data
+ * @param {string} customerId - The QuickBooks customer ID
+ * @returns {Object} QBO formatted estimate data
+ */
 const createQboEstimateData = (calculatorEstimate, customerId) => {
   const lines = [];
   let lineNumber = 1;
@@ -13,6 +217,7 @@ const createQboEstimateData = (calculatorEstimate, customerId) => {
   calculatorEstimate.categories.forEach(category => {
     category.items.forEach(item => {
       if (item.qboId) {
+      
         lines.push({
           Id: lineNumber.toString(),
           LineNum: lineNumber,
@@ -52,267 +257,329 @@ const createQboEstimateData = (calculatorEstimate, customerId) => {
   };
 };
 
+/**
+ * Generates a UUID v4
+ * @returns {string} UUID string
+ */
+const generateUUID = () => {
+  let dt = new Date().getTime();
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    let r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+  return uuid;
+}
+
+/**
+ * Calculates kitchen dimensions from form data
+ * @param {Object} formData - The submitted form data
+ * @returns {Object} Kitchen and island dimensions
+ */
+const calculateDimensions = (formData) => {
+  const kitchenLength = formData.kitchenSize.length / 12;
+  const kitchenWidth = formData.kitchenSize.width / 12;
+  const kitchenArea = kitchenLength * kitchenWidth;
+  const islandLength = formData.kitchenSize.islandLength / 12;
+  const islandWidth = formData.kitchenSize.islandWidth / 12;
+  const hasIsland = formData.kitchenSize.hasIsland;
+  const islandArea = (islandLength * islandWidth);
+
+  return {
+    kitchen: { kitchenLength, kitchenWidth, kitchenArea },
+    island: { islandLength, islandWidth, islandArea, hasIsland }
+  };
+};
+
+/**
+ * Calculates item units based on dimensions and type
+ * @param {string} itemType - Type of item being calculated
+ * @param {Object} dimensions - Kitchen dimensions
+ * @param {Object} formData - Form data
+ * @param {Object} category - Category data
+ * @returns {number} Calculated units
+ */
+const calculateUnits = (itemType, dimensions, formData, category) => {
+  console.log("** calculateUnits **");
+  if(itemType === 'Tile') console.log("itemType: ", itemType);
+  const { kitchenLength, kitchenWidth, kitchenArea } = dimensions.kitchen;
+  const { hasIsland, islandLength, islandWidth, islandArea } = dimensions.island;
+
+  switch (itemType) {
+    case 'removeCountertops':
+    case 'removeCabinets':
+    case 'removeFlooring':
+    case 'lightDemo':
+    case 'addCanLights':
+    case 'addUnderCabinetLights':
+    case 'switchesAndOutlets':
+    case 'applianceOutlets':
+    case 'paintKitchen':
+    case 'cleanKitchen':
+    case 'Tile':
+    case 'Hardwood':
+    case 'LVP/Engineered':
+      return kitchenArea;
+
+    case 'standardLineCabinets':
+    case 'paintStainedCabinets':
+    case 'paintPaintedCabinets':
+    case 'fullCustomCabinets':
+      return ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - 
+              calculatorSettings.window_constant - calculatorSettings.appliance_constant + 
+              (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0));
+
+    case 'backsplash':
+      return ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - 
+                calculatorSettings.window_constant - calculatorSettings.appliance_constant)) * 2);
+
+    case 'customColorBase':
+      return (((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - 
+              calculatorSettings.window_constant - calculatorSettings.appliance_constant) / 2 + 
+              ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)));
+
+    case 'customColorWall':
+      const cabinetUnits = category.items.find(item => item.name === 'standardLineCabinets')?.calculatedUnits ?? 0;
+      const customColorBase = category.items.find(item => item.name === 'customColorBase')?.calculatedUnits ?? 0;
+      return cabinetUnits - customColorBase;
+
+    case 'Quartz':
+
+      return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier -  calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? (islandLength * islandWidth) : 0)) * 2.5;
+
+    case 'waterfallEdges':
+      return formData.countertops.waterfallEdges;
+
+    case 'swapFixtures':
+      return formData.electrical.fixtureCount;
+
+    case 'newFixtures':
+      let count = formData.electrical.fixtureCount || 0;
+      if (formData.plumbing.installPotFiller) count += 1;
+      if (formData.plumbing.installFaucet) count += 1;
+      return count;
+
+    default:
+      return 1;
+  }
+};
+
+/**
+ * Calculates unit cost based on item type and dimensions
+ * @param {Object} dbItem - Database item data
+ * @param {string} itemType - Type of item
+ * @param {Object} dimensions - Kitchen dimensions
+ * @returns {number} Calculated unit cost
+ */
+const calculateUnitCost = (dbItem, itemType, dimensions) => {
+  console.log("** calculateUnitCost **")
+  if(itemType === 'Tile') console.log("itemType: ", itemType);
+  const { kitchenArea } = dimensions.kitchen;
+  const { islandWidth } = dimensions.island;
+
+  switch (itemType) {
+    case 'paintKitchen':
+      return Math.max((dbItem.sqftPrice * kitchenArea), 500);
+
+    case 'waterfallEdges':
+      const base = 65;
+      const multiplier = 3;
+      return (base * islandWidth * multiplier);
+
+    case 'cleanKitchen':
+      return dbItem.sqftPrice * kitchenArea;
+
+    default:
+      return dbItem.unitCost ?? 1;
+  }
+};
+
+/**
+ * Processes form data and generates estimate
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 export const processFormData = async (req, res) => {
-  let formData = req?.body;
-
-  const isSelected = (item) => {
-    if (!item) return item;
-    return true;
-  };
-
-  // Function to calculate total cost
-  const calculateTotalCost = (dbItems, formData) => {
-    const MARK_UP = calculatorSettings.markUp;
-    const estimate = {
-      categories: [],
-      overallTotal: 0
-    };
-
-    // Loop through formData categories 
-    for (let cat in formData) {
-
-      if (cat === 'kitchenSize') {
-        var kitchenLength = formData.kitchenSize.length / 12;
-        var kitchenWidth = formData.kitchenSize.width / 12;
-        var kitchenArea = kitchenLength * kitchenWidth;
-        var islandLength = formData.kitchenSize.islandLength / 12;
-        var islandWidth = formData.kitchenSize.islandWidth / 12;
-        var hasIsland = formData.kitchenSize.hasIsland;
-        var islandArea = (islandLength * islandWidth);
-        continue;
-      }
-
-      const category = {
-        category: cat,
-        items: [],
-        categoryTotal: 0
-      }
-
-      const formCategory = formData[cat];
-
-      if (cat == 'newFixtures') {
-        formCategory.newFixtures = true;
-      }
-
-      for (let categoryItem in formCategory) {
-        const item = {};
-        const dbNeddle = ((categoryItem == 'countertopType') || (categoryItem == 'flooringType') || (categoryItem == 'sinkType') ? `${cat}:${formData[cat][categoryItem]}` : (categoryItem == 'cabinetType') ? `${formData[cat][categoryItem]}` : categoryItem);
-        const itemsNeddle = (
-          (categoryItem == 'countertopType') || (categoryItem == 'flooringType' || (categoryItem == 'sinkType'))
-            ? cat
-            : (categoryItem == 'cabinetType')
-              ? `${formData[cat][categoryItem]}`
-              : categoryItem);
-
-        if (isSelected(formCategory[categoryItem]) && dbItems[dbNeddle]) {
-          const dbItem = dbItems[dbNeddle];
-          const markup = isNaN(parseFloat(dbItem?.markup)) ? parseFloat(dbItem?.markup) : MARK_UP;
-          const sqftPrice = dbItem?.sqftPrice;
-
-          // calculate units
-          let calculatedUnits = 1;
-
-          if (['paintStainedCabinets', 'paintPaintedCabinets', 'standardLineCabinets', 'fullCustomCabinets'].includes(dbNeddle)) {
-            calculatedUnits = ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant + (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0))
-          } else if (dbNeddle == 'backsplash') {
-            calculatedUnits = ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant)) * 2);
-          } else if (dbNeddle == 'customColorBase') {
-            calculatedUnits = (((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant) / 2 + ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)))
-          } else if (dbNeddle == 'customColorWall') {
-            const cabinetUnits = category.items.filter(item => item.name == 'standardLineCabinets')[0]?.calculatedUnits ?? 0;
-            const customColorBase = category.items.filter(item => item.name == 'customColorBase')[0]?.calculatedUnits ?? 0;
-            calculatedUnits = cabinetUnits - customColorBase;
-          } else if (['countertops:Granite', 'countertops:Quartz', 'countertops:Solid-Surface', 'countertops:Butcher Block'].includes(dbNeddle)) {
-            const a = 1;
-            calculatedUnits = ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? islandLength * islandWidth : 0)) * 2.5);
-          } else if (dbNeddle == 'waterfallEdges') {
-            calculatedUnits = formCategory[categoryItem]
-          } else if (dbNeddle == 'swapFixtures') {
-            calculatedUnits = formData['electrical'].fixtureCount;
-          } else if (dbNeddle == 'newFixtures') {
-            let newFixturesCount = formData.electrical.fixtureCount || 0;
-            if (formData.plumbing.installPotFiller) newFixturesCount += 1;
-            if (formData.plumbing.installFaucet) newFixturesCount += 1;
-            calculatedUnits = newFixturesCount;
-          }
-
-          //calculate unit cost
-          let unitCost = dbItem.unitCost ?? 1;
-
-          if (dbNeddle == 'paintKitchen') {
-            unitCost = Math.max((sqftPrice * kitchenArea), 500);
-          } else if (dbNeddle == 'waterfallEdges') {
-            const base = 60;
-            const multiplier = 3
-            unitCost = (base * islandWidth * multiplier)
-          } else if (dbNeddle == 'cleanKitchen') {
-            unitCost = sqftPrice * kitchenArea
-          }
-
-          // calculate unit price
-          let unitPrice = 0;
-          if (dbNeddle == 'backsplash') {
-            const multiplier = 12;
-            unitPrice = (!sqftPrice ? (unitCost * (1 + markup) + (multiplier * calculatedUnits)) : (sqftPrice * ((1 + markup))));
-          } else {
-            unitPrice = ((sqftPrice == null || sqftPrice == "") ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
-          }
-
-          let subtotal = 0;
-
-          if (dbNeddle == 'swapFixtures') {
-            subtotal = (!sqftPrice
-              ? unitPrice * calculatedUnits
-              : unitPrice * parseFloat(kitchenArea) * formData.electrical.fixtureCount);
-          } else if (dbNeddle == 'backsplash') {
-            const categoryMinimum = 700;
-            const allowance = 12
-            const a = 1
-
-            subtotal = (
-              sqftPrice == undefined
-                ? unitPrice * a
-                : (calculatedUnits * sqftPrice) > categoryMinimum
-                  ? ((unitPrice + allowance) * a * calculatedUnits)
-                  : (categoryMinimum * (1 + markup) + (allowance * calculatedUnits)) * a
-            )
-          } else if (dbNeddle == 'waterfallEdges') {
-            const edges = parseInt(formData.countertops.waterfallEdges);
-            subtotal = (
-              !sqftPrice
-                ? unitPrice * (!calculatedUnits
-                  ? 1
-                  : calculatedUnits)
-                : unitPrice * kitchenArea * edges
-            );
-          } else if (dbNeddle == 'fixtureCount') {
-            subtotal = ((formData.electrical.addCanLights || formData.electrical.switchesAndOutlets) ? 1500 : 0);
-          } else if (['flooring:Tile', 'flooring:LVP/Engineered'].includes(dbNeddle)) {
-            let a = 1;
-            let allowance = dbNeddle == 'flooring:Tile' ? 12 : 0;
-            subtotal = (!sqftPrice ? unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : (unitPrice + allowance) * kitchenArea * a)
-          } else {
-            const a = 1
-            subtotal = (!sqftPrice ? unitPrice * a * calculatedUnits : unitPrice * kitchenArea * a)
-          }
-
-          //build the estimate item
-          item.qboId = dbItem?.qboId;
-          item.sqftPrice = sqftPrice;
-          item.markup = markup;
-          item.name = itemsNeddle;
-          item.unitCost = unitCost;
-          item.calculatedUnits = calculatedUnits;
-          item.unitPrice = unitPrice;
-          item.subtotal = subtotal;
-
-          // add item to category items
-          category.items.push(item);
-
-          if (dbNeddle == 'backsplash') {
-            category.categoryTotal = (item.subtotal);
-          } else {
-            category.categoryTotal += item.subtotal;
-          }
-        }
-      }
-
-      // Apply category minimum if applicable
-      if (categoryMinimums[cat] && category.categoryTotal > 0 && category.categoryTotal < categoryMinimums[cat]) {
-        category.categoryTotal = categoryMinimums[cat];
-      }
-
-      estimate.categories.push(category);
-      estimate.overallTotal += category.categoryTotal;
-    };
-
-    const rng = (Math.floor(Math.random() * 75) + 1) / 10000;
-    console.log("rng: ", rng, "\nlowBuffer: ", calculatorSettings.lowBuffer, "\nhighBuffer: ", calculatorSettings.highBuffer);
-    estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSettings.lowBuffer + rng));
-    estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSettings.highBuffer + rng));
-    estimate.rng = rng
-    
-    return estimate;
-  };
-
   try {
-    // Calculate estimate
-    const estimate = calculateTotalCost(dbItems, formData);
+    const formData = req?.body;
+    console.log("Processing form data:", formData);
 
-    // Store visitor data
-    const calculatorSettingsValue = {
-      rng: estimate.rng,
-      lowBuffer: calculatorSettings.lowBuffer,
-      highBuffer: calculatorSettings.highBuffer
-    };
-    const { id, ...contactInfo } = formData.user;
-    const visitor = {
-      contactInfo,
-      calculatorSettingsValue,
-      estimate
-    };
+    // Initialize response data
+    const responseData = { estimate: await calculateEstimate(formData) };
+
+    // Handle integrations
+    try {
+      const integrationData = await handleIntegrations(formData, responseData.estimate);
+      Object.assign(responseData, integrationData);
+    } catch (integrationError) {
+      console.error('Integration error:', integrationError);
+      responseData.integrationError = integrationError.message;
+    }
 
     // Save visitor data
-    await updateVisitor({ body: { id: [formData.user.id], data: visitor } });
-
-    // QBO Integration
     try {
-      // Find or create customer
-      let customer = await qboClient.findCustomerByEmail(contactInfo.email);
-      
-      if (!customer) {
-        const customerData = {
-          DisplayName: contactInfo.name,
-          PrimaryEmailAddr: { Address: contactInfo.email },
-          PrimaryPhone: { FreeFormNumber: contactInfo.phone },
-          BillAddr: {
-            Line1: contactInfo.address,
-            City: contactInfo.city,
-            CountrySubDivisionCode: contactInfo.state,
-            PostalCode: contactInfo.zip
-          }
-        };
-        customer = await qboClient.createCustomer(customerData);
-      }
-
-      // Send customer data to Hatch
-      try {
-        await sendToHatch({
-          ...customer,
-          estimate: {
-            lowRange: estimate.lowRange,
-            highRange: estimate.highRange
-          }
-        });
-        console.log('Successfully sent customer data to Hatch');
-      } catch (hatchError) {
-        console.error('Error sending to Hatch:', hatchError);
-        // Continue with QBO estimate creation even if Hatch fails
-      }
-
-      // Create QBO estimate
-      const qboEstimateData = createQboEstimateData(estimate, customer.Id);
-      const qboEstimate = await qboClient.createEstimate(qboEstimateData);
-
-      // Get estimate PDF
-      const estimatePdf = await qboClient.getEstimatePdf(qboEstimate.Id);
-
-      // Send response with all data
-      res.status(200).send({
-        estimate,
-        qbo: {
-          customer,
-          estimate: qboEstimate,
-          pdf: estimatePdf
-        }
-      });
-    } catch (qboError) {
-      console.error('QBO integration error:', qboError);
-      // Still send the estimate even if QBO integration fails
-      res.status(200).send({ estimate, qboError: qboError.message });
+      await saveVisitorData(formData, responseData.estimate);
+    } catch (visitorError) {
+      console.error('Error saving visitor data:', visitorError);
+      responseData.visitorError = visitorError.message;
     }
+
+    res.status(200).send(responseData);
   } catch (error) {
     console.error('Error processing form data:', error);
     res.status(500).send({ error: 'Error processing form data' });
   }
+};
+
+/**
+ * Calculates the complete estimate from form data
+ * @param {Object} formData - The submitted form data
+ * @returns {Object} Complete estimate data
+ */
+const calculateEstimate = async (formData) => {
+  const dimensions = calculateDimensions(formData);
+  const estimate = {
+    categories: [],
+    overallTotal: 0,
+    dimensions,
+    id: generateUUID(),
+    displayName: `Estimate ${new Date().toLocaleDateString("en-US")}`,
+  };
+
+  // Process each category
+  for (const categoryName in formData) {
+    if (categoryName === 'kitchenSize') continue;
+
+    const category = {
+      category: categoryName,
+      items: [],
+      categoryTotal: 0
+    };
+
+    const formCategory = formData[categoryName];
+    await processCategory(category, formCategory, categoryName, formData, dimensions);
+
+    // Apply category minimum if applicable
+    if (categoryMinimums[categoryName] && category.categoryTotal > 0 && 
+        category.categoryTotal < categoryMinimums[categoryName]) {
+      category.categoryTotal = categoryMinimums[categoryName];
+    }
+
+    estimate.categories.push(category);
+    estimate.overallTotal += category.categoryTotal;
+  }
+
+  // Calculate estimate ranges
+  const rng = (Math.floor(Math.random() * 75) + 1) / 10000;
+  estimate.rng = rng;
+  estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSettings.lowBuffer + rng));
+  estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSettings.highBuffer + rng));
+
+  return estimate;
+};
+
+/**
+ * Processes a single category for the estimate
+ * @param {Object} category - Category object being processed
+ * @param {Object} formCategory - Form data for the category
+ * @param {string} categoryName - Name of the category
+ * @param {Object} formData - Complete form data
+ * @param {Object} dimensions - Kitchen dimensions
+ */
+const processCategory = async (category, formCategory, categoryName, formData, dimensions) => {
+  if (categoryName === 'newFixtures') {
+    formCategory.newFixtures = true;
+  }
+
+  for (const itemName in formCategory) {
+    console.log("itemName: ", itemName)
+    const dbNeddle = getDbNeddle(itemName, categoryName, formData);
+    const itemsNeddle = getItemsNeddle(itemName, categoryName, formData);
+    const dbItem = dbItems[dbNeddle];
+
+    if (formCategory[itemName] && dbItem) {
+      const item = createEstimateItem(dbItem, itemsNeddle, formData, dimensions, category);
+      if (item) {
+        category.items.push(item);
+        category.categoryTotal = updateCategoryTotal(category.categoryTotal, item, dbNeddle);
+      }
+    }
+  }
+};
+
+/**
+ * Handles third-party integrations (QBO and Hatch)
+ * @param {Object} formData - The submitted form data
+ * @param {Object} estimate - The calculated estimate
+ * @returns {Object} Integration results
+ */
+const handleIntegrations = async (formData, estimate) => {
+  const results = {};
+  const contactInfo = formData.user || {};
+
+  // QBO Integration
+  try {
+    let customer = await qboClient.findCustomerByEmail(contactInfo.email);
+    
+    if (!customer) {
+      console.log("customer not found")
+      const customerData = {
+        DisplayName: contactInfo.name,
+        PrimaryEmailAddr: { Address: contactInfo.email },
+        PrimaryPhone: { FreeFormNumber: contactInfo.phone },
+        BillAddr: {
+          Line1: contactInfo.address,
+          City: contactInfo.city,
+          CountrySubDivisionCode: contactInfo.state,
+          PostalCode: contactInfo.zip
+        }
+      };
+      customer = await qboClient.createCustomer(customerData);
+    }
+
+    const qboEstimateData = createQboEstimateData(estimate, customer.Id);
+    // console.log("** qboEstimateData: ",JSON.stringify(qboEstimateData,null,2))
+    // const qboEstimate = await qboClient.createEstimate(qboEstimateData);
+    // const estimatePdf = await qboClient.getEstimatePdf(qboEstimate.Id);
+
+    results.qbo = { customer, estimate: qboEstimate, pdf: estimatePdf };
+    estimate.qboId = qboEstimate.Id;
+
+    // Hatch Integration
+    try {
+      await sendToHatch({
+        ...customer,
+        estimate: {
+          lowRange: estimate.lowRange,
+          highRange: estimate.highRange
+        }
+      });
+    } catch (hatchError) {
+      results.hatchError = hatchError.message;
+    }
+  } catch (qboError) {
+    results.qboError = qboError.message;
+  }
+
+  return results;
+};
+
+/**
+ * Saves visitor data to the database
+ * @param {Object} formData - The submitted form data
+ * @param {Object} estimate - The calculated estimate
+ */
+const saveVisitorData = async (formData, estimate) => {
+  const { id, ...contactInfoData } = formData.user;
+  const visitor = {
+    contactInfo: contactInfoData,
+    calculatorSettingsValue: {
+      rng: estimate.rng,
+      lowBuffer: calculatorSettings.lowBuffer,
+      highBuffer: calculatorSettings.highBuffer
+    },
+    estimates: [estimate]
+  };
+
+  await updateVisitor({ body: { id: formData.user.id, data: visitor } });
 };
