@@ -427,7 +427,13 @@
                 "unitCost": "2500",
                 "calculatedUnits": 1,
                 "unitPrice": 2500,
-                "subtotal": 2500
+                "subtotal": 2500,
+                "selections": [
+                  {
+                    "url": "https://www.bestbuy.com/site/haier-16-8-cu-ft-4-door-french-door-counter-depth-refrigerator-with-led-lighting-stainless-steel/6461196.p?skuId=6461196",
+                    "primary": true
+                  }
+                ]
               },
               {
                 "qboId": "76",

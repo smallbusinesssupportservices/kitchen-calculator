@@ -13,6 +13,28 @@
     </div>
     
     <div v-else class="project-container">
+      <!-- Contact Information -->
+      <div v-if="currentProject.contactInfo" class="project-section">
+        <h2>Contact Information</h2>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <label>Name:</label>
+            <span>{{ currentProject.contactInfo.name }}</span>
+          </div>
+          <div class="contact-item">
+            <label>Email:</label>
+            <span>{{ currentProject.contactInfo.email }}</span>
+          </div>
+          <div class="contact-item">
+            <label>Phone:</label>
+            <span>{{ currentProject.contactInfo.phone }}</span>
+          </div>
+          <div class="contact-item">
+            <label>Address:</label>
+            <span>{{ formatAddress(currentProject.contactInfo) }}</span>
+          </div>
+        </div>
+      </div>
       <!-- Estimate Selection -->
       <div class="estimate-selector project-section">
         <h2>Your Estimates</h2>
@@ -31,7 +53,7 @@
           </button>
         </div>
       </div>
-
+      
       <!-- Project Details -->
       <div class="project-section">
         <h2>Project Details</h2>
@@ -128,29 +150,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Contact Information -->
-      <div v-if="currentProject.contactInfo" class="project-section">
-        <h2>Contact Information</h2>
-        <div class="contact-grid">
-          <div class="contact-item">
-            <label>Name:</label>
-            <span>{{ currentProject.contactInfo.name }}</span>
-          </div>
-          <div class="contact-item">
-            <label>Email:</label>
-            <span>{{ currentProject.contactInfo.email }}</span>
-          </div>
-          <div class="contact-item">
-            <label>Phone:</label>
-            <span>{{ currentProject.contactInfo.phone }}</span>
-          </div>
-          <div class="contact-item">
-            <label>Address:</label>
-            <span>{{ formatAddress(currentProject.contactInfo) }}</span>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Product URL Modal -->
@@ -227,13 +226,43 @@ const selectedEstimate = computed(() => {
 
 const validCategories = computed(() => {
   if (!selectedEstimate.value?.categories) return [];
-  return selectedEstimate.value.categories.filter(category => 
+  
+  // Get all categories except 'user'
+  let categories = selectedEstimate.value.categories.filter(category => 
     category && 
     category.items && 
     Array.isArray(category.items) && 
     category.items.length > 0 &&
     category.category !== 'user'
   );
+
+  // Find demo and dumpster categories
+  const demoCategory = categories.find(c => c.category === 'demo');
+  const dumpsterCategory = categories.find(c => c.category === 'dumpster');
+
+  // If both exist, merge dumpster items into demo
+  if (demoCategory && dumpsterCategory) {
+    // Create a new array without the dumpster category
+    categories = categories.filter(c => c.category !== 'dumpster');
+    
+    // Create a deep copy of demo category to avoid mutation
+    const updatedDemoCategory = {
+      ...demoCategory,
+      items: [
+        ...demoCategory.items,
+        ...dumpsterCategory.items
+      ],
+      categoryTotal: demoCategory.categoryTotal + dumpsterCategory.categoryTotal
+    };
+
+    // Replace the demo category with the updated one
+    const demoIndex = categories.findIndex(c => c.category === 'demo');
+    if (demoIndex !== -1) {
+      categories[demoIndex] = updatedDemoCategory;
+    }
+  }
+
+  return categories;
 });
 
 const getPrimarySelection = (item) => {
