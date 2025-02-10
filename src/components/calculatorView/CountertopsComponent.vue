@@ -26,7 +26,7 @@
       <div v-if="localValue.countertopType && localValue.countertopType !== 'noCountertop'" class="countertop-styles">
         <div class="styles-count">{{ currentCountertopImages.length }} Styles Available</div>
         <Carousel :items-to-show="1" :wrap-around="true" :transition="500">
-          <Slide v-for="(image, index) in currentCountertopImages" :key="index">
+          <Slide v-for="image in currentCountertopImages" :key="image.value">
             <div class="carousel-slide">
               <div class="option-title">{{ image.title }}</div>
               <div class="image-wrapper">
@@ -98,6 +98,7 @@
 import { reactive, computed, ref, watch } from 'vue';
 import { Carousel, Navigation, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
+import { getCountertopImages } from '../../data/images';
 
 const props = defineProps({
   modelValue: {
@@ -116,82 +117,8 @@ const localValue = reactive({
 
 const selectedImage = ref(null);
 
-const graniteImages = [
-  {
-    src: new URL('../../assets/countertop_images/Granite.png', import.meta.url).href,
-    title: 'Granite Style 1',
-    value: 'granite-style-1'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Granite 2.png', import.meta.url).href,
-    title: 'Granite Style 2',
-    value: 'granite-style-2'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Granite 3.png', import.meta.url).href,
-    title: 'Granite Style 3',
-    value: 'granite-style-3'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Granite 4.png', import.meta.url).href,
-    title: 'Granite Style 4',
-    value: 'granite-style-4'
-  },
-];
-
-const quartzImages = [
-  {
-    src: new URL('../../assets/countertop_images/Quartz.png', import.meta.url).href,
-    title: 'Quartz Style 1',
-    value: 'quartz-style-1'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Quartz 2.png', import.meta.url).href,
-    title: 'Quartz Style 2',
-    value: 'quartz-style-2'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Quartz Soapstone.png', import.meta.url).href,
-    title: 'Quartz Soapstone',
-    value: 'quartz-soapstone'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Quartz Waterfall.png', import.meta.url).href,
-    title: 'Quartz Waterfall',
-    value: 'quartz-waterfall'
-  },
-];
-
-const butcherBlockImages = [
-  {
-    src: new URL('../../assets/countertop_images/Butcher_Birch.png', import.meta.url).href,
-    title: 'Birch Butcher Block',
-    value: 'butcher-birch'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Butcher_Maple.png', import.meta.url).href,
-    title: 'Maple Butcher Block',
-    value: 'butcher-maple'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Butcher_Oak.png', import.meta.url).href,
-    title: 'Oak Butcher Block',
-    value: 'butcher-oak'
-  },
-  {
-    src: new URL('../../assets/countertop_images/Butcher_Walnut.png', import.meta.url).href,
-    title: 'Walnut Butcher Block',
-    value: 'butcher-walnut'
-  },
-];
-
 const currentCountertopImages = computed(() => {
-  switch (localValue.countertopType) {
-    case 'Granite': return graniteImages;
-    case 'Quartz': return quartzImages;
-    case 'Butcher Block': return butcherBlockImages;
-    default: return [];
-  }
+  return getCountertopImages(localValue.countertopType);
 });
 
 const openImageModal = (image) => {
@@ -207,13 +134,15 @@ watch(
   () => localValue.countertopStyle,
   (newStyle) => {
     if (newStyle) {
-      const images = currentCountertopImages.value;
-      const selectedImage = images.find(img => img.value === newStyle);
+      const selectedImage = currentCountertopImages.value.find(img => img.value === newStyle);
       if (selectedImage) {
+        // Get file extension from the original path
+        const extension = selectedImage.src.toLowerCase().endsWith('.png') ? 'png' : 'webp';
         localValue.selectedStyle = {
           style: newStyle,
           title: selectedImage.title,
-          imagePath: selectedImage.src
+          // Store only the relative path with correct extension
+          imagePath: `countertop_images/${newStyle}.${extension}`
         };
       }
     } else {

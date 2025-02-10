@@ -78,19 +78,10 @@ const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category)
   // Add style description for cabinets and countertops
   const description = getItemDescription(itemsNeddle, formData);
 
-  console.log({
-    qboId: dbItem?.qboId,
-    sqftPrice,
-    markup,
-    name: itemsNeddle,
-    unitCost,
-    calculatedUnits,
-    unitPrice,
-    subtotal,
-    ...(description && { description })
-  })
+  // Get selections for appliances
+  const selections = getItemSelections(itemsNeddle, formData);
 
-  return {
+  const estimateItem = {
     qboId: dbItem?.qboId,
     sqftPrice,
     markup,
@@ -99,8 +90,28 @@ const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category)
     calculatedUnits,
     unitPrice,
     subtotal,
-    ...(description && { description })
+    ...(description && { description }),
+    ...(selections && { selections })
   };
+
+  console.log('Created estimate item:', estimateItem);
+  return estimateItem;
+};
+
+/**
+ * Gets selections for an item if applicable
+ * @param {string} itemName - Name of the item
+ * @param {Object} formData - Form data
+ * @returns {Array|null} Array of selections or null
+ */
+const getItemSelections = (itemName, formData) => {
+  // Check if this is an appliance item with selections
+  if (formData.newAppliances && 
+      formData.newAppliances[itemName] && 
+      formData.newAppliances[`${itemName}_selections`]) {
+    return formData.newAppliances[`${itemName}_selections`];
+  }
+  return null;
 };
 
 /**
@@ -172,18 +183,16 @@ const getItemDescription = (itemType, formData) => {
       ['standardLineCabinets', 'paintStainedCabinets', 'paintPaintedCabinets', 'fullCustomCabinets'].includes(itemType)) {
     return {
       style: formData.cabinets.selectedStyle.style,
-      imagePath: `/cabinet_images/${formData.cabinets.selectedStyle.style}.webp`,
+      imagePath: formData.cabinets.selectedStyle.imagePath,
       title: formData.cabinets.selectedStyle.title
     };
   }
 
   if (formData.countertops?.selectedStyle && itemType === 'countertops') {
-    const style = formData.countertops.selectedStyle;
-    const extension = style.style.includes('butcher') ? 'png' : 'webp';
     return {
-      style: style.style,
-      imagePath: `/countertop_images/${style.style}.${extension}`,
-      title: style.title
+      style: formData.countertops.selectedStyle.style,
+      imagePath: formData.countertops.selectedStyle.imagePath,
+      title: formData.countertops.selectedStyle.title
     };
   }
 
@@ -344,7 +353,6 @@ const calculateUnits = (itemType, dimensions, formData, category) => {
       return cabinetUnits - customColorBase;
 
     case 'Quartz':
-
       return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier -  calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? (islandLength * islandWidth) : 0)) * 2.5;
 
     case 'waterfallEdges':

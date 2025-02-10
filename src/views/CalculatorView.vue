@@ -1,3 +1,40 @@
+<template>
+  <h1>Kitchen Calculator</h1>
+  <div v-if="!hasServerResponded">
+    <form @submit.prevent="handleSubmit">
+      <KitchenSize v-model="formData.kitchenSize" />
+      <Cabinets v-model="formData.cabinets" />
+      <Countertops v-model="formData.countertops" />
+      <NewSink v-model="formData.newSink" />
+      <Backsplash v-model="formData.backsplash" />
+      <Plumbing v-model="formData.plumbing" />
+      <Electrical v-model="formData.electrical" />
+      <NewAppliances v-model="formData.newAppliances" />
+      <InteriorPainting v-model="formData.interiorPainting" />
+      <Flooring v-model="formData.flooring" />
+      <Demo
+        v-model="formData.demo"
+        :demoSink="formData.newSink.sinkType"
+        :demoCountertops="formData.countertops.countertopType"
+        :demoBacksplash="formData.backsplash.backsplash"
+        :demoCabinets="formData.cabinets.cabinetType"
+        :demoFlooring="formData.flooring.flooringType"
+      />
+      <FinalCleaning v-model="formData.finalCleaning" />
+      <UserForm v-model="formData.user" />
+      <ProgressButton
+        :progress="progress"
+        :disabled="isDisabled"
+        :loading="isLoading"
+        @click="handleSubmit"
+      />
+    </form>
+  </div>
+  <div v-else>
+    <ServerResponse :response="serverResponse" />
+  </div>
+</template>
+
 <script setup>
 import axios from 'axios';
 import { reactive, ref, computed, onMounted, watch } from 'vue';
@@ -142,7 +179,7 @@ const hasServerResponded = ref(false);
 const serverResponse = ref(null);
 
 // Initialize form data with test data
-const formData = reactive(testFormData);
+const formData = reactive({...JSON.parse(JSON.stringify(testFormData))});
 
 // Generate or retrieve userId on component mount
 onMounted(() => {
@@ -252,9 +289,12 @@ const handleSubmit = async () => {
   isSubmitted.value = false;
 
   try {
+    // Create a serializable copy of the form data
+    const serializedFormData = JSON.parse(JSON.stringify(formData));
+    
     const response = await axios.post(
       'http://localhost:3000/submit-form',
-      formData
+      serializedFormData
     );
 
     if (response.status === 200) {
@@ -286,43 +326,6 @@ watch(
   { deep: true }
 );
 </script>
-
-<template>
-  <h1>Kitchen Calculator</h1>
-  <div v-if="!hasServerResponded">
-    <form @submit.prevent="handleSubmit">
-      <KitchenSize v-model="formData.kitchenSize" />
-      <Cabinets v-model="formData.cabinets" />
-      <Countertops v-model="formData.countertops" />
-      <NewSink v-model="formData.newSink" />
-      <Backsplash v-model="formData.backsplash" />
-      <Plumbing v-model="formData.plumbing" />
-      <Electrical v-model="formData.electrical" />
-      <NewAppliances v-model="formData.newAppliances" />
-      <InteriorPainting v-model="formData.interiorPainting" />
-      <Flooring v-model="formData.flooring" />
-      <Demo
-        v-model="formData.demo"
-        :demoSink="formData.newSink.sinkType"
-        :demoCountertops="formData.countertops.countertopType"
-        :demoBacksplash="formData.backsplash.backsplash"
-        :demoCabinets="formData.cabinets.cabinetType"
-        :demoFlooring="formData.flooring.flooringType"
-      />
-      <FinalCleaning v-model="formData.finalCleaning" />
-      <UserForm v-model="formData.user" />
-      <ProgressButton
-        :progress="progress"
-        :disabled="isDisabled"
-        :loading="isLoading"
-        @click="handleSubmit"
-      />
-    </form>
-  </div>
-  <div v-else>
-    <ServerResponse :response="serverResponse" />
-  </div>
-</template>
 
 <style>
 body {

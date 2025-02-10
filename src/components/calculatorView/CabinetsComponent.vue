@@ -45,7 +45,7 @@
       <div v-if="localValue.cabinetType === 'standardLineCabinets'" class="cabinet-styles">
         <div class="styles-count">{{ cabinetImages.length }} Cabinet Styles Available</div>
         <Carousel v-if="showStyles" :items-to-show="1" :wrap-around="true" :transition="500">
-          <Slide v-for="(image, index) in cabinetImages" :key="index">
+          <Slide v-for="image in cabinetImages" :key="image.value">
             <div class="carousel-slide">
               <div class="option-title">{{ image.title }}</div>
               <div class="image-wrapper">
@@ -84,8 +84,9 @@
 
 <script setup>
 import { reactive, computed, ref, watch } from 'vue';
-import { Carousel, Navigation, Slide, Pagination } from 'vue3-carousel';
+import { Carousel, Navigation, Slide } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
+import { getCabinetImages } from '../../data/images';
 
 const props = defineProps({
   modelValue: {
@@ -107,58 +108,7 @@ const showStyles = computed(() => localValue.cabinetType === 'standardLineCabine
 
 const selectedImage = ref(null);
 
-const cabinetImages = [
-  { 
-    src: new URL('../../assets/cabinet_images/Columbia_Antique_White.webp', import.meta.url).href, 
-    title: 'Columbia Antique White',
-    value: 'columbia-antique-white'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/Edgewater-White.webp', import.meta.url).href, 
-    title: 'Edgewater White',
-    value: 'edgewater-white'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/odyssey-sage.webp', import.meta.url).href, 
-    title: 'Odyssey Sage',
-    value: 'odyssey-sage'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/oxford-mist_1.webp', import.meta.url).href, 
-    title: 'Oxford Mist',
-    value: 'oxford-mist'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/oxford-toffee-door.webp', import.meta.url).href, 
-    title: 'Oxford Toffee',
-    value: 'oxford-toffee'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/SC-prime.png', import.meta.url).href, 
-    title: 'SC Prime',
-    value: 'sc-prime'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/Shaker_Antique_White.webp', import.meta.url).href, 
-    title: 'Shaker Antique White',
-    value: 'shaker-antique-white'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/Shaker_Dove_1.webp', import.meta.url).href, 
-    title: 'Shaker Dove',
-    value: 'shaker-dove'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/Shaker_Grey.webp', import.meta.url).href, 
-    title: 'Shaker Grey',
-    value: 'shaker-grey'
-  },
-  { 
-    src: new URL('../../assets/cabinet_images/Shaker-Black.webp', import.meta.url).href, 
-    title: 'Shaker Black',
-    value: 'shaker-black'
-  },
-];
+const cabinetImages = getCabinetImages();
 
 const isSubOptionDisabled = computed(() => localValue.cabinetType === 'noCabinets');
 
@@ -182,7 +132,8 @@ watch(
         localValue.selectedStyle = {
           style: newStyle,
           title: selectedImage.title,
-          imagePath: selectedImage.src
+          // Store only the relative path
+          imagePath: `cabinet_images/${newStyle}.webp`
         };
       }
     } else {

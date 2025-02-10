@@ -1,31 +1,3 @@
-<script setup>
-import { ref, watch } from 'vue';
-
-const props = defineProps({
-  visitor: Object, 
-});
-
-const emit = defineEmits(['save', 'close']);
-
-// Copy the visitor object to avoid directly mutating the prop
-const visitorCopy = ref({ ...props.visitor });
-
-// Watch for changes to props.visitor and update visitorCopy
-watch(() => props.visitor, (newVisitor) => {
-  visitorCopy.value = { ...newVisitor };
-});
-
-// Function to handle save
-const handleSave = () => {
-  emit('save', visitorCopy.value); // Emit the updated visitor data
-};
-
-// Function to close the modal
-const handleClose = () => {
-  emit('close');
-};
-</script>
-
 <template>
   <div class="modal-overlay">
     <div class="modal-content">
@@ -45,35 +17,76 @@ const handleClose = () => {
         <h4>Calculator Settings</h4>
         <div v-for="(value, key) in visitorCopy.calculatorSettingsValue" :key="key" class="form-group">
           <label :for="key">{{ key }}:</label>
-          <p>{{ visitorCopy.calculatorSettingsValue[key]  }}</p>
+          <p>{{ visitorCopy.calculatorSettingsValue[key] }}</p>
         </div>
       </section>
 
       <!-- Estimate Section as plain text -->
-      <section class="form-section">
+      <section v-if="hasEstimate" class="form-section">
         <h4>Estimate Summary</h4>
         <div class="form-group">
           <label>Overall Total:</label>
-          <p>{{ visitorCopy.estimate.overallTotal }}</p> <!-- Display value as text -->
+          <p>{{ formatCurrency(visitorCopy.estimate?.overallTotal) }}</p>
         </div>
         <div class="form-group">
           <label>Low Range:</label>
-          <p>{{ visitorCopy.estimate.lowRange }}</p> <!-- Display value as text -->
+          <p>{{ formatCurrency(visitorCopy.estimate?.lowRange) }}</p>
         </div>
         <div class="form-group">
           <label>High Range:</label>
-          <p>{{ visitorCopy.estimate.highRange }}</p> <!-- Display value as text -->
+          <p>{{ formatCurrency(visitorCopy.estimate?.highRange) }}</p>
         </div>
       </section>
 
       <!-- Action Buttons -->
       <div class="button-group">
-        <!-- <button @click="handleSave">Save</button> -->
         <button @click="handleClose">Close</button>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, watch, computed } from 'vue';
+
+const props = defineProps({
+  visitor: Object, 
+});
+
+const emit = defineEmits(['save', 'close']);
+
+// Copy the visitor object to avoid directly mutating the prop
+const visitorCopy = ref({ ...props.visitor });
+
+// Computed property to check if estimate exists and has required properties
+const hasEstimate = computed(() => {
+  return visitorCopy.value?.estimate && 
+         (visitorCopy.value.estimate.overallTotal !== undefined ||
+          visitorCopy.value.estimate.lowRange !== undefined ||
+          visitorCopy.value.estimate.highRange !== undefined);
+});
+
+// Format currency helper function
+const formatCurrency = (value) => {
+  if (value === undefined || value === null) return 'N/A';
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+};
+
+// Watch for changes to props.visitor and update visitorCopy
+watch(() => props.visitor, (newVisitor) => {
+  visitorCopy.value = { ...newVisitor };
+}, { deep: true });
+
+// Function to close the modal
+const handleClose = () => {
+  emit('close');
+};
+</script>
 
 <style scoped>
 .modal-overlay {
@@ -86,6 +99,7 @@ const handleClose = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
@@ -113,15 +127,15 @@ h4 {
 
 .form-group {
   display: flex;
-  align-items: center; /* Align label and text vertically */
+  align-items: center;
   margin-bottom: 15px;
 }
 
 .form-group label {
   font-weight: bold;
-  margin-right: 10px; /* Add space between label and text */
-  width: 120px; /* Set a fixed width for labels */
-  text-align: right; /* Align the label text to the right */
+  margin-right: 10px;
+  width: 120px;
+  text-align: right;
 }
 
 .form-group p {
@@ -130,10 +144,10 @@ h4 {
   background-color: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 4px;
-  flex-grow: 1; /* Ensure the text takes up the remaining space */
+  flex-grow: 1;
 }
 
-button-group {
+.button-group {
   display: flex;
   justify-content: flex-end;
 }

@@ -106,18 +106,21 @@
             <h3>{{ formatCategoryName(category.category) }}</h3>
             <ul>
               <li v-for="item in category.items" :key="item.name" class="feature-item">
-                <div class="feature-header">
+                <div class="feature-header" 
+                     @click="category.category === 'newAppliances' && openProductUrlModal(item)"
+                     :class="{ 'clickable': category.category === 'newAppliances' }">
                   {{ formatItemName(item.name) }}
-                </div>
-                <div v-if="item.description" class="feature-details">
-                  <div v-if="item.description.imagePath" class="style-image-container">
-                    <img 
-                      :src="getImageUrl(item.description.imagePath)"
-                      :alt="item.description.title"
-                      class="style-image"
-                      @error="handleImageError"
-                    />
+                  <div v-if="item.description" class="feature-details">
                     <p class="style-title">{{ item.description.title }}</p>
+                  </div>
+                  <div v-if="category.category === 'newAppliances'" class="product-selection">
+                    <div v-if="getPrimarySelection(item)" class="primary-selection">
+                      <span class="product-domain">{{ extractDomain(getPrimarySelection(item).url) }}</span>
+                      <a :href="getPrimarySelection(item).url" target="_blank" @click.stop>View Product</a>
+                    </div>
+                    <div v-else class="no-selection">
+                      Click to add product selection
+                    </div>
                   </div>
                 </div>
               </li>
@@ -149,25 +152,79 @@
         </div>
       </div>
     </div>
+
+    <!-- Product URL Modal -->
+    <div v-if="showProductUrlModal" class="modal-overlay" @click="closeProductUrlModal">
+      <div class="modal-content" @click.stop>
+        <button class="modal-close" @click="closeProductUrlModal">&times;</button>
+        <h3>Product Selections</h3>
+        <p class="modal-description">Add URLs to products you're interested in purchasing.</p>
+        
+        <!-- Existing Selections -->
+        <div v-if="selectedItem.selections?.length" class="existing-selections">
+          <h4>Current Selections</h4>
+          <div v-for="(selection, index) in selectedItem.selections" :key="index" class="selection-item">
+            <div class="selection-content">
+              <span class="product-domain">{{ extractDomain(selection.url) }}</span>
+              <a :href="selection.url" target="_blank" @click.stop>View Product</a>
+              <span v-if="selection.primary" class="primary-badge">Primary</span>
+            </div>
+            <div class="selection-actions">
+              <button 
+                v-if="!selection.primary" 
+                @click="setPrimarySelection(index)"
+                class="make-primary-button"
+              >
+                Make Primary
+              </button>
+              <button 
+                @click="removeSelection(index)"
+                class="remove-button"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add New Selection -->
+        <div class="add-selection">
+          <h4>Add New Selection</h4>
+          <input 
+            type="url" 
+            v-model="productUrlInput"
+            placeholder="https://example.com/product"
+            class="url-input"
+            @keyup.enter="saveProductUrl"
+          />
+          <div class="modal-actions">
+            <button @click="saveProductUrl" class="save-button">Add Selection</button>
+            <button @click="closeProductUrlModal" class="cancel-button">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
+import axios from 'axios'; 
 import visitors from '../components/adminView/visitors/visitors.json';
 
 const currentProject = ref(null);
 const loading = ref(true);
 const error = ref(null);
 const selectedEstimateIndex = ref(0);
+const showProductUrlModal = ref(false);
+const productUrlInput = ref('');
+const selectedItem = ref(null);
 
-// Computed property to get the selected estimate
 const selectedEstimate = computed(() => {
   if (!currentProject.value?.estimates?.length) return null;
   return currentProject.value.estimates[selectedEstimateIndex.value];
 });
 
-// Computed property to filter valid categories
 const validCategories = computed(() => {
   if (!selectedEstimate.value?.categories) return [];
   return selectedEstimate.value.categories.filter(category => 
@@ -175,9 +232,174 @@ const validCategories = computed(() => {
     category.items && 
     Array.isArray(category.items) && 
     category.items.length > 0 &&
-    category.category !== 'user' // Exclude user category
+    category.category !== 'user'
   );
 });
+
+const getPrimarySelection = (item) => {
+  if (!item.selections?.length) return null;
+  return item.selections.find(selection => selection.primary);
+};
+
+const openProductUrlModal = (item) => {
+  selectedItem.value = item;
+  
+  if (!selectedItem.value.selections) {
+    selectedItem.value.selections = [];
+    
+    const estimate = currentProject.value.estimates[selectedEstimateIndex.value];
+    const category = estimate.categories.find(c => c.category === 'newAppliances');
+    if (category) {
+      const storedItem = category.items.find(i => i.name === selectedItem.value.name);
+      if (storedItem) {
+        storedItem.selections = [];
+      }
+    }
+  }
+  
+  productUrlInput.value = '';
+  showProductUrlModal.value = true;
+};
+
+const closeProductUrlModal = () => {
+  showProductUrlModal.value = false;
+  productUrlInput.value = '';
+  selectedItem.value = null;
+};
+
+const saveProductUrl = async () => {
+  if (selectedItem.value && productUrlInput.value) {
+    try {
+      // Validate URL
+      new URL(productUrlInput.value);
+      
+      // Create new selection
+      const newSelection = {
+        url: productUrlInput.value,
+        primary: selectedItem.value.selections?.length === 0
+      };
+      
+      // Get the current estimate
+      const currentEstimate = currentProject.value.estimates[selectedEstimateIndex.value];
+      
+      // Find the appliances category and update the specific item
+      const appliancesCategory = currentEstimate.categories.find(c => c.category === 'newAppliances');
+      if (appliancesCategory) {
+        const itemToUpdate = appliancesCategory.items.find(i => i.name === selectedItem.value.name);
+        if (itemToUpdate) {
+          if (!itemToUpdate.selections) {
+            itemToUpdate.selections = [];
+          }
+          itemToUpdate.selections.push(newSelection);
+          
+          // Get visitor ID
+          const visitorId = localStorage.getItem('atlhm');
+          
+          // Save to server
+          try {
+            await axios.post('http://localhost:3000/add-visitor', {
+              id: visitorId,
+              data: currentProject.value
+            });
+            
+            productUrlInput.value = '';
+          } catch (error) {
+            console.error('Error saving selection:', error);
+            // Remove the selection if save failed
+            itemToUpdate.selections.pop();
+            alert('Failed to save selection. Please try again.');
+          }
+        }
+      }
+    } catch (error) {
+      alert('Please enter a valid URL');
+    }
+  }
+};
+
+const setPrimarySelection = async (index) => {
+  if (selectedItem.value?.selections) {
+    const currentEstimate = currentProject.value.estimates[selectedEstimateIndex.value];
+    const appliancesCategory = currentEstimate.categories.find(c => c.category === 'newAppliances');
+    
+    if (appliancesCategory) {
+      const itemToUpdate = appliancesCategory.items.find(i => i.name === selectedItem.value.name);
+      if (itemToUpdate?.selections) {
+        const previousState = [...itemToUpdate.selections];
+        
+        // Update primary status
+        itemToUpdate.selections.forEach(selection => selection.primary = false);
+        itemToUpdate.selections[index].primary = true;
+        
+        // Get visitor ID
+        const visitorId = localStorage.getItem('atlhm');
+        
+        // Save to server
+        try {
+          await axios.post('http://localhost:3000/add-visitor', {
+            id: visitorId,
+            data: currentProject.value
+          });
+        } catch (error) {
+          console.error('Error updating primary selection:', error);
+          // Restore previous state if save failed
+          itemToUpdate.selections = previousState;
+          alert('Failed to update primary selection. Please try again.');
+        }
+      }
+    }
+  }
+};
+
+const removeSelection = async (index) => {
+  if (selectedItem.value?.selections) {
+    const currentEstimate = currentProject.value.estimates[selectedEstimateIndex.value];
+    const appliancesCategory = currentEstimate.categories.find(c => c.category === 'newAppliances');
+    
+    if (appliancesCategory) {
+      const itemToUpdate = appliancesCategory.items.find(i => i.name === selectedItem.value.name);
+      if (itemToUpdate?.selections) {
+        const previousState = [...itemToUpdate.selections];
+        const removedSelection = itemToUpdate.selections[index];
+        
+        // Remove the selection
+        itemToUpdate.selections.splice(index, 1);
+        
+        // Update primary if needed
+        if (removedSelection.primary && itemToUpdate.selections.length > 0) {
+          itemToUpdate.selections[0].primary = true;
+        }
+        
+        // Get visitor ID
+        const visitorId = localStorage.getItem('atlhm');
+        
+        // Save to server
+        try {
+          await axios.post('http://localhost:3000/add-visitor', {
+            id: visitorId,
+            data: currentProject.value
+          });
+        } catch (error) {
+          console.error('Error removing selection:', error);
+          // Restore previous state if save failed
+          itemToUpdate.selections = previousState;
+          alert('Failed to remove selection. Please try again.');
+        }
+      }
+    }
+  }
+};
+
+
+const extractDomain = (url) => {
+  try {
+    const domain = new URL(url).hostname.replace('www.', '');
+    return domain;
+  } catch (error) {
+    console.error('Error extracting domain:', error);
+    return 'Invalid URL';
+  }
+};
 
 onMounted(async () => {
   try {
@@ -243,27 +465,6 @@ const formatItemName = (name) => {
     .join(' ');
 };
 
-const getImageUrl = (path) => {
-  if (!path) return '';
-  try {
-    // Remove leading slash if present
-    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-    return new URL(`../assets/${cleanPath}`, import.meta.url).href;
-  } catch (error) {
-    console.error('Error loading image:', error);
-    return '';
-  }
-};
-
-const handleImageError = (event) => {
-  console.error('Image failed to load:', event.target.src);
-  // Hide the image container instead of just the image
-  const container = event.target.closest('.style-image-container');
-  if (container) {
-    container.style.display = 'none';
-  }
-};
-
 const getCategoryClass = (category) => {
   const classes = {
     demo: 'bg-red-50',
@@ -304,7 +505,6 @@ const getCategoryClass = (category) => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Estimate Selector Styles */
 .estimate-selector {
   margin-bottom: 2rem;
 }
@@ -494,7 +694,6 @@ const getCategoryClass = (category) => {
   font-weight: 500;
 }
 
-/* Category Background Colors */
 .bg-red-50 { background-color: #fef2f2; }
 .bg-blue-50 { background-color: #eff6ff; }
 .bg-yellow-50 { background-color: #fefce8; }
@@ -538,6 +737,255 @@ const getCategoryClass = (category) => {
 
 .error {
   color: #dc2626;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clickable:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modal-description {
+  margin-bottom: 1rem;
+  color: #64748b;
+}
+
+.url-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.save-button,
+.cancel-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.save-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+}
+
+.save-button:hover {
+  background-color: #1d4ed8;
+}
+
+.cancel-button {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.cancel-button:hover {
+  background-color: #e2e8f0;
+}
+
+.product-link {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-domain {
+  color: #64748b;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+}
+
+.product-link a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product-link a:hover {
+  text-decoration: underline;
+}
+
+.existing-selections {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.selection-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.selection-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.selection-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.primary-badge {
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.make-primary-button {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.make-primary-button:hover {
+  background: #4f46e5;
+}
+
+.remove-button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+  background: #dc2626;
+}
+
+.add-selection {
+  margin-top: 1.5rem;
+}
+
+.add-selection h4 {
+  margin-bottom: 1rem;
+}
+
+.product-selection {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.primary-selection {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8fafc;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.no-selection {
+  color: #64748b;
+  font-size: 0.875rem;
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+.product-domain {
+  color: #64748b;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #f1f5f9;
+  border-radius: 4px;
+}
+
+.primary-selection a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.primary-selection a:hover {
+  text-decoration: underline;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+.clickable:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 @media (max-width: 768px) {
