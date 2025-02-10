@@ -175,6 +175,25 @@ const testFormData = {
   }
 };
 
+// Temporarily set hasServerResponded and serverResponse for testing purposes
+onMounted(() => {
+  let storedUserId = localStorage.getItem('atlhm');
+  if (!storedUserId) {
+    storedUserId = uuidv4();
+    localStorage.setItem('atlhm', storedUserId);
+  }
+  formData.user = { id: storedUserId };
+  // Mock server response for testing
+  hasServerResponded.value = true;
+  serverResponse.value = {
+    estimate: {
+      highRange: 15000,
+      lowRange: 12000
+    },
+    message: "Here is the estimated cost for your kitchen renovation."
+  };
+});
+
 const hasServerResponded = ref(false);
 const serverResponse = ref(null);
 
