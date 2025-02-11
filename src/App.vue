@@ -7,20 +7,19 @@
       <div><router-link to="/make-appointment">Appointment</router-link></div>
       <div><router-link to="/email">Email</router-link></div>
       <div><router-link to="/portal">Customer Portal</router-link></div>
+      <div><router-link to="/team">Team</router-link></div>
       ** Nav for testing **
     </nav>
     <router-view />
   </div>
 </template>
 
-
 <style scoped> 
-
 .horizontal-nav {
   display: flex;
-  flex-direction: row; /* Stack items horizontally */
-  align-items: center; /* Align items vertically centered */
-  gap: 20px; /* Add space between the links */
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
 }
 
 .calculator-app {

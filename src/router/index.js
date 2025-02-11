@@ -5,6 +5,8 @@ import Calendar from '../views/CalendarView.vue'
 import Email from '../views/EmailView.vue'
 import QBO from '../views/qboView.vue'
 import CustomerPortal from '../views/CustomerPortalView.vue'
+import Team from '../views/TeamView.vue'
+import TeamBio from '../views/TeamBioView.vue'
 
 const routes = [
   {
@@ -36,6 +38,16 @@ const routes = [
     path: '/portal',
     name: 'CustomerPortal',
     component: CustomerPortal
+  },
+  {
+    path: '/team',
+    name: 'Team',
+    component: Team
+  },
+  {
+    path: '/team/:role',
+    name: 'TeamBio',
+    component: TeamBio
   }
 ]
 
