@@ -4,6 +4,7 @@ import calculatorSettings from '../components/adminView/calculator/calculatorSet
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
 import qboClient from './qbo.js';
 import { sendToHatch } from './hatch.js';
+import axios from 'axios';
 
 /**
  * Gets the database lookup key for an item
@@ -15,7 +16,7 @@ import { sendToHatch } from './hatch.js';
 const getDbNeddle = (itemName, categoryName, formData) => {
   console.log("** getDbNeddle **");
   if (itemName === 'countertopType' || itemName === 'flooringType' || itemName === 'sinkType') {
-    console.log(`${categoryName}:${formData[categoryName][itemName]}`);
+    // console.log(`${categoryName}:${formData[categoryName][itemName]}`);
     return `${categoryName}:${formData[categoryName][itemName]}`;
   }
   if (itemName === 'cabinetType') {
@@ -34,7 +35,7 @@ const getDbNeddle = (itemName, categoryName, formData) => {
 const getItemsNeddle = (itemName, categoryName, formData) => {
   console.log("** getItemsNeddle **")
   if (itemName === 'countertopType' || itemName === 'flooringType' || itemName === 'sinkType') {
-    console.log(`${formData[categoryName][itemName]} `);
+    // console.log(`${formData[categoryName][itemName]} `);
     return formData[categoryName][itemName];
   }
   if (itemName === 'cabinetType') {
@@ -54,7 +55,7 @@ const getItemsNeddle = (itemName, categoryName, formData) => {
  */
 const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category) => {
   console.log("** createEstimateItem **");
-  console.log(itemsNeddle)
+  // console.log(itemsNeddle)
   const markup = isNaN(parseFloat(dbItem?.markup)) ? calculatorSettings.markUp : parseFloat(dbItem.markup);
   const calculatedUnits = calculateUnits(itemsNeddle, dimensions, formData, category);
   let unitCost = calculateUnitCost(dbItem, itemsNeddle, dimensions);
@@ -94,7 +95,7 @@ const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category)
     ...(selections && { selections })
   };
 
-  console.log('Created estimate item:', estimateItem);
+  // console.log('Created estimate item:', estimateItem);
   return estimateItem;
 };
 
@@ -310,7 +311,7 @@ const calculateDimensions = (formData) => {
  */
 const calculateUnits = (itemType, dimensions, formData, category) => {
   console.log("** calculateUnits **");
-  if(itemType === 'Tile') console.log("itemType: ", itemType);
+  // if(itemType === 'Tile') console.log("itemType: ", itemType);
   const { kitchenLength, kitchenWidth, kitchenArea } = dimensions.kitchen;
   const { hasIsland, islandLength, islandWidth, islandArea } = dimensions.island;
 
@@ -381,7 +382,7 @@ const calculateUnits = (itemType, dimensions, formData, category) => {
  */
 const calculateUnitCost = (dbItem, itemType, dimensions) => {
   console.log("** calculateUnitCost **")
-  if(itemType === 'Tile') console.log("itemType: ", itemType);
+  // if(itemType === 'Tile') console.log("itemType: ", itemType);
   const { kitchenArea } = dimensions.kitchen;
   const { islandWidth } = dimensions.island;
 
@@ -426,6 +427,7 @@ export const processFormData = async (req, res) => {
 
     // Save visitor data
     try {
+      console.log("***** Save visitor data *****")
       await saveVisitorData(formData, responseData.estimate);
     } catch (visitorError) {
       console.error('Error saving visitor data:', visitorError);
@@ -500,7 +502,7 @@ const processCategory = async (category, formCategory, categoryName, formData, d
   }
 
   for (const itemName in formCategory) {
-    console.log("itemName: ", itemName)
+    // console.log("itemName: ", itemName)
     const dbNeddle = getDbNeddle(itemName, categoryName, formData);
     const itemsNeddle = getItemsNeddle(itemName, categoryName, formData);
     const dbItem = dbItems[dbNeddle];
@@ -578,16 +580,45 @@ const handleIntegrations = async (formData, estimate) => {
  * @param {Object} estimate - The calculated estimate
  */
 const saveVisitorData = async (formData, estimate) => {
-  const { id, ...contactInfoData } = formData.user;
-  const visitor = {
-    contactInfo: contactInfoData,
-    calculatorSettingsValue: {
+  try {
+    const { id, ...contactInfoData } = formData.user;
+    
+    // First, get any existing visitor data
+    const response = await axios.get(`http://localhost:3000/get-visitor/${id}`);
+    console.log("response: ", response)
+    let visitorData = response.data || {
+      contactInfo: contactInfoData,
+      calculatorSettingsValue: {
+        rng: estimate.rng,
+        lowBuffer: calculatorSettings.lowBuffer,
+        highBuffer: calculatorSettings.highBuffer
+      },
+      estimates: []
+    };
+
+    // Add the new estimate to the estimates array
+    if (!visitorData.estimates) {
+      visitorData.estimates = [];
+    }
+    visitorData.estimates.push(estimate);
+
+    // Update contact info and calculator settings
+    visitorData.contactInfo = contactInfoData;
+    visitorData.calculatorSettingsValue = {
       rng: estimate.rng,
       lowBuffer: calculatorSettings.lowBuffer,
       highBuffer: calculatorSettings.highBuffer
-    },
-    estimates: [estimate]
-  };
+    };
 
-  await updateVisitor({ body: { id: formData.user.id, data: visitor } });
+    // Save the updated visitor data
+    await updateVisitor({ 
+      body: { 
+        id: formData.user.id, 
+        data: visitorData 
+      } 
+    });
+  } catch (error) {
+    console.error('Error saving visitor data:', error);
+    throw error;
+  }
 };

@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import { join, dirname } from 'path';
+import { readFile } from 'fs/promises';
+import { fileURLToPath } from 'url';
 import { processFormData } from './formHandler.js';
 import { sendEmail } from './sendEmail.js';
 import { updateCalculatorSetting } from '../components/adminView/calculator/updateCalculatorSettings.js'
@@ -8,6 +11,9 @@ import { updateItem } from '../components/adminView/items/updateItem.js'
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
 import bodyParser from 'body-parser';
 import qboClient from './qbo.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = 3000;
@@ -19,6 +25,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Add route to get visitor data
+app.get('/get-visitor/:id', async (req, res) => {
+  try {
+    const filePath = join(__dirname, '..', 'components', 'adminView', 'visitors', 'visitors.json');
+    const fileData = await readFile(filePath, 'utf8');
+    const visitors = JSON.parse(fileData);
+    const visitorData = visitors[req.params.id] || null;
+    res.json(visitorData);
+  } catch (error) {
+    console.error('Error getting visitor data:', error);
+    res.status(500).json({ message: 'Failed to get visitor data' });
+  }
+});
 
 // QBO Routes
 app.get('/authUri', function (req, res) {

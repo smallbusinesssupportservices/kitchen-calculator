@@ -57,8 +57,34 @@ import ServerResponse from '../components/calculatorView/ServerResponseComponent
 import ProgressButton from '../components/calculatorView/ProgressButtonComponent.vue';
 import UserForm from '../components/calculatorView/UserComponent.vue';
 
-// Test form data
-const testFormData = {
+const hasServerResponded = ref(false);
+const serverResponse = ref(null);
+const isLoading = ref(false);
+const isSubmitted = ref(false);
+
+// Define required fields for progress calculation
+const requiredFields = ref([
+  'kitchenSize',
+  'electrical',
+  'newAppliances',
+  'interiorPainting',
+  'finalCleaning',
+  'plumbing',
+  'newSink',
+  'countertops',
+  'cabinets',
+  'backsplash',
+  'flooring',
+  'user',
+]);
+
+// Configuration for excluded subfields
+const excludedSubFields = {
+  user: ['id'],
+};
+
+// Initialize form data
+const formData = reactive({
   kitchenSize: {
     length: 120,
     width: 120,
@@ -165,6 +191,7 @@ const testFormData = {
   interiorPainting: { paintKitchen: true },
   finalCleaning: { cleanKitchen: true },
   user: {
+    id: '',
     name: 'williamjhgf',
     phone: '4106102350',
     email: 'technology@theatlhomemaker.com',
@@ -173,68 +200,7 @@ const testFormData = {
     state: 'GA',
     zip: '30311'
   }
-};
-
-// Temporarily set hasServerResponded and serverResponse for testing purposes
-onMounted(() => {
-  let storedUserId = localStorage.getItem('atlhm');
-  if (!storedUserId) {
-    storedUserId = uuidv4();
-    localStorage.setItem('atlhm', storedUserId);
-  }
-  formData.user = { id: storedUserId };
-  // Mock server response for testing
-  hasServerResponded.value = true;
-  serverResponse.value = {
-    estimate: {
-      highRange: 15000,
-      lowRange: 12000
-    },
-    message: "Here is the estimated cost for your kitchen renovation."
-  };
 });
-
-const hasServerResponded = ref(false);
-const serverResponse = ref(null);
-
-// Initialize form data with test data
-const formData = reactive({...JSON.parse(JSON.stringify(testFormData))});
-
-// Generate or retrieve userId on component mount
-onMounted(() => {
-  let storedUserId = localStorage.getItem('atlhm');
-  if (!storedUserId) {
-    storedUserId = uuidv4();
-    localStorage.setItem('atlhm', storedUserId);
-  }
-  
-  // Preserve test data while setting the ID
-  formData.user = {
-    ...formData.user,
-    id: storedUserId
-  };
-});
-
-// Define required fields for progress calculation
-const requiredFields = ref([
-  'kitchenSize',
-  'electrical',
-  'newAppliances',
-  'interiorPainting',
-  'finalCleaning',
-  'plumbing',
-  'newSink',
-  'countertops',
-  'cabinets',
-  'backsplash',
-  'flooring',
-  'user',
-]);
-
-// Configuration for excluded subfields
-const excludedSubFields = {
-  user: ['id'],
-};
 
 // Compute progress based on filled required fields
 const progress = computed(() => {
@@ -270,8 +236,35 @@ const progress = computed(() => {
 });
 
 const isDisabled = computed(() => progress.value < 100);
-const isLoading = ref(false);
-const isSubmitted = ref(false);
+
+// Generate or retrieve userId on component mount
+onMounted(() => {
+  let storedUserId = localStorage.getItem('atlhm');
+  if (!storedUserId) {
+    storedUserId = uuidv4();
+    localStorage.setItem('atlhm', storedUserId);
+  }
+  
+  // Update the user ID while preserving other user data
+  formData.user = {
+    ...formData.user,
+    id: storedUserId
+  };
+});
+
+  // Temporarily set hasServerResponded and serverResponse for testing purposes
+onMounted(() => {
+  if(false){
+    hasServerResponded.value = true;
+    serverResponse.value = {
+      estimate: {
+        highRange: 15000,
+        lowRange: 12000
+      },
+      message: "Here is the estimated cost for your kitchen renovation."
+    };
+  }
+});
 
 const handleSubmit = async () => {
   let allFilled = true;
