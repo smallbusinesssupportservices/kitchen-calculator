@@ -1,39 +1,90 @@
 <template>
-  <div class="container">
-    <div class="content">
-      <div class="estimate-box text-center">
-        <h2>Your Estimate Range</h2>
-        <p>Based on your selections, here's your estimated price range:</p>
-        <h3 class="estimate-amount">{{ formatCurrency(response.estimate.lowRange) }} - {{
-          formatCurrency(response.estimate.highRange) }}</h3>
-        <p><small>*This estimate is based on the specifications you provided and may vary based on final design choices
-            and site conditions.</small></p>
+  <div class="response-container">
+    <div class="response-content">
+      <!-- Estimate Box -->
+      <div class="estimate-box">
+        <div class="estimate-header">
+          <h2>Your Kitchen Estimate</h2>
+          <div class="estimate-badge">Personalized Estimate</div>
+        </div>
+        
+        <div class="estimate-details">
+          <p class="estimate-description">Based on your selections, here's your estimated price range:</p>
+          <div class="estimate-amount">
+            {{ formatCurrency(response.estimate.lowRange) }} - {{ formatCurrency(response.estimate.highRange) }}
+          </div>
+          <p class="estimate-disclaimer">*This estimate is based on the specifications you provided and may vary based on final design choices and site conditions.</p>
+        </div>
       </div>
 
-      <p><strong>Ready to take the next step?</strong></p>
+      <!-- Action Cards -->
+      <div class="action-cards">
+        <!-- Schedule Card -->
+        <div class="action-card primary">
+          <h3>Ready to Start?</h3>
+          <p>Schedule a free consultation with one of our kitchen design experts to discuss your project in detail.</p>
+          <button 
+            class="action-button primary" 
+            @click="handleButtonClick('schedule')"
+          >
+            Start Your Kitchen Transformation
+            <span class="icon">→</span>
+          </button>
+        </div>
 
-      <p class="text-center">Schedule a free consultation with one of our kitchen design experts to discuss your project
-        in detail.</p>
+        <!-- Design Card -->
+        <div class="action-card secondary">
+          <h3>Need More Time?</h3>
+          <p>Let's explore your design ideas and selections together. Our experts can help refine your vision.</p>
+          <button 
+            class="action-button secondary" 
+            @click="handleButtonClick('design')"
+          >
+            Explore Design Options
+            <span class="icon">→</span>
+          </button>
+        </div>
 
-      <div style="text-align: center; margin: 30px 0;">
-        <a href="#schedule" class="button primary-button" @click="handleButtonClick('schedule')">Start Your Kitchen
-          Transformation Now!</a>
+        <!-- Budget Card -->
+        <div class="action-card secondary">
+          <h3>Budget Concerns?</h3>
+          <p>We offer flexible options to match your financial goals while achieving your dream kitchen.</p>
+          <button 
+            class="action-button secondary" 
+            @click="handleButtonClick('budget')"
+          >
+            Discuss Budget Options
+            <span class="icon">→</span>
+          </button>
+        </div>
       </div>
 
-      <p class="text-center">Not quite ready to commit? We understand the importance of careful planning. Let's explore
-        your design ideas and selections together.</p>
-
-      <div style="text-align: center; margin: 30px 0;">
-        <a href="#feedback" class="button secondary-button" @click="handleButtonClick('design')">I'm still thinking
-          through designs and selections</a>
-      </div>
-
-      <p class="text-center">Concerned about the budget? We offer flexible options and can help you find solutions that
-        match your financial goals while still achieving your dream kitchen.</p>
-
-      <div style="text-align: center; margin: 30px 0;">
-        <a href="#feedback" class="button secondary-button" @click="handleButtonClick('budget')">This is way above my
-          budget, what are my other options</a>
+      <!-- Additional Information -->
+      <div class="info-section">
+        <h3>What's Next?</h3>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Free Consultation</h4>
+              <p>Meet with our design expert to discuss your vision</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Design & Planning</h4>
+              <p>Refine your selections and finalize the design</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Transform Your Kitchen</h4>
+              <p>Watch your dream kitchen come to life</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -55,16 +106,16 @@ const router = useRouter();
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(value);
 };
 
 const handleButtonClick = (selection) => {
-  // Store the user's selection in localStorage
   localStorage.setItem('atlhm_user_selection', selection);
-
-  // Handle navigation based on selection
-  switch (selection) {
+  
+  switch(selection) {
     case 'schedule':
       router.push('/make-appointment');
       break;
@@ -77,97 +128,195 @@ const handleButtonClick = (selection) => {
 </script>
 
 <style scoped>
-body,
-table,
-td,
-div,
-p,
-a {
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
-}
-
-/* Container styles */
-.container {
-  max-width: 600px;
+.response-container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
+  padding: 2rem;
+  background-color: #f8fafc;
 }
 
-/* Header styles */
-.header {
-  text-align: center;
-  padding: 20px 0;
-  background-color: #f8f9fa;
+.response-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #2d3748;
-}
-
-/* Content styles */
-.content {
-  padding: 30px 0;
-}
-
+/* Estimate Box Styles */
 .estimate-box {
-  background-color: #f1f5f9;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
-/* Button styles */
-.button {
-  display: inline-block;
-  padding: 12px 24px;
-  margin: 10px 0;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  text-align: center;
+.estimate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.primary-button {
-  background-color: rgb(173, 49, 52);
-  color: #ffffff !important;
+.estimate-badge {
+  background: #10b981;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
-.secondary-button {
-  background-color: rgb(173, 49, 52);
-  color: #ffffff !important;
-}
-
-/* Footer styles */
-.footer {
-  text-align: center;
-  padding: 20px 0;
-  color: #64748b;
-  font-size: 14px;
-  border-top: 1px solid #e2e8f0;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.estimate-box {
-  background-color: #f1f5f9;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
+.estimate-details {
   text-align: center;
 }
 
 .estimate-amount {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 700;
   color: rgb(173, 49, 52);
   margin: 1rem 0;
+}
+
+.estimate-disclaimer {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+/* Action Cards Styles */
+.action-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.action-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  transition: transform 0.2s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-4px);
+}
+
+.action-card h3 {
+  color: rgb(173, 49, 52);
+  margin-bottom: 1rem;
+}
+
+.action-card p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.action-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.action-button.primary {
+  background: rgb(173, 49, 52);
+  color: white;
+}
+
+.action-button.primary:hover {
+  background: rgb(173, 49, 52);
+}
+
+.action-button.secondary {
+  background: rgb(173, 49, 52, 80%);
+  color: white;
+}
+
+.action-button.secondary:hover {
+  background: rgb(173, 49, 52);
+}
+
+.icon {
+  transition: transform 0.2s ease;
+}
+
+.action-button:hover .icon {
+  transform: translateX(4px);
+}
+
+/* Steps Section Styles */
+.info-section {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.info-section h3 {
+  color: rgb(173, 49, 52);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.step-number {
+  background: rgb(173, 49, 52);
+  color: white;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.step-content h4 {
+  color: rgb(173, 49, 52);
+  margin-bottom: 0.5rem;
+}
+
+.step-content p {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .response-container {
+    padding: 1rem;
+  }
+
+  .estimate-amount {
+    font-size: 2rem;
+  }
+
+  .action-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
