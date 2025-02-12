@@ -8,14 +8,15 @@
         <input type="text" v-model="subject" placeholder="Subject" required />
         <div class="template-fields">
           <h3>Template Variables</h3>
-          <input type="text" v-model="templateData.customerName" placeholder="Customer Name" required />
+          <input type="text" v-model="templateData.userId" placeholder="User ID" required />
+          <select v-model="templateData.buttonType" required>
+            <option value="">Select Button Type</option>
+            <option value="schedule">Schedule</option>
+            <option value="design">Design</option>
+            <option value="budget">Budget</option>
+          </select>
           <input type="text" v-model="templateData.lowRange" placeholder="Low Range" required />
           <input type="text" v-model="templateData.highRange" placeholder="High Range" required />
-          <input type="text" v-model="templateData.scheduleUrl" placeholder="Schedule URL" required />
-          <input type="text" v-model="templateData.feedbackUrl" placeholder="Feedback URL" required />
-          <input type="text" v-model="templateData.address" placeholder="Address" required />
-          <input type="text" v-model="templateData.phone" placeholder="Phone" required />
-          <input type="text" v-model="templateData.email" placeholder="Contact Email" required />
         </div>
         <button type="submit">Send Test Email</button>
       </form>
@@ -32,22 +33,16 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
-// Form data
 const from = ref('');
 const to = ref('');
 const subject = ref('Kitchen Estimate from 7 Day Kitchens');
 const templateData = ref({
-  customerName: '',
+  userId: '',
+  buttonType: '',
   lowRange: '',
-  highRange: '',
-  scheduleUrl: '',
-  feedbackUrl: '',
-  address: '',
-  phone: '',
-  email: ''
+  highRange: ''
 });
 
-// Template storage
 const emailTemplate = ref('');
 
 // Load email template
@@ -65,63 +60,45 @@ const processedTemplate = computed(() => {
   if (!emailTemplate.value) return '';
   
   let processed = emailTemplate.value;
-  processed = processed.replace('[Customer Name]', templateData.value.customerName || '[Customer Name]');
-  processed = processed.replace('[Low Range]', templateData.value.lowRange || '[Low Range]');
-  processed = processed.replace('[High Range]', templateData.value.highRange || '[High Range]');
-  processed = processed.replace('[Schedule URL]', templateData.value.scheduleUrl || '#');
-  processed = processed.replace('[Feedback URL]', templateData.value.feedbackUrl || '#');
-  processed = processed.replace('[Address]', templateData.value.address || '[Address]');
-  processed = processed.replace('[Phone Number]', templateData.value.phone || '[Phone Number]');
-  processed = processed.replace('[Email]', templateData.value.email || '[Email]');
+  const baseUrl = window.location.origin;
+  
+  processed = processed.replace('[LOW_RANGE]', formatCurrency(templateData.value.lowRange));
+  processed = processed.replace('[HIGH_RANGE]', formatCurrency(templateData.value.highRange));
+  processed = processed.replace(/\[BASE_URL\]/g, baseUrl);
+  processed = processed.replace(/\[USER_ID\]/g, templateData.value.userId);
   
   return processed;
 });
 
-// Send email function
+function formatCurrency(value) {
+  if (!value) return '$0';
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
 const sendEmail = async () => {
   try {
-    // Create a plain text version of the email
-    const plainText = `
-      Kitchen Estimate from 7 Day Kitchens
-      
-      Dear ${templateData.value.customerName},
-      
-      Thank you for using our kitchen remodel estimator. We're excited to help you transform your kitchen into the space of your dreams!
-      
-      Your Estimate Range: $${templateData.value.lowRange} - $${templateData.value.highRange}
-      
-      To schedule a consultation, visit: ${templateData.value.scheduleUrl}
-      
-      Contact us:
-      Address: ${templateData.value.address}
-      Phone: ${templateData.value.phone}
-      Email: ${templateData.value.email}
-      
-      This estimate is valid for 30 days from the date of this email.
-    `;
-
     await axios.post('http://localhost:3000/send-email', {
       from: from.value,
       to: to.value,
       subject: subject.value,
-      text: plainText,
-      html: processedTemplate.value
+      templateData: templateData.value
     });
     
-    // Clear form after successful send
+    alert('Test email sent successfully!');
+    
+    // Clear form
     to.value = '';
     templateData.value = {
-      customerName: '',
+      userId: '',
+      buttonType: '',
       lowRange: '',
-      highRange: '',
-      scheduleUrl: '',
-      feedbackUrl: '',
-      address: '',
-      phone: '',
-      email: ''
+      highRange: ''
     };
-    
-    alert('Test email sent successfully!');
   } catch (error) {
     console.error('Failed to send email:', error);
     alert('Failed to send email. Please check the console for details.');

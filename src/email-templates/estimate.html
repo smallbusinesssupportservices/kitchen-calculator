@@ -3,129 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Kitchen Remodel Estimate - 7 Day Kitchens</title>
+    <title>Your Kitchen Remodel Estimate</title>
     <style>
-        /* Reset styles for email clients */
-        body, table, td, div, p, a {
+        body {
             font-family: Arial, sans-serif;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
+            background-color: #f8fafc;
         }
-        
-        /* Container styles */
-        .container {
+
+        .response-container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
+            padding: 2rem;
         }
-        
-        /* Header styles */
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #f8f9fa;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2d3748;
-        }
-        
-        /* Content styles */
-        .content {
-            padding: 30px 0;
-        }
-        
-        .estimate-box {
-            background-color: #f1f5f9;
+
+        .response-content {
+            background: white;
             border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
-        /* Button styles */
-        .button {
+
+        .estimate-box {
+            padding: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .estimate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .estimate-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .estimate-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: rgb(173, 49, 52);
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .action-cards {
+            padding: 2rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .action-card h3 {
+            color: rgb(173, 49, 52);
+            margin: 0 0 1rem 0;
+        }
+
+        .action-button {
             display: inline-block;
-            padding: 12px 24px;
-            margin: 10px 0;
+            padding: 0.75rem 1.5rem;
             border-radius: 6px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            margin-top: 1rem;
             text-align: center;
         }
-        
-        .primary-button {
-            background-color: #2563eb;
-            color: #ffffff !important;
+
+        .primary {
+            background: rgb(173, 49, 52);
+            color: white !important;
         }
-        
-        .secondary-button {
-            background-color: #64748b;
-            color: #ffffff !important;
+
+        .secondary {
+            background: rgba(173, 49, 52, 0.8);
+            color: white !important;
         }
-        
-        /* Footer styles */
-        .footer {
-            text-align: center;
-            padding: 20px 0;
+
+        .info-section {
+            padding: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .steps {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: rgb(173, 49, 52);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: rgb(173, 49, 52);
+        }
+
+        .step-content p {
+            margin: 0;
             color: #64748b;
-            font-size: 14px;
+        }
+
+        .disclaimer {
+            padding: 1rem 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            text-align: center;
             border-top: 1px solid #e2e8f0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">7 Day Kitchens</div>
-        </div>
-        
-        <div class="content">
-            <h1>Your Kitchen Remodel Estimate</h1>
-            
-            <p>Dear [Customer Name],</p>
-            
-            <p>Thank you for using our kitchen remodel estimator. We're excited to help you transform your kitchen into the space of your dreams!</p>
-            
+    <div class="response-container">
+        <div class="response-content">
             <div class="estimate-box">
-                <h2>Your Estimate Range</h2>
-                <p>Based on your selections, here's your estimated price range:</p>
-                <h3>$[Low Range] - $[High Range]</h3>
-                <p><small>*This estimate is based on the specifications you provided and may vary based on final design choices and site conditions.</small></p>
+                <div class="estimate-header">
+                    <h2>Your Kitchen Estimate</h2>
+                    <div class="estimate-badge">Personalized Estimate</div>
+                </div>
+                
+                <div class="estimate-details">
+                    <p>Based on your selections, here's your estimated price range:</p>
+                    <div class="estimate-amount">
+                        [LOW_RANGE] - [HIGH_RANGE]
+                    </div>
+                    <p>*This estimate is based on the specifications you provided and may vary based on final design choices and site conditions.</p>
+                </div>
             </div>
-            
-            <p>We've attached a detailed PDF with your complete estimate breakdown and selected features. This includes:</p>
-            <ul>
-                <li>Material specifications</li>
-                <li>Labor costs</li>
-                <li>Timeline estimates</li>
-                <li>Design considerations</li>
-            </ul>
-            
-            <p><strong>Ready to take the next step?</strong></p>
-            
-            <p>Schedule a free consultation with one of our kitchen design experts to discuss your project in detail.</p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="[Schedule URL]" class="button primary-button">Schedule Consultation</a>
+
+            <div class="action-cards">
+                <div class="action-card">
+                    <h3>Ready to Start?</h3>
+                    <p>Schedule a free consultation with one of our kitchen design experts to discuss your project in detail.</p>
+                    <a href="[BASE_URL]/email-action/schedule?id=[USER_ID]" class="action-button primary">
+                        Start Your Kitchen Transformation
+                    </a>
+                </div>
+
+                <div class="action-card">
+                    <h3>Need More Time?</h3>
+                    <p>Let's explore your design ideas and selections together. Our experts can help refine your vision.</p>
+                    <a href="[BASE_URL]/email-action/design?id=[USER_ID]" class="action-button secondary">
+                        Explore Design Options
+                    </a>
+                </div>
+
+                <div class="action-card">
+                    <h3>Budget Concerns?</h3>
+                    <p>We offer flexible options to match your financial goals while achieving your dream kitchen.</p>
+                    <a href="[BASE_URL]/email-action/budget?id=[USER_ID]" class="action-button secondary">
+                        Discuss Budget Options
+                    </a>
+                </div>
             </div>
-            
-            <p>Not quite what you were expecting? We understand that every project is unique. Let's discuss how we can adjust the plan to better meet your needs and budget.</p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="[Feedback URL]" class="button secondary-button">Discuss Other Options</a>
+
+            <div class="info-section">
+                <h3>What's Next?</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Free Consultation</h4>
+                            <p>Meet with our design expert to discuss your vision</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Design & Planning</h4>
+                            <p>Refine your selections and finalize the design</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Transform Your Kitchen</h4>
+                            <p>Watch your dream kitchen come to life</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>7 Day Kitchens</p>
-            <p>[Address]</p>
-            <p>Phone: [Phone Number]</p>
-            <p>Email: [Email]</p>
-            <p><small>This estimate is valid for 30 days from the date of this email.</small></p>
+
+            <div class="disclaimer">
+                <p>This estimate is valid for 30 days from the date of this email.</p>
+            </div>
         </div>
     </div>
 </body>
