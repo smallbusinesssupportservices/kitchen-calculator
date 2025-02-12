@@ -26,7 +26,7 @@ class QBOClient {
       try {
         const tokenData = JSON.parse(await readFile(tokenPath, 'utf8'));
         if (tokenData?.token) {
-          console.log('Loading token from file:', tokenData.token);
+          // console.log('Loading token from file:', tokenData.token);
           this.oauthClient.token = tokenData.token;
           this.oauthClient.setToken(tokenData.token);
         }
@@ -135,7 +135,7 @@ class QBOClient {
         this.oauthClient.getToken().access_token,
         false,
         this.oauthClient.getToken().realmId,
-        process.env.QBO_ENVIRONMENT === 'sandbox',
+        (process.env.QBO_ENVIRONMENT === 'sandbox' ? false : true),
         true,
         null,
         '2.0',
