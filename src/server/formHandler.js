@@ -65,16 +65,21 @@ const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category)
 
   if (itemsNeddle === 'backsplash') {
     const multiplier = 12;
-    unitPrice = (!sqftPrice ? 
-      (unitCost * (1 + markup) + (multiplier * calculatedUnits)) : 
+    unitPrice = (!sqftPrice ?
+      (unitCost * (1 + markup) + (multiplier * calculatedUnits)) :
       (sqftPrice * ((1 + markup))));
-  }else {
+  } else {
     unitPrice = (!sqftPrice ? unitCost * (1 + markup) : sqftPrice * (1 + markup));
   }
 
-  unitPrice += (itemsNeddle === 'Tile' ? 12 : 0) 
+  unitPrice += (itemsNeddle === 'Tile' ? 12 : 0)
 
   let subtotal = calculateSubtotal(itemsNeddle, unitPrice, calculatedUnits, dimensions, formData);
+
+  // Update unitPrice to ensure strict QBO requirments unitPrice * calculatedUnits = subtotal
+  if (calculatedUnits > 0) {
+    unitPrice = subtotal / calculatedUnits;
+  }
 
   // Add style description for cabinets and countertops
   const description = getItemDescription(itemsNeddle, formData);
@@ -107,9 +112,9 @@ const createEstimateItem = (dbItem, itemsNeddle, formData, dimensions, category)
  */
 const getItemSelections = (itemName, formData) => {
   // Check if this is an appliance item with selections
-  if (formData.newAppliances && 
-      formData.newAppliances[itemName] && 
-      formData.newAppliances[`${itemName}_selections`]) {
+  if (formData.newAppliances &&
+    formData.newAppliances[itemName] &&
+    formData.newAppliances[`${itemName}_selections`]) {
     return formData.newAppliances[`${itemName}_selections`];
   }
   return null;
@@ -129,8 +134,8 @@ const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, for
 
   switch (itemType) {
     case 'swapFixtures':
-      return (!dbItems[itemType]?.sqftPrice ? 
-        unitPrice * calculatedUnits : 
+      return (!dbItems[itemType]?.sqftPrice ?
+        unitPrice * calculatedUnits :
         unitPrice * kitchenArea * formData.electrical.fixtureCount);
 
     case 'backsplash': {
@@ -138,7 +143,7 @@ const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, for
       const allowance = 12;
       const a = 1;
 
-      return (dbItems[itemType]?.sqftPrice === undefined ? 
+      return (dbItems[itemType]?.sqftPrice === undefined ?
         unitPrice * a :
         (calculatedUnits * dbItems[itemType].sqftPrice) > categoryMinimum ?
           ((unitPrice + allowance) * a * calculatedUnits) :
@@ -147,8 +152,8 @@ const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, for
 
     case 'waterfallEdges': {
       const edges = parseInt(formData.countertops.waterfallEdges);
-      return (!dbItems[itemType]?.sqftPrice ? 
-        unitPrice * (!calculatedUnits ? 1 : calculatedUnits) : 
+      return (!dbItems[itemType]?.sqftPrice ?
+        unitPrice * (!calculatedUnits ? 1 : calculatedUnits) :
         unitPrice * kitchenArea * edges);
     }
 
@@ -159,15 +164,15 @@ const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, for
     case 'flooring:LVP/Engineered': {
       const a = 1;
       const allowance = itemType === 'flooring:Tile' ? 12 : 0;
-      return (!dbItems[itemType]?.sqftPrice ? 
-        unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) : 
+      return (!dbItems[itemType]?.sqftPrice ?
+        unitPrice * a * (!calculatedUnits ? 1 : calculatedUnits) :
         (unitPrice + allowance) * kitchenArea * a);
     }
 
     default: {
       const a = 1;
-      return (!dbItems[itemType]?.sqftPrice ? 
-        unitPrice * a * calculatedUnits : 
+      return (!dbItems[itemType]?.sqftPrice ?
+        unitPrice * a * calculatedUnits :
         unitPrice * kitchenArea * a);
     }
   }
@@ -180,8 +185,8 @@ const calculateSubtotal = (itemType, unitPrice, calculatedUnits, dimensions, for
  * @returns {Object|null} Item description
  */
 const getItemDescription = (itemType, formData) => {
-  if (formData.cabinets?.selectedStyle && 
-      ['standardLineCabinets', 'paintStainedCabinets', 'paintPaintedCabinets', 'fullCustomCabinets'].includes(itemType)) {
+  if (formData.cabinets?.selectedStyle &&
+    ['standardLineCabinets', 'paintStainedCabinets', 'paintPaintedCabinets', 'fullCustomCabinets'].includes(itemType)) {
     return {
       style: formData.cabinets.selectedStyle.style,
       imagePath: formData.cabinets.selectedStyle.imagePath,
@@ -227,7 +232,7 @@ const createQboEstimateData = (calculatorEstimate, customerId) => {
   calculatorEstimate.categories.forEach(category => {
     category.items.forEach(item => {
       if (item.qboId) {
-      
+
         lines.push({
           Id: lineNumber.toString(),
           LineNum: lineNumber,
@@ -273,7 +278,7 @@ const createQboEstimateData = (calculatorEstimate, customerId) => {
  */
 const generateUUID = () => {
   let dt = new Date().getTime();
-  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     let r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
     return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -335,18 +340,18 @@ const calculateUnits = (itemType, dimensions, formData, category) => {
     case 'paintStainedCabinets':
     case 'paintPaintedCabinets':
     case 'fullCustomCabinets':
-      return ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - 
-              calculatorSettings.window_constant - calculatorSettings.appliance_constant + 
-              (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0));
+      return ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier -
+        calculatorSettings.window_constant - calculatorSettings.appliance_constant +
+        (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0));
 
     case 'backsplash':
-      return ((((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - 
-                calculatorSettings.window_constant - calculatorSettings.appliance_constant)) * 2);
+      return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier -
+        calculatorSettings.window_constant - calculatorSettings.appliance_constant) * 2);
 
     case 'customColorBase':
-      return (((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - 
-              calculatorSettings.window_constant - calculatorSettings.appliance_constant) / 2 + 
-              ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)));
+      return (((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier -
+        calculatorSettings.window_constant - calculatorSettings.appliance_constant) / 2 +
+        ((hasIsland ? (islandArea * (kitchenWidth > (38 / 12)) ? 2 : 1) : 0)));
 
     case 'customColorWall':
       const cabinetUnits = category.items.find(item => item.name === 'standardLineCabinets')?.calculatedUnits ?? 0;
@@ -354,7 +359,7 @@ const calculateUnits = (itemType, dimensions, formData, category) => {
       return cabinetUnits - customColorBase;
 
     case 'Quartz':
-      return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier -  calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? (islandLength * islandWidth) : 0)) * 2.5;
+      return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant) + (hasIsland ? (islandLength * islandWidth) : 0)) * 2.5;
 
     case 'waterfallEdges':
       return formData.countertops.waterfallEdges;
@@ -470,8 +475,8 @@ const calculateEstimate = async (formData) => {
     await processCategory(category, formCategory, categoryName, formData, dimensions);
 
     // Apply category minimum if applicable
-    if (categoryMinimums[categoryName] && category.categoryTotal > 0 && 
-        category.categoryTotal < categoryMinimums[categoryName]) {
+    if (categoryMinimums[categoryName] && category.categoryTotal > 0 &&
+      category.categoryTotal < categoryMinimums[categoryName]) {
       category.categoryTotal = categoryMinimums[categoryName];
     }
 
@@ -524,13 +529,13 @@ const processCategory = async (category, formCategory, categoryName, formData, d
  * @returns {Object} Integration results
  */
 const handleIntegrations = async (formData, estimate) => {
+  console.log("** handleIntegrations **")
   const results = {};
   const contactInfo = formData.user || {};
 
   // QBO Integration
   try {
     let customer = await qboClient.findCustomerByEmail(contactInfo.email);
-    
     if (!customer) {
       console.log("customer not found")
       const customerData = {
@@ -546,11 +551,12 @@ const handleIntegrations = async (formData, estimate) => {
       };
       customer = await qboClient.createCustomer(customerData);
     }
+    console.log("** customer **", customer);
 
     const qboEstimateData = createQboEstimateData(estimate, customer.Id);
-    // console.log("** qboEstimateData: ",JSON.stringify(qboEstimateData,null,2))
-    // const qboEstimate = await qboClient.createEstimate(qboEstimateData);
-    // const estimatePdf = await qboClient.getEstimatePdf(qboEstimate.Id);
+    console.log("** qboEstimateData: ", JSON.stringify(qboEstimateData, null, 2))
+    const qboEstimate = await qboClient.createEstimate(qboEstimateData);
+    const estimatePdf = await qboClient.getEstimatePdf(qboEstimate.Id);
 
     results.qbo = { customer, estimate: qboEstimate, pdf: estimatePdf };
     estimate.qboId = qboEstimate.Id;
@@ -582,7 +588,7 @@ const handleIntegrations = async (formData, estimate) => {
 const saveVisitorData = async (formData, estimate) => {
   try {
     const { id, ...contactInfoData } = formData.user;
-    
+
     // First, get any existing visitor data
     const response = await axios.get(`http://localhost:3000/get-visitor/${id}`);
     console.log("response: ", response)
@@ -611,11 +617,11 @@ const saveVisitorData = async (formData, estimate) => {
     };
 
     // Save the updated visitor data
-    await updateVisitor({ 
-      body: { 
-        id: formData.user.id, 
-        data: visitorData 
-      } 
+    await updateVisitor({
+      body: {
+        id: formData.user.id,
+        data: visitorData
+      }
     });
   } catch (error) {
     console.error('Error saving visitor data:', error);
