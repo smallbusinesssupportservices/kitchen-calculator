@@ -340,9 +340,7 @@ const calculateUnits = (itemType, dimensions, formData, category) => {
     case 'paintStainedCabinets':
     case 'paintPaintedCabinets':
     case 'fullCustomCabinets':
-      return ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier -
-        calculatorSettings.window_constant - calculatorSettings.appliance_constant +
-        (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0));
+      return ((kitchenLength + kitchenWidth) * calculatorSettings.cabinet_multiplier - calculatorSettings.window_constant - calculatorSettings.appliance_constant + (hasIsland ? islandLength * (islandWidth > (38 / 12) ? 2 : 1) : 0));
 
     case 'backsplash':
       return (((kitchenLength + kitchenWidth) * calculatorSettings.countertop_multiplier -
@@ -606,6 +604,10 @@ const saveVisitorData = async (formData, estimate) => {
     if (!visitorData.estimates) {
       visitorData.estimates = [];
     }
+
+    //add form data to estimate object
+    estimate.formSubmission = formData;
+
     visitorData.estimates.push(estimate);
 
     // Update contact info and calculator settings
