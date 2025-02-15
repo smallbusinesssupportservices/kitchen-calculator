@@ -93,6 +93,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const props = defineProps({
   response: {
@@ -112,17 +113,41 @@ const formatCurrency = (value) => {
   }).format(value);
 };
 
-const handleButtonClick = (selection) => {
-  localStorage.setItem('atlhm_user_selection', selection);
-  
-  switch(selection) {
-    case 'schedule':
-      router.push('/make-appointment');
-      break;
-    case 'design':
-    case 'budget':
-      router.push('/portal');
-      break;
+const handleButtonClick = async (selection) => {
+  try {
+    // Get the visitor ID
+    const visitorId = localStorage.getItem('atlhm');
+    
+    // Get the current visitor data
+    const response = await axios.get(`http://localhost:3000/get-visitor/${visitorId}`);
+    const visitorData = response.data;
+    
+    if (visitorData && visitorData.estimates && visitorData.estimates.length > 0) {
+      // Get the latest estimate
+      const latestEstimate = visitorData.estimates[visitorData.estimates.length - 1];
+      
+      // Add the selection to the estimate
+      latestEstimate.userSelection = selection;
+      
+      // Save the updated visitor data
+      await axios.post('http://localhost:3000/add-visitor', {
+        id: visitorId,
+        data: visitorData
+      });
+    }
+    
+    // Navigate based on selection
+    switch(selection) {
+      case 'schedule':
+        router.push('/make-appointment');
+        break;
+      case 'design':
+      case 'budget':
+        router.push('/portal');
+        break;
+    }
+  } catch (error) {
+    console.error('Error saving selection:', error);
   }
 };
 </script>
@@ -184,9 +209,12 @@ const handleButtonClick = (selection) => {
 
 /* Action Cards Styles */
 .action-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .action-card {
@@ -309,10 +337,6 @@ const handleButtonClick = (selection) => {
 
   .estimate-amount {
     font-size: 2rem;
-  }
-
-  .action-cards {
-    grid-template-columns: 1fr;
   }
 
   .steps {
