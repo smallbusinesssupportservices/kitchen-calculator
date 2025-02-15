@@ -8,6 +8,7 @@ import CustomerPortal from '../views/CustomerPortalView.vue'
 import Team from '../views/TeamView.vue'
 import TeamBio from '../views/TeamBioView.vue'
 import TeamVCard from '../views/TeamVCardView.vue'
+import TeamQR from '../views/TeamQRView.vue'
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/team/:role/vcf',
     name: 'TeamVCard',
     component: TeamVCard
+  },
+  {
+    path: '/team/:role/qr',
+    name: 'TeamQR',
+    component: TeamQR
   }
 ]
 

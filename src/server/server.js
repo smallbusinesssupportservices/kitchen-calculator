@@ -11,6 +11,8 @@ import { updateItem } from '../components/adminView/items/updateItem.js';
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js';
 import bodyParser from 'body-parser';
 import qboClient from './qbo.js';
+import QRCode from 'qrcode';
+import teamMembers from '../data/teamMembers.json' assert { type: "json" };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,6 +25,110 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function findMemberByRoleSlug(roleSlug) {
+  for (const department of Object.values(teamMembers)) {
+    const foundMember = department.members.find(m => 
+      slugify(m.role) === roleSlug && m.active
+    );
+    if (foundMember) return foundMember;
+  }
+  return null;
+}
+
+// vCard endpoint
+app.get('/team/:role/vcf', (req, res) => {
+  try {
+    const { role } = req.params;
+    const member = findMemberByRoleSlug(role);
+    
+    if (!member) {
+      return res.status(404).send('Team member not found');
+    }
+
+    // Format categories (expertise) as a comma-separated string
+    const categories = member.expertise ? member.expertise.join(',') : '';
+    
+    // General appointments
+    const calUri = `https://calendar.google.com/calendar/appointments/schedules/AcZssZ3fyWaQmMk_JZvj6-6RomRzViixeC5Be9-pZ4PJ4f2t7nFCU5CTm_Ioju0_HjNYQayVIOu9jshI`;
+    
+    // Company logo URL
+    const logo = 'https://theatlhomemaker.com/logo.png';
+    
+    // Calendar URL
+    const fbUrl = 'https://calendar.google.com/calendar/u/0?cid=d2lsbGlhbUBzbWFsbGJ1c2luZXNzZXNzdXBwb3J0LnNlcnZpY2Vz';
+
+    const vCard = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      `FN:${member.name}`,
+      member.nickname ? `NICKNAME:${member.nickname}` : '',
+      member.title ? `TITLE:${member.title}` : `TITLE:${member.role}`,
+      member.organization ? `ORG:${member.organization}` : 'ORG:The ATL Homemaker',
+      member.email ? `EMAIL;type=WORK:${member.email}` : '',
+      member.phone ? `TEL;type=WORK:${member.phone}` : '',
+      member.url ? `URL:${member.url}` : '',
+      `CALURI:${calUri}`,
+      `CATEGORIES:${categories}`,
+      `FBURL:${fbUrl}`,
+      `LOGO:${logo}`,
+      'MAILER:gmail',
+      `ROLE:${member.position || member.role}`,
+      member.note ? `NOTE:${member.note}` : '',
+      member.image ? `PHOTO;VALUE=URI:${member.image}` : '',
+      member.startDate ? `REV:${new Date(member.startDate).toISOString()}` : '',
+      'END:VCARD'
+    ].filter(Boolean).join('\r\n');
+
+    // Set response headers
+    res.setHeader('Content-Type', 'text/vcard');
+    res.setHeader('Content-Disposition', `attachment; filename="${slugify(member.name)}.vcf"`);
+    
+    // Send the vCard
+    res.send(vCard);
+  } catch (error) {
+    console.error('Error generating vCard:', error);
+    res.status(500).send('Error generating vCard');
+  }
+});
+
+// QR Code endpoint
+app.get('/team/:role/qr', async (req, res) => {
+  try {
+    const { role } = req.params;
+    const baseUrl = process.env.VITE_BASE_URL;
+    const vcfUrl = `${baseUrl}/team/${role}/vcf`;
+    
+    // Generate QR code as data URL
+    const qrCode = await QRCode.toDataURL(vcfUrl, {
+      errorCorrectionLevel: 'H',
+      margin: 1,
+      width: 300,
+      color: {
+        dark: '#000000',
+        light: '#ffffff'
+      }
+    });
+    
+    // Set response headers
+    res.setHeader('Content-Type', 'image/png');
+    
+    // Convert data URL to buffer and send
+    const qrBuffer = Buffer.from(qrCode.split(',')[1], 'base64');
+    res.send(qrBuffer);
+  } catch (error) {
+    console.error('Error generating QR code:', error);
+    res.status(500).send('Error generating QR code');
+  }
+});
 
 // Email action endpoint
 app.get('/email-action/:action', async (req, res) => {
@@ -83,21 +189,6 @@ app.post('/update-category-setting', updateCategorySetting);
 app.post('/update-item', updateItem);
 app.post('/add-visitor', updateVisitor);
 app.post('/send-email', sendEmail);
-
-// QBO routes...
-app.get('/authUri', function (req, res) {
-  try {
-    const authUri = qboClient.getAuthorizationUrl('intuit-test');
-    res.send(authUri);
-  } catch (error) {
-    console.error('Error in authUri:', error);
-    res.status(500).send({
-      status: 'Error',
-      message: 'Error generating auth URI',
-      error: error.message
-    });
-  }
-});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

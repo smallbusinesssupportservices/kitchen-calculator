@@ -1,7 +1,6 @@
 <template>
   <div class="bio-container">
     <div v-if="member" class="bio-card">
-      <!-- Edit Mode Toggle -->
       <div class="edit-controls">
         <button @click="toggleEdit" class="edit-button">
           {{ isEditing ? 'Cancel' : 'Edit Profile' }}
@@ -37,9 +36,14 @@
               <input v-model="editedMember.name" placeholder="Name" class="edit-input" />
               <input v-model="editedMember.role" placeholder="Role" class="edit-input" />
             </div>
-            <a :href="`/team/${roleSlug}/vcf`" class="download-vcf">
-              Add to Contacts
-            </a>
+            <div class="contact-actions">
+              <router-link :to="`/team/${roleSlug}/qr`" class="qr-link">
+                View Contact QR Code
+              </router-link>
+              <a :href="`/team/${roleSlug}/vcf`" class="download-vcf">
+                Add to Contacts
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -294,17 +298,35 @@ async function saveChanges() {
   margin-left: 0.5rem;
 }
 
+.contact-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.qr-link,
 .download-vcf {
   display: inline-block;
-  margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background-color: #6366f1;
-  color: white;
   text-decoration: none;
   border-radius: var(--radius);
   font-size: 0.875rem;
   font-weight: 500;
   transition: background-color 0.2s ease;
+}
+
+.qr-link {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.qr-link:hover {
+  background-color: #4338ca;
+}
+
+.download-vcf {
+  background-color: #6366f1;
+  color: white;
 }
 
 .download-vcf:hover {
