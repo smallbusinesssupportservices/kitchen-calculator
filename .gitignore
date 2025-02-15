@@ -27,3 +27,4 @@ config.json
 notes.txt
 token.json
 visitors.json
+package-lock.json

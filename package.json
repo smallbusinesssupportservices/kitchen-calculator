@@ -20,6 +20,7 @@
     "node-quickbooks": "^2.0.45",
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.7",
+    "qrcode": "^1.5.4",
     "pdf-lib": "^1.17.1",
     "simple-oauth2": "^5.1.0",
     "uuid": "^10.0.0",
