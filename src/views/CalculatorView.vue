@@ -61,6 +61,7 @@ const hasServerResponded = ref(false);
 const serverResponse = ref(null);
 const isLoading = ref(false);
 const isSubmitted = ref(false);
+const showServerResponse = true;
 
 // Define required fields for progress calculation
 const requiredFields = ref([
@@ -254,7 +255,7 @@ onMounted(() => {
 
   // Temporarily set hasServerResponded and serverResponse for testing purposes
 onMounted(() => {
-  if(false){
+  if(showServerResponse){
     hasServerResponded.value = true;
     serverResponse.value = {
       estimate: {
