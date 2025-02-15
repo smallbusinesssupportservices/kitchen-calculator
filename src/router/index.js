@@ -7,6 +7,7 @@ import QBO from '../views/qboView.vue'
 import CustomerPortal from '../views/CustomerPortalView.vue'
 import Team from '../views/TeamView.vue'
 import TeamBio from '../views/TeamBioView.vue'
+import TeamVCard from '../views/TeamVCardView.vue'
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/team/:role',
     name: 'TeamBio',
     component: TeamBio
+  },
+  {
+    path: '/team/:role/vcf',
+    name: 'TeamVCard',
+    component: TeamVCard
   }
 ]
 
