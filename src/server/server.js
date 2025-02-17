@@ -13,6 +13,7 @@ import bodyParser from 'body-parser';
 import qboClient from './qbo.js';
 import QRCode from 'qrcode';
 import teamMembers from '../data/teamMembers.json' assert { type: "json" };
+import googleAdmin from './googleAdmin.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,12 +45,25 @@ function findMemberByRoleSlug(roleSlug) {
   return null;
 }
 
+// Google Admin API endpoint
+app.get('/api/team-members', async (req, res) => {
+  console.log("** /api/team-members **")
+  try {
+    const teamMembers = await googleAdmin.getUsers();
+    res.json(teamMembers);
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    res.status(500).json({ error: 'Failed to fetch team members' });
+  }
+});
+
 // vCard endpoint
 app.get('/team/:role/vcf', (req, res) => {
   try {
     const { role } = req.params;
     const member = findMemberByRoleSlug(role);
-    
+    console.log("member: ", member);
+    console.log("member.phone: ", member.phone)
     if (!member) {
       return res.status(404).send('Team member not found');
     }
@@ -87,7 +101,7 @@ app.get('/team/:role/vcf', (req, res) => {
       member.startDate ? `REV:${new Date(member.startDate).toISOString()}` : '',
       'END:VCARD'
     ].filter(Boolean).join('\r\n');
-
+    // console.log("Vcard: ", vCard)
     // Set response headers
     res.setHeader('Content-Type', 'text/vcard');
     res.setHeader('Content-Disposition', `attachment; filename="${slugify(member.name)}.vcf"`);
@@ -104,7 +118,7 @@ app.get('/team/:role/vcf', (req, res) => {
 app.get('/team/:role/qr', async (req, res) => {
   try {
     const { role } = req.params;
-    const baseUrl = process.env.VITE_BASE_URL;
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
     const vcfUrl = `${baseUrl}/team/${role}/vcf`;
     
     // Generate QR code as data URL
