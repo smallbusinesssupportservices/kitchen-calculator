@@ -92,10 +92,10 @@
         <div class="bio-section">
           <h2>Contact & Additional Information</h2>
           <div v-if="!isEditing" class="contact-details">
-            <a v-if="editedMember.email" :href="`mailto:${editedMember.email}`" class="contact-link">
+            <a v-if="editedMember.email && !isFounderCEO(editedMember)" :href="`mailto:${editedMember.email}`" class="contact-link">
               {{ editedMember.email }}
             </a>
-            <a v-if="editedMember.phone" :href="`tel:${editedMember.phone}`" class="contact-link">
+            <a v-if="editedMember.phone && !isFounderCEO(editedMember)" :href="`tel:${editedMember.phone}`" class="contact-link">
               {{ editedMember.phone }}
             </a>
             <p v-if="editedMember.startDate" class="start-date">
@@ -103,18 +103,20 @@
             </p>
           </div>
           <div v-else class="edit-fields">
-            <input 
-              v-model="editedMember.email" 
-              type="email" 
-              placeholder="Email"
-              class="edit-input"
-            />
-            <input 
-              v-model="editedMember.phone" 
-              type="tel" 
-              placeholder="Phone"
-              class="edit-input"
-            />
+            <template v-if="!isFounderCEO(editedMember)">
+              <input 
+                v-model="editedMember.email" 
+                type="email" 
+                placeholder="Email"
+                class="edit-input"
+              />
+              <input 
+                v-model="editedMember.phone" 
+                type="tel" 
+                placeholder="Phone"
+                class="edit-input"
+              />
+            </template>
             <input 
               v-model="editedMember.startDate" 
               type="date" 
@@ -177,6 +179,11 @@ function slugify(text) {
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function isFounderCEO(member) {
+  return member.role.toLowerCase().includes('founder') || 
+         member.role.toLowerCase().includes('ceo');
 }
 
 const roleSlug = computed(() => slugify(route.params.role));

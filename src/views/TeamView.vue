@@ -2,7 +2,7 @@
   <div class="team-container">
     <h1>Our Team</h1>
     
-    <div v-for="(department, key) in teamMembers" :key="key" class="department-section">
+    <div v-for="(department, key) in teamMembersData" :key="key" class="department-section">
       <h2>{{ department.title }}</h2>
       
       <div class="table-container">
@@ -12,7 +12,7 @@
               <th>Name</th>
               <th>Role</th>
               <th>Bio</th>
-              <th>Contact</th>
+              <th v-if="!hasFounderCEO(department.members)">Contact</th>
             </tr>
           </thead>
           <tbody>
@@ -25,7 +25,7 @@
               <td class="name-cell">{{ member.name }}</td>
               <td class="role-cell">{{ member.role }}</td>
               <td class="bio-cell">{{ member.bio }}</td>
-              <td class="contact-cell">
+              <td v-if="!isFounderCEO(member)" class="contact-cell">
                 <div class="contact-info">
                   <a 
                     v-if="member.email"
@@ -54,10 +54,24 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import teamMembers from '../data/teamMembers.json';
+import teamMembersData from '../data/teamMembers.json';
+import axios from 'axios';
 
 const router = useRouter();
+const teamMembers = ref(null);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/api/team-members');
+    teamMembers.value = response.data;
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    // Fallback to local data
+    teamMembers.value = null;
+  }
+});
 
 function slugify(text) {
   return text
@@ -65,6 +79,15 @@ function slugify(text) {
     .replace(/[^\w\s-]/g, '')
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function isFounderCEO(member) {
+  return member.role.toLowerCase().includes('founder') || 
+         member.role.toLowerCase().includes('ceo');
+}
+
+function hasFounderCEO(members) {
+  return members.some(member => isFounderCEO(member));
 }
 
 function navigateToMember(member) {
