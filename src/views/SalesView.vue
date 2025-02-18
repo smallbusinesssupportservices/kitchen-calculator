@@ -1,7 +1,19 @@
 <template>
-  <h1>Kitchen Calculator</h1>
+  <h1>Sales Calculator</h1>
   <div v-if="!hasServerResponded">
     <form @submit.prevent="handleSubmit">
+      <!-- Sales Rep Selection -->
+      <div class="sales-rep-selection">
+        <h2>Sales Representative</h2>
+        <select v-model="selectedSalesRep" required class="sales-rep-select">
+          <option value="">Select Sales Representative</option>
+          <option v-for="rep in salesTeam" :key="rep.id" :value="rep">
+            {{ rep.name }} - {{ rep.role }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Calculator Components -->
       <KitchenSize v-model="formData.kitchenSize" />
       <Cabinets v-model="formData.cabinets" />
       <Countertops v-model="formData.countertops" />
@@ -46,9 +58,7 @@ import Electrical from '../components/calculatorView/ElectricalComponent.vue';
 import Cabinets from '../components/calculatorView/CabinetsComponent.vue';
 import Countertops from '../components/calculatorView/CountertopsComponent.vue';
 import NewSink from '../components/calculatorView/NewSinkComponent.vue';
-import ExhaustHoodDucting from '../components/calculatorView/ExhaustHoodDuctingComponent.vue';
 import NewAppliances from '../components/calculatorView/NewAppliancesComponent.vue';
-import Installation from '../components/calculatorView/InstallationComponent.vue';
 import Backsplash from '../components/calculatorView/BacksplashComponent.vue';
 import Flooring from '../components/calculatorView/FlooringComponent.vue';
 import InteriorPainting from '../components/calculatorView/InteriorPaintingComponent.vue';
@@ -56,12 +66,18 @@ import FinalCleaning from '../components/calculatorView/FinalCleaningComponent.v
 import ServerResponse from '../components/calculatorView/ServerResponseComponent.vue';
 import ProgressButton from '../components/calculatorView/ProgressButtonComponent.vue';
 import UserForm from '../components/calculatorView/UserComponent.vue';
+import teamMembers from '../data/teamMembers.json';
 
 const hasServerResponded = ref(false);
 const serverResponse = ref(null);
 const isLoading = ref(false);
 const isSubmitted = ref(false);
-const showServerResponse = false;
+const selectedSalesRep = ref('');
+
+// Get sales team members
+const salesTeam = computed(() => {
+  return teamMembers.sales?.members || [];
+});
 
 // Define required fields for progress calculation
 const requiredFields = ref([
@@ -193,39 +209,36 @@ const formData = reactive({
   finalCleaning: { cleanKitchen: true },
   user: {
     id: '',
-    name: 'williamjhgf',
-    phone: '4106102350',
-    email: 'technology@theatlhomemaker.com',
-    address: '3156 w manor cir sw',
-    city: 'atlanta',
-    state: 'GA',
-    zip: '30311'
+    name: '',
+    phone: '',
+    email: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: ''
   }
 });
 
 // Compute progress based on filled required fields
 const progress = computed(() => {
+  // Check if sales rep is selected
+  if (!selectedSalesRep.value) return 0;
+
   const filled = requiredFields.value.reduce((count, field) => {
     const fieldData = formData[field];
     if (typeof fieldData === 'object' && fieldData !== null) {
-      // Determine which subfields to exclude for the current field
       const exclusions = excludedSubFields[field] || [];
-
-      // Extract values, excluding the specified subfields
       const values = Object.entries(fieldData)
         .filter(([key]) => !exclusions.includes(key))
         .map(([, value]) => value);
-
-      // Check if any of the remaining subfield values are filled
       const isFilled = values.some((value) => {
         if (typeof value === 'string') {
           return value.trim() !== '';
         } else if (typeof value === 'boolean') {
-          return true; // Consider boolean fields as filled regardless of true/false
+          return true;
         }
         return Boolean(value);
       });
-
       return isFilled ? count + 1 : count;
     } else if (typeof fieldData === 'string') {
       return fieldData.trim() !== '' ? count + 1 : count;
@@ -233,10 +246,10 @@ const progress = computed(() => {
     return Boolean(fieldData) ? count + 1 : count;
   }, 0);
 
-  return Math.round((filled / requiredFields.value.length) * 100);
+  return Math.round((filled / (requiredFields.value.length + 1)) * 100);
 });
 
-const isDisabled = computed(() => progress.value < 100);
+const isDisabled = computed(() => progress.value < 100 || !selectedSalesRep.value);
 
 // Generate or retrieve userId on component mount
 onMounted(() => {
@@ -246,28 +259,15 @@ onMounted(() => {
     localStorage.setItem('atlhm', storedUserId);
   }
   
-  // Update the user ID while preserving other user data
-  formData.user = {
-    ...formData.user,
-    id: storedUserId
-  };
-});
-
-  // Temporarily set hasServerResponded and serverResponse for testing purposes
-onMounted(() => {
-  if(showServerResponse){
-    hasServerResponded.value = true;
-    serverResponse.value = {
-      estimate: {
-        highRange: 15000,
-        lowRange: 12000
-      },
-      message: "Here is the estimated cost for your kitchen renovation."
-    };
-  }
+  formData.user.id = storedUserId;
 });
 
 const handleSubmit = async () => {
+  if (!selectedSalesRep.value) {
+    alert('Please select a sales representative.');
+    return;
+  }
+
   let allFilled = true;
   requiredFields.value.forEach((field) => {
     const fieldData = formData[field];
@@ -298,20 +298,28 @@ const handleSubmit = async () => {
     alert('Please fill in all required fields.');
     return;
   }
+
   isLoading.value = true;
   isSubmitted.value = false;
 
   try {
-    // Create a serializable copy of the form data
-    const serializedFormData = JSON.parse(JSON.stringify(formData));
-    
+    // Add sales rep information to the form data
+    const dataToSubmit = {
+      ...formData,
+      salesRep: {
+        id: selectedSalesRep.value.id,
+        name: selectedSalesRep.value.name,
+        email: selectedSalesRep.value.email,
+        phone: selectedSalesRep.value.phone
+      }
+    };
+
     const response = await axios.post(
       'http://localhost:3000/submit-form',
-      serializedFormData
+      dataToSubmit
     );
 
     if (response.status === 200) {
-      console.log(response.data.estimate);
       serverResponse.value = response.data;
       serverResponse.value.high = response.data.estimate.highRange;
       serverResponse.value.low = response.data.estimate.lowRange;
@@ -340,10 +348,40 @@ watch(
 );
 </script>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+<style scoped>
+.sales-rep-selection {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.sales-rep-selection h2 {
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.sales-rep-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: white;
+  font-size: 1rem;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.sales-rep-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.sales-rep-select option {
+  padding: 0.5rem;
 }
 
 form {

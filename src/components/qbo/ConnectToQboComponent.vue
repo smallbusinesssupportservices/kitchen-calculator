@@ -22,7 +22,7 @@ const authorizeUri = async () => {
 
 <template>
   <div class="connect-to-qbo">
-    <h3>Services</h3>
+    <!-- <h3>Services</h3> -->
     <div class="connect-to-qbo-button">
       <a class="imgLink" href="#" @click.prevent="authorizeUri">
         <img src="./images/C2QB_green_btn_lg_default.png" width="178" alt="Connect to QuickBooks" />

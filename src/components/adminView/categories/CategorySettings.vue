@@ -16,7 +16,7 @@ const saveToServer = async () => {
 </script>
 
 <template>
-  <h3>Category Settings</h3>
+  <!-- <h3>Category Settings</h3> -->
   <div class="category-settings">
     <div v-for="(value, key) in categoryMinimums" :key="key" class="category-input">
       <label :for="key">{{ key }}:</label>

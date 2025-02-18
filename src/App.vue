@@ -8,6 +8,7 @@
       <div><router-link to="/email">Email</router-link></div>
       <div><router-link to="/portal">Customer Portal</router-link></div>
       <div><router-link to="/team">Team</router-link></div>
+      <div><router-link to="/sales">Sales</router-link></div>
       ** Nav for testing **
     </nav>
     <router-view />

@@ -16,12 +16,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
+    "googleapis": "^133.0.0",
     "intuit-oauth": "^4.1.2",
     "node-quickbooks": "^2.0.45",
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.7",
-    "qrcode": "^1.5.4",
     "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
     "simple-oauth2": "^5.1.0",
     "uuid": "^10.0.0",
     "vue": "^3.5.10",
@@ -31,10 +32,5 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
     "vite": "^5.4.8"
-  },
-  "overrides": {
-    "node-quickbooks": {
-      "request": "npm:axios-as-request@^2.0.1"
-    }
   }
 }

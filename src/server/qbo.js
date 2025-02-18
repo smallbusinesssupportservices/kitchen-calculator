@@ -24,23 +24,27 @@ class QBOClient {
       const tokenPath = path.join(__dirname, '..', 'components', 'qbo', 'token.json');
       
       try {
-        const tokenData = JSON.parse(await readFile(tokenPath, 'utf8'));
+        const data = await readFile(tokenPath, 'utf8');
+        const tokenData = JSON.parse(data);
+        
         if (tokenData?.token) {
-          // console.log('Loading token from file:', tokenData.token);
+          console.log('Loading token from file');
           this.oauthClient.token = tokenData.token;
           this.oauthClient.setToken(tokenData.token);
+          return tokenData;
         }
-        return tokenData;
       } catch (readError) {
-        return {
-          environment: process.env.QBO_ENVIRONMENT || 'sandbox',
-          clientId: process.env.QBO_CLIENT_ID,
-          clientSecret: process.env.QBO_CLIENT_SECRET,
-          redirectUri: process.env.QBO_REDIRECT_URI,
-          token: null,
-          logging: true
-        };
+        console.log('No existing token file found');
       }
+
+      return {
+        environment: process.env.QBO_ENVIRONMENT || 'sandbox',
+        clientId: process.env.QBO_CLIENT_ID,
+        clientSecret: process.env.QBO_CLIENT_SECRET,
+        redirectUri: process.env.QBO_REDIRECT_URI,
+        token: null,
+        logging: true
+      };
     } catch (error) {
       console.error('Error loading token from file:', error);
       throw error;
@@ -58,13 +62,11 @@ class QBOClient {
         clientId: process.env.QBO_CLIENT_ID,
         clientSecret: process.env.QBO_CLIENT_SECRET,
         redirectUri: process.env.QBO_REDIRECT_URI,
-        logging: true
+        logging: true,
+        token: tokenData
       };
 
-      await writeFile(
-        tokenPath, 
-        JSON.stringify({ ...baseData, token: tokenData.token }, null, 2)
-      );
+      await writeFile(tokenPath, JSON.stringify(baseData, null, 2));
       console.log('Token saved to file successfully');
     } catch (error) {
       console.error('Error saving token to file:', error);
@@ -89,7 +91,7 @@ class QBOClient {
       const urlObj = new URL(url, process.env.QBO_REDIRECT_URI);
       const fullUrl = urlObj.toString();
       
-      console.log('Processing callback URL:', fullUrl);
+      console.log('Processing callback URL');
       
       const authResponse = await this.oauthClient.createToken(fullUrl);
       console.log('Auth response received');
@@ -108,7 +110,7 @@ class QBOClient {
 
       console.log('Setting new token');
       this.oauthClient.setToken(token);
-      await this.saveTokenToFile({ token });
+      await this.saveTokenToFile(token);
       
       return token;
     } catch (error) {
@@ -121,25 +123,25 @@ class QBOClient {
     try {
       await this.loadTokenFromFile();
       
-      console.log('Checking token validity...');
-      const token = this.oauthClient.getToken();
-
+      console.log('Checking token validity');
+      
       if (!this.oauthClient.isAccessTokenValid()) {
-        console.log('Access token expired, refreshing...');
+        console.log('Access token expired, refreshing');
         await this.refreshTokens();
       }
 
+      const token = this.oauthClient.getToken();
       return new QuickBooks(
         process.env.QBO_CLIENT_ID,
         process.env.QBO_CLIENT_SECRET,
-        this.oauthClient.getToken().access_token,
+        token.access_token,
         false,
-        this.oauthClient.getToken().realmId,
-        (process.env.QBO_ENVIRONMENT === 'sandbox' ? false : true),
+        token.realmId,
+        process.env.QBO_ENVIRONMENT === 'sandbox',
         true,
         null,
         '2.0',
-        this.oauthClient.getToken().refresh_token
+        token.refresh_token
       );
     } catch (error) {
       console.error('Error creating QB client:', error);
@@ -149,11 +151,10 @@ class QBOClient {
 
   async refreshTokens() {
     try {
-      console.log('Refreshing tokens...');
+      console.log('Refreshing tokens');
       const authResponse = await this.oauthClient.refresh();
-      console.log('Refresh response received:', authResponse);
+      console.log('Refresh response received');
       
-      // Construct the full token object
       const token = {
         realmId: this.oauthClient.getToken().realmId,
         token_type: authResponse.token_type,
@@ -168,7 +169,7 @@ class QBOClient {
       
       console.log('Setting refreshed token');
       this.oauthClient.setToken(token);
-      await this.saveTokenToFile({ token });
+      await this.saveTokenToFile(token);
       
       return token;
     } catch (error) {
@@ -189,7 +190,6 @@ class QBOClient {
             reject(err);
             return;
           }
-          console.log('Customer search result:', result);
           resolve(result.QueryResponse?.Customer?.[0] || null);
         });
       });
@@ -209,7 +209,6 @@ class QBOClient {
             reject(err);
             return;
           }
-          console.log('Customer created:', customer);
           resolve(customer);
         });
       });
@@ -229,7 +228,6 @@ class QBOClient {
             reject(err);
             return;
           }
-          console.log('Estimate created:', estimate);
           resolve(estimate);
         });
       });

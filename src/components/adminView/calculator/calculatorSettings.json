@@ -1,9 +1,9 @@
 {
-  "lowBuffer": 0.05,
-  "highBuffer": 0.1,
-  "rng": 0.01,
+  "lowBuffer": 0.3,
+  "highBuffer": 0.4,
+  "rng": 601,
   "markUp": 0.65,
-  "cabinet_multiplier": 1.75,
+  "cabinet_multiplier" : 1.75,
   "countertop_multiplier": 1.6,
   "window_constant": 9,
   "appliance_constant": 7

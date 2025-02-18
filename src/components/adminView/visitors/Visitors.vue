@@ -53,7 +53,7 @@ const saveItem = async (updatedItem) => {
 </script>
 
 <template>
-    <h3>Visitors</h3>
+    <!-- <h3>Visitors</h3> -->
   <div class="visitors">
     <!-- Render list of visitors -->
     <ul class="item-list">

@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue';
 import axios from 'axios';
 import ItemSettings from "./ItemSettings.vue" 
-import Items from './items.json' with { type: 'json' };
+import Items from './items.json' with { type: "json" };
 
 
 const items = reactive({ ...Items });
@@ -46,12 +46,9 @@ const saveItem = async (updatedItem) => {
 
   closeModal();  // Close the modal after saving
 };
-
-
 </script>
 
 <template>
-    <h3>Items</h3>
   <div class="items">
     <!-- Render list of items -->
     <ul class="item-list">
@@ -66,32 +63,29 @@ const saveItem = async (updatedItem) => {
 
     <!-- Show ItemSettings when an item is selected -->
     <ItemSettings 
-    v-if="isModalVisible" 
-    :item="selectedItem" 
-    :itemName="itemName"
-    @close="closeModal" 
-    @save="saveItem" 
-  />
+      v-if="isModalVisible" 
+      :item="selectedItem" 
+      :itemName="itemName"
+      @close="closeModal" 
+      @save="saveItem" 
+    />
   </div>
 </template>
 
 <style scoped>
 .items {
-  grid-column: 3 / 3;
-  grid-row: 1 / 1;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  width: 200px;
-  height: 604px; 
-  overflow-y: auto; 
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .item-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .item-list li {

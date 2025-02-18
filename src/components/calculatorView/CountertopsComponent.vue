@@ -400,7 +400,7 @@ watch(
   background-color: var(--primary-hover);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .countertop-container {
     flex-direction: column;
   }

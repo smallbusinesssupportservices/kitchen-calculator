@@ -1,13 +1,17 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
   server: {
     port: 5173,
     strictPort: true,
-    historyApiFallback: true
+    proxy: {
+      '/api': {
+        target: ' https://aed5-24-125-95-94.ngrok-free.app',
+        changeOrigin: true
+      }
+    }
   },
   base: '/',
   resolve: {

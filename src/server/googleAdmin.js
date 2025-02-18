@@ -18,14 +18,15 @@ class GoogleAdminClient {
     try {
       const now = Math.floor(Date.now() / 1000);
       const credentials = {
-        client_email: "adminsdk@aqueous-cargo-406518.iam.gserviceaccount.com",
-        private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDSPJjz0YmyfZmE\nX+wkyqXeW+ilT032GKQ4z6Daf9DUARZppHKZlrvU+La/b3jY9dOQnwYKnURD37YD\neBH7/7KnKRYPBPCw2yHUS0YwF1WqqxI8dvCXtNr5lpM4jPiVcji4rXZPrD1EXUUS\nWYrmzxKraIaoyPm1mvn1INoO22w/fB5pXm6/Z/plTdJot4rBcwSSRyBQd+cOMWdR\nD+LuQtDix1hodnkpjPMRZCZvZ5X/frDLoMHlAIoxoJhB7bRlNzfPmIeJiblUYeiW\nLi50iAYJ9od8K2dlGZV94QKGlKD/ufMKdUP7afNwlkxIhzLyVZSjK1uprmWrK8db\nQWYQwA9jAgMBAAECggEACw+VHH7Rt8pT4VsKmYTv5RsAynG5sFDrkvGZjOVcn0rP\nWw+D2ADOMQ5Ezx2WRhPo5Zr4Pma3yLpkYRpYF+IEDDdlKbUg1K0ywnCTaMRRhYEq\nnHPFhLXHL4p0hG0mRvaTdWPq7ZYqQwaFM8nyPOJ4IPyG2Sp5uMxGilcIIe/5af2N\nRK9tLuuOIJMK4r2cPEERVDIl2vQAPX2VPFgXWBIBtu7BDYvDPTkf+4ZEVcX9+tJ7\nFQbyGdPtn/SKn8E3aXM/sL52XHdo6fuvQJJKffo/cv1o0BzIbDqOyy7V4PXmmnYz\nFkrFJzI+0AUXNLAQnpe9Q8taFn+0y86q47h1gFnMwQKBgQD4Ft3tuEi2wQHDa426\nCNxpuAsXOOuFZVriYoRTr+FYc1cE6TgSTqFj/4XuLOyzFOv7/WY3SjYmq2tYMshC\nVvfzptlvUhCdZD4F665toVzZCNskb1Q8l2MnCR/RslbwPPkFo6o4eaDBWwpR5b9u\n0lQlB7+l2ks6vRY6U/Y8P2vWbQKBgQDY8L4jTb/azAGOQzb1aJpZIBCGClfgEFmV\na3oPh1algdEk2StWJp+9DdcaQua1tt0bmTcK2B2VuSDdJD50O8j7Zg/wzCFlfJGt\nfKYiNzJ+lTz18bJNLbbNEIzXv8P1olKhollXY4nJ+L8d5FHEOYUCphD9ivKpxzgZ\nBwuEonUbDwKBgQDn8MEFmc/phGK4qBo1vkkLUbSUvnN7IHoqwr5CW2HLxvGpNr1k\naDz894zoUvnsp3fE/HCO6oPb/VF7gOa3FwXztp78M3YzH9/YuzI1brIWevAejTLs\n/wAFI8Oq0hfzvJ14Rz5CVHwVqZ7pWGl0G5HtmOP1FDRXMybP22WPiB+ytQKBgHeC\nD8yU/TbEIatEPddte3HTpyagNg6aEy+sGH7LeKEOZa+d7zCzcFYOdMvjxQKfrSiR\n++9+ZLXhWUhZugoAEVTkwa1OVqt4tyvSOhcpPyjaf82hCy9XGpfXIS+NVZ9Qf6LJ\nM9xfWj2oSWhnKeAmK67s2vlBfTKoK7Al4GN9t3NjAoGBANM/e6C4NCaUN8XjZxL3\noaBo/eSy3Fj6SCwcBO182SZ9vzKVxQT61nmU0M6j+yjYg9bkuBkRiVufKg/jbA9d\n+paHsDomNo0DCR2l+V9slAfbEMdkvCSi7CYL/gTRAHsUZDgG4OyoxiZJqrHoz11g\n8yFSEXZc1aHZHQZDcM+D966A\n-----END PRIVATE KEY-----\n",
-        client_id: "116954533269619252681"
+        client_email: "webapp-google-admin@aqueous-cargo-406518.iam.gserviceaccount.com",
+        private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCUN7s4HVHsDQgb\nmpsLoR/Wp+x8pb65Ki3NQ5iuBO8HN+uvdb0OXdR/dlHL4D8PSQ7627HYZW1t7k6k\nBv5J8e8JMBQDoHJf0gj6XP3SSWw/q3HpTgPCj7U6tK2QpwVoNEUNRLq6xK5gqseU\ndcBznddgds1d8Xss2KaKrpcv0wHpKSAq4eRqdl/cied7iYjTYdDoCnMCETALWMlg\nXSbnu/68lQGSNF+5qLZAcNWgxlBalVDP08JC53ZrjNG/IpmMsU3t45NUL7DPpRYl\n8FTmbBoEBCkPWeMa7FgPnlfxqEf0VmX/JGYO9vroTAYui5mT14bRoU8tPKhE2JKE\nzrIUbLRJAgMBAAECggEADWfTA5rHR5HQK2r63fznO8t5XLbC/s1dUiTsgMTKd70r\nkHWWMV/0MckaUdXI7lF9zNulBLz7vkchDr3hLv/2Tj7ueHuBDMCa9kYF4QiqBUI0\n7dSUC3ti+VnRHvW0S/36Rt5yAyV53h1kKr3Rt8NNcRidr4MBUIeR3JY472bm09c0\npiiwxpcCb2NfOxQVNJhYWKXlSAUaOqhyKbaSQ+3NMEKBYbo5m1aC4B+v1FpKvNZR\n1GEyhWU7hL1JmyBRWGp3Hky1MdouxS3om13h80zBU+HID8WuNb44qz9yHkODftHH\nITbjn1LzV49TvOYqsIdNKcf0PVXCLm41ZRMcBffxXwKBgQDHXcdKMhumet7RD07q\np9SCf/LILZDCyVhG1d6AuEeHdHsczaSASW6aun8qzm0LDaFZ0IkYifDRsqZcdrTU\nbZJDr4Thm+itUc+lVod6+Be8kaN7qXY5Nuu9ri5AlFCv3FKDw6G8TUpPh03KmoIL\nQMfB/uFayBD+Dq/5dspouQzwUwKBgQC+UljyqHsoW94nI4z82nEVyWhIIFiChFT+\nklLFQm70T04lSAt8S+D1CVIhgIXWXYNoiAD3ToOt5qq2pwlbn52EIb5QWUSW/H97\nrosmoDxeSHVd+NPsFJIhbrafuS1HnoOYKhrHuF09Ey6BMDuWBnIOwikNlU3kHoSC\ntswdmoRlcwKBgQDGfX6qR0MyOAjZOhWHGTtCBmNQm9URqebi95HEtDQ7D2R3Y+KQ\n+wtMr7tmggkcxSBMzIuCS+vgy65IRsN47/J8wyZYfKJm1RoYchMHAjSXwKR0vV6A\nTkbdHardDw1aWdApcb/4OzduALcZrUUmMQPxCHOTr7cDSto3U+bn5r2UEwKBgQCk\nRz5Bzo3n60xZakVTKFZ+YMgjoc/kcMdQqgrJ/Cr7tMyWP5ayZmi5+Z6sDlz4COXZ\nv7NdxKbC350xZgMc1CzJlbrJbhRXY4HCx4mTALK7Cz5Lq/F5ENSGCSOXwOZFsJyU\nJpvREuFgS4NTvcdhGxUuigeXku2V34WvsouDbhGj4wKBgQCZj5YRWWIffpxJSC8z\nI+obzcjJplwngL+5JTufftwnFEk64czOtV8MKNEOd6QeT8zssgMx1ltsnbf7iLS9\nTedUCkQloFH345tZWi1SwTMAZTkGf66Q5QKRVybE8k9R8D6GuRRyfh0ms4ZHOo4g\nNn8U3JqeuNH0gIvPM4r4K2IZoQ==\n-----END PRIVATE KEY-----\n",
+        client_id: "110683048298389073968"
       };
 
       // Create JWT with proper claims
       const jwtClaims = {
         iss: credentials.client_email,
+        // sub: "webapp-google-admin@aqueous-cargo-406518.iam.gserviceaccount.com", // The user to impersonate
         scope: [
           'https://www.googleapis.com/auth/admin.directory.user',
           'https://www.googleapis.com/auth/admin.directory.group',
@@ -39,6 +40,7 @@ class GoogleAdminClient {
       this.auth = new google.auth.JWT({
         email: credentials.client_email,
         key: credentials.private_key,
+        subject: process.env.GOOGLE_ADMIN_EMAIL,
         scopes: [
           'https://www.googleapis.com/auth/admin.directory.user',
           'https://www.googleapis.com/auth/admin.directory.group',

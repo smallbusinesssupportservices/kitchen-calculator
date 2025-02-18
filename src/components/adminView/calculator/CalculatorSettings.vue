@@ -17,7 +17,7 @@ const saveToServer = async () => {
 </script>
 
 <template>
-  <h3>Calculator Settings</h3>
+  <!-- <h3>Calculator Settings</h3> -->
   <div class="calculator-settings">
     <div class="input-group">
       <label for="lowside">Lowside Buffer:</label>
