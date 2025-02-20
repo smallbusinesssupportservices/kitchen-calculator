@@ -56,7 +56,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import teamMembersData from '../data/teamMembers.json';
+import teamMembersData from '../data/teamMembers.json' with { type: 'json' };
 import axios from 'axios';
 
 const router = useRouter();

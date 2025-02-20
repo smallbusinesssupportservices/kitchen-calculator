@@ -66,7 +66,7 @@ import FinalCleaning from '../components/calculatorView/FinalCleaningComponent.v
 import ServerResponse from '../components/calculatorView/ServerResponseComponent.vue';
 import ProgressButton from '../components/calculatorView/ProgressButtonComponent.vue';
 import UserForm from '../components/calculatorView/UserComponent.vue';
-import teamMembers from '../data/teamMembers.json';
+import teamMembers from '../data/teamMembers.json' with { type: 'json' };
 
 const hasServerResponded = ref(false);
 const serverResponse = ref(null);
