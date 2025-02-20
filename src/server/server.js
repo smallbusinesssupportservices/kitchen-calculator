@@ -6,6 +6,7 @@ import { updateCalculatorSetting } from '../components/adminView/calculator/upda
 import { updateCategorySetting } from '../components/adminView/categories/updateCategorySetting.js';
 import { updateItem } from '../components/adminView/items/updateItem.js';
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js';
+import { verifyGoogleToken } from './auth/googleAuth.js';
 import QRCode from 'qrcode';
 import teamMembers from '../data/teamMembers.json' with { type: 'json' };
 import { googleDirectoryService } from './google/googleDirectoryService.js';
@@ -37,6 +38,21 @@ function findMemberByRoleSlug(roleSlug) {
   }
   return null;
 }
+
+// Google Auth endpoint
+app.post('/auth/google', async (req, res) => {
+  try {
+    const { token } = req.body;
+    const authResult = await verifyGoogleToken(token);
+    res.json(authResult);
+  } catch (error) {
+    console.error('Auth error:', error);
+    res.status(500).json({
+      authorized: false,
+      message: 'Authentication failed'
+    });
+  }
+});
 
 app.get('/', (req, res) => res.status(200).json({"Message":"Hello world"}));
 

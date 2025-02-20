@@ -1,15 +1,17 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Calculator from '../views/CalculatorView.vue'
-import Admin from '../views/AdminView.vue'
-import Calendar from '../views/CalendarView.vue'
-import Email from '../views/EmailView.vue'
-import QBO from '../views/qboView.vue'
-import CustomerPortal from '../views/CustomerPortalView.vue'
-import Team from '../views/TeamView.vue'
-import TeamBio from '../views/TeamBioView.vue'
-import TeamVCard from '../views/TeamVCardView.vue'
-import TeamQR from '../views/TeamQRView.vue'
-import Sales from '../views/SalesView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import Calculator from '../views/CalculatorView.vue';
+import Admin from '../views/AdminView.vue';
+import Calendar from '../views/CalendarView.vue';
+import Email from '../views/EmailView.vue';
+import QBO from '../views/qboView.vue';
+import CustomerPortal from '../views/CustomerPortalView.vue';
+import Team from '../views/TeamView.vue';
+import TeamBio from '../views/TeamBioView.vue';
+import TeamVCard from '../views/TeamVCardView.vue';
+import TeamQR from '../views/TeamQRView.vue';
+import Sales from '../views/SalesView.vue';
+import Login from '../views/LoginView.vue';
+import { isAuthenticated } from '../auth/authGuard';
 
 const routes = [
   {
@@ -20,7 +22,8 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: Admin
+    component: Admin,
+    meta: { requiresAuth: true }
   },
   {
     path: '/make-appointment',
@@ -30,12 +33,14 @@ const routes = [
   {
     path: '/email',
     name: 'Email',
-    component: Email
+    component: Email,
+    meta: { requiresAuth: true }
   },
   {
     path: '/qbo',
     name: 'Connect',
-    component: QBO
+    component: QBO,
+    meta: { requiresAuth: true }
   },
   {
     path: '/portal',
@@ -65,13 +70,34 @@ const routes = [
   {
     path: '/sales',
     name: 'Sales',
-    component: Sales
+    component: Sales,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated.value) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
