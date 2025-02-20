@@ -64,7 +64,8 @@ const teamMembers = ref(null);
 
 onMounted(async () => {
   try {
-    const response = await axios.get('http://localhost:3000/api/team-members');
+    const response = await axios.get('http://localhost:3000/users');
+    console.log("users: ", response)
     teamMembers.value = response.data;
   } catch (error) {
     console.error('Error fetching team members:', error);

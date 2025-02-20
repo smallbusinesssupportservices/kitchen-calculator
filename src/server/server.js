@@ -1,29 +1,22 @@
 import express from 'express';
 import cors from 'cors';
-import { join, dirname } from 'path';
-import { readFile } from 'fs/promises';
-import { fileURLToPath } from 'url';
 import { processFormData } from './formHandler.js';
 import { sendEmail } from './sendEmail.js';
 import { updateCalculatorSetting } from '../components/adminView/calculator/updateCalculatorSettings.js';
 import { updateCategorySetting } from '../components/adminView/categories/updateCategorySetting.js';
 import { updateItem } from '../components/adminView/items/updateItem.js';
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js';
-import bodyParser from 'body-parser';
-import qboClient from './qbo.js';
 import QRCode from 'qrcode';
-import teamMembers from '../data/teamMembers.json' assert { type: "json" };
-import googleAdmin from './googleAdmin.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import teamMembers from '../data/teamMembers.json' with { type: 'json' };
+import { googleDirectoryService } from './google/googleDirectoryService.js';
+import helmet from 'helmet';
 
 const app = express();
 const PORT = 3000;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -45,15 +38,51 @@ function findMemberByRoleSlug(roleSlug) {
   return null;
 }
 
-// Google Admin API endpoint
-app.get('/api/team-members', async (req, res) => {
-  console.log("** /api/team-members **")
+app.get('/', (req, res) => res.status(200).json({"Message":"Hello world"}));
+
+// Team members endpoints
+app.get('/users', async (req, res) => {
   try {
-    const teamMembers = await googleAdmin.getUsers();
-    res.json(teamMembers);
+    const users = await googleDirectoryService.getUsers();
+    res.json(users);
   } catch (error) {
-    console.error('Error fetching team members:', error);
-    res.status(500).json({ error: 'Failed to fetch team members' });
+    console.error('Failed to get users:', error);
+    res.status(500).json({
+      statusCode: 500,
+      timestamp: new Date().toISOString(),
+      path: req.url,
+      message: 'Failed to get users'
+    });
+  }
+});
+
+app.get('/groups', async (req, res) => {
+  try {
+    const groups = await googleDirectoryService.getGroups();
+    res.json(groups);
+  } catch (error) {
+    console.error('Failed to get groups:', error);
+    res.status(500).json({
+      statusCode: 500,
+      timestamp: new Date().toISOString(),
+      path: req.url,
+      message: 'Failed to get groups'
+    });
+  }
+});
+
+app.get('/groups/:groupKey/members', async (req, res) => {
+  try {
+    const members = await googleDirectoryService.getGroupMembers(req.params.groupKey);
+    res.json(members);
+  } catch (error) {
+    console.error(`Failed to get members for group ${req.params.groupKey}:`, error);
+    res.status(500).json({
+      statusCode: 500,
+      timestamp: new Date().toISOString(),
+      path: req.url,
+      message: `Failed to get members for group ${req.params.groupKey}`
+    });
   }
 });
 
@@ -62,8 +91,7 @@ app.get('/team/:role/vcf', (req, res) => {
   try {
     const { role } = req.params;
     const member = findMemberByRoleSlug(role);
-    console.log("member: ", member);
-    console.log("member.phone: ", member.phone)
+    
     if (!member) {
       return res.status(404).send('Team member not found');
     }
@@ -101,7 +129,7 @@ app.get('/team/:role/vcf', (req, res) => {
       member.startDate ? `REV:${new Date(member.startDate).toISOString()}` : '',
       'END:VCARD'
     ].filter(Boolean).join('\r\n');
-    // console.log("Vcard: ", vCard)
+
     // Set response headers
     res.setHeader('Content-Type', 'text/vcard');
     res.setHeader('Content-Disposition', `attachment; filename="${slugify(member.name)}.vcf"`);
@@ -118,7 +146,7 @@ app.get('/team/:role/vcf', (req, res) => {
 app.get('/team/:role/qr', async (req, res) => {
   try {
     const { role } = req.params;
-    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+    const baseUrl = process.env.VITE_BASE_URL || 'http://localhost:5173';
     const vcfUrl = `${baseUrl}/team/${role}/vcf`;
     
     // Generate QR code as data URL
@@ -141,58 +169,6 @@ app.get('/team/:role/qr', async (req, res) => {
   } catch (error) {
     console.error('Error generating QR code:', error);
     res.status(500).send('Error generating QR code');
-  }
-});
-
-// Email action endpoint
-app.get('/email-action/:action', async (req, res) => {
-  try {
-    const { action } = req.params;
-    const { id } = req.query;
-
-    if (!id) {
-      return res.status(400).send('User ID is required');
-    }
-
-    // Get visitor data
-    const filePath = join(__dirname, '..', 'components', 'adminView', 'visitors', 'visitors.json');
-    const fileData = await readFile(filePath, 'utf8');
-    const visitors = JSON.parse(fileData);
-    const visitorData = visitors[id];
-
-    if (!visitorData) {
-      return res.status(404).send('Visitor not found');
-    }
-
-    // Handle different actions
-    switch (action) {
-      case 'schedule':
-        res.redirect(`/make-appointment?id=${id}`);
-        break;
-      case 'design':
-      case 'budget':
-        res.redirect(`/portal?id=${id}&view=${action}`);
-        break;
-      default:
-        res.status(400).send('Invalid action');
-    }
-  } catch (error) {
-    console.error('Error handling email action:', error);
-    res.status(500).send('Internal server error');
-  }
-});
-
-// Add route to get visitor data
-app.get('/get-visitor/:id', async (req, res) => {
-  try {
-    const filePath = join(__dirname, '..', 'components', 'adminView', 'visitors', 'visitors.json');
-    const fileData = await readFile(filePath, 'utf8');
-    const visitors = JSON.parse(fileData);
-    const visitorData = visitors[req.params.id] || null;
-    res.json(visitorData);
-  } catch (error) {
-    console.error('Error getting visitor data:', error);
-    res.status(500).json({ message: 'Failed to get visitor data' });
   }
 });
 
