@@ -8,6 +8,7 @@ dotenv.config();
 const SCOPES = [
     'https://www.googleapis.com/auth/admin.directory.user.readonly',
     'https://www.googleapis.com/auth/admin.directory.group.readonly',
+    'https://www.googleapis.com/auth/admin.directory.orgunit.readonly'
 ];
 
 const __filename = fileURLToPath(import.meta.url);

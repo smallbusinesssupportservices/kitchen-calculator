@@ -60,6 +60,19 @@ class GoogleDirectoryService {
       throw error;
     }
   }
+  async getOrgUnits() {
+    try {
+      const res = await directory.orgunits.list({
+        customerId: 'my_customer', 
+        type: 'all', 
+      });
+      return res.data.organizationUnits;
+    } catch (error) {
+      console.error('Failed to get organizational units:', error);
+      throw error;
+    }
+  }
+  
 }
 
 export const googleDirectoryService = new GoogleDirectoryService();

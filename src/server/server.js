@@ -102,6 +102,21 @@ app.get('/groups/:groupKey/members', async (req, res) => {
   }
 });
 
+app.get('/OrgUnits', async (req, res) => {
+  try {
+    const OrgUnits = await googleDirectoryService.getOrgUnits();
+    res.json(OrgUnits);
+  } catch (error) {
+    console.error('Failed to get users:', error);
+    res.status(500).json({
+      statusCode: 500,
+      timestamp: new Date().toISOString(),
+      path: req.url,
+      message: 'Failed to get users'
+    });
+  }
+});
+
 // vCard endpoint
 app.get('/team/:role/vcf', (req, res) => {
   try {
