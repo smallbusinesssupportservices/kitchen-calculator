@@ -102,7 +102,7 @@ app.get('/groups/:groupKey/members', async (req, res) => {
   }
 });
 
-app.get('/OrgUnits', async (req, res) => {
+app.get('/orgUnits', async (req, res) => {
   try {
     const OrgUnits = await googleDirectoryService.getOrgUnits();
     res.json(OrgUnits);
