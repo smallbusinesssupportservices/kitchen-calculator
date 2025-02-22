@@ -27,7 +27,8 @@ class GoogleDirectoryService {
         organizations: user.organizations,
         externalIds: user.externalIds,
         emails: user.emails,
-        phones: user.phones
+        phones: user.phones,
+        orgUnitPath: user.orgUnitPath
       }));
     } catch (error) {
       console.error('Failed to get users:', error);
