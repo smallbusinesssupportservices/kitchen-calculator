@@ -13,27 +13,147 @@
         </select>
       </div>
 
-      <!-- Calculator Components -->
-      <KitchenSize v-model="formData.kitchenSize" />
-      <Cabinets v-model="formData.cabinets" />
-      <Countertops v-model="formData.countertops" />
-      <NewSink v-model="formData.newSink" />
-      <Backsplash v-model="formData.backsplash" />
-      <Plumbing v-model="formData.plumbing" />
-      <Electrical v-model="formData.electrical" />
-      <NewAppliances v-model="formData.newAppliances" />
-      <InteriorPainting v-model="formData.interiorPainting" />
-      <Flooring v-model="formData.flooring" />
-      <Demo
-        v-model="formData.demo"
-        :demoSink="formData.newSink.sinkType"
-        :demoCountertops="formData.countertops.countertopType"
-        :demoBacksplash="formData.backsplash.backsplash"
-        :demoCabinets="formData.cabinets.cabinetType"
-        :demoFlooring="formData.flooring.flooringType"
-      />
-      <FinalCleaning v-model="formData.finalCleaning" />
+      <!-- Calculator Components with Notes -->
       <UserForm v-model="formData.user" />
+      <div class="category-container">
+        <KitchenSize v-model="formData.kitchenSize" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.kitchenSize.salesNotes" 
+            placeholder="Add notes about kitchen size..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Cabinets v-model="formData.cabinets" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.cabinets.salesNotes" 
+            placeholder="Add notes about cabinets..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Countertops v-model="formData.countertops" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.countertops.salesNotes" 
+            placeholder="Add notes about countertops..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <NewSink v-model="formData.newSink" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.newSink.salesNotes" 
+            placeholder="Add notes about sink..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Backsplash v-model="formData.backsplash" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.backsplash.salesNotes" 
+            placeholder="Add notes about backsplash..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Plumbing v-model="formData.plumbing" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.plumbing.salesNotes" 
+            placeholder="Add notes about plumbing..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Electrical v-model="formData.electrical" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.electrical.salesNotes" 
+            placeholder="Add notes about electrical..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <NewAppliances v-model="formData.newAppliances" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.newAppliances.salesNotes" 
+            placeholder="Add notes about appliances..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <InteriorPainting v-model="formData.interiorPainting" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.interiorPainting.salesNotes" 
+            placeholder="Add notes about painting..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Flooring v-model="formData.flooring" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.flooring.salesNotes" 
+            placeholder="Add notes about flooring..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <Demo
+          v-model="formData.demo"
+          :demoSink="formData.newSink.sinkType"
+          :demoCountertops="formData.countertops.countertopType"
+          :demoBacksplash="formData.backsplash.backsplash"
+          :demoCabinets="formData.cabinets.cabinetType"
+          :demoFlooring="formData.flooring.flooringType"
+        />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.demo.salesNotes" 
+            placeholder="Add notes about demo..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="category-container">
+        <FinalCleaning v-model="formData.finalCleaning" />
+        <div class="notes-field">
+          <textarea 
+            v-model="formData.finalCleaning.salesNotes" 
+            placeholder="Add notes about final cleaning..."
+            class="category-notes"
+          ></textarea>
+        </div>
+      </div>
+
       <ProgressButton
         :progress="progress"
         :disabled="isDisabled"
@@ -107,7 +227,8 @@ const formData = reactive({
     width: 120,
     hasIsland: true,
     islandLength: 24,
-    islandWidth: 24
+    islandWidth: 24,
+    salesNotes: ''
   },
   demo: {
     removeSink: true,
@@ -117,9 +238,13 @@ const formData = reactive({
     removeFlooring: true,
     lightDemo: true,
     drywallRepair: true,
-    noDemo: false
+    noDemo: false,
+    salesNotes: ''
   },
-  dumpster: { dumpster: true },
+  dumpster: { 
+    dumpster: true,
+    salesNotes: ''
+  },
   plumbing: {
     moveSink: true,
     moveFridgeWater: true,
@@ -127,7 +252,8 @@ const formData = reactive({
     installFaucet: true,
     installDisposal: true,
     addGasLine: true,
-    noPlumbing: false
+    noPlumbing: false,
+    salesNotes: ''
   },
   electrical: {
     swapFixtures: true,
@@ -137,9 +263,12 @@ const formData = reactive({
     switchesAndOutlets: true,
     applianceOutlets: true,
     drywallRepair: true,
-    noElectrical: false
+    noElectrical: false,
+    salesNotes: ''
   },
-  drywall: {},
+  drywall: {
+    salesNotes: ''
+  },
   cabinets: {
     cabinetType: 'standardLineCabinets',
     cabinetStyle: 'edgewater-white',
@@ -149,7 +278,8 @@ const formData = reactive({
       style: 'edgewater-white',
       title: 'Edgewater White',
       imagePath: '/cabinet_images/Edgewater-White.webp'
-    }
+    },
+    salesNotes: ''
   },
   countertops: {
     countertopType: 'Quartz',
@@ -159,11 +289,19 @@ const formData = reactive({
       style: 'quartz-style-1',
       title: 'Quartz Style 1',
       imagePath: '/countertop_images/Quartz.png'
-    }
+    },
+    salesNotes: ''
   },
-  newSink: { sinkType: 'Custom Finish' },
-  newFixtures: {},
-  exhaustHoodDucting: {},
+  newSink: { 
+    sinkType: 'Custom Finish',
+    salesNotes: ''
+  },
+  newFixtures: {
+    salesNotes: ''
+  },
+  exhaustHoodDucting: {
+    salesNotes: ''
+  },
   newAppliances: {
     installAppliances: true,
     installVentHood: true,
@@ -200,13 +338,28 @@ const formData = reactive({
     RangeHoodSubSection_keep: false,
     RangeHoodSubSection_new: false,
     installationOptout_keep: false,
-    installationOptout_new: false
+    installationOptout_new: false,
+    salesNotes: ''
   },
-  installation: {},
-  backsplash: { backsplash: true },
-  flooring: { flooringType: 'Hardwood' },
-  interiorPainting: { paintKitchen: true },
-  finalCleaning: { cleanKitchen: true },
+  installation: {
+    salesNotes: ''
+  },
+  backsplash: { 
+    backsplash: true,
+    salesNotes: ''
+  },
+  flooring: { 
+    flooringType: 'Hardwood',
+    salesNotes: ''
+  },
+  interiorPainting: { 
+    paintKitchen: true,
+    salesNotes: ''
+  },
+  finalCleaning: { 
+    cleanKitchen: true,
+    salesNotes: ''
+  },
   user: {
     id: '',
     name: '',
@@ -382,6 +535,35 @@ watch(
 
 .sales-rep-select option {
   padding: 0.5rem;
+}
+
+.category-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.notes-field {
+  margin-top: 1rem;
+  padding: 0 1.5rem;
+}
+
+.category-notes {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background-color: #f8fafc;
+  font-size: 0.875rem;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.category-notes:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background-color: white;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
 }
 
 form {
