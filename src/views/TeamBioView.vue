@@ -172,7 +172,7 @@ import teamMembersData from '../data/teamMembers.json' with { type: 'json' };
 const route = useRoute();
 const isEditing = ref(false);
 const teamMembers = ref(null);
-const testing = false;
+const testing = true;
 
 // Fetch data on mount
 onMounted(async () => {
@@ -181,7 +181,7 @@ onMounted(async () => {
     teamMembers.value = testing ? teamMembersData : response.data;
   } catch (error) {
     console.error('Error fetching team members:', error);
-    teamMembers.value = null;
+    teamMembers.value = teamMembersData;
   }
   console.log("teamMembers.value:\n",teamMembers.value)
 });

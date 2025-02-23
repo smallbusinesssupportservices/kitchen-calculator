@@ -61,7 +61,7 @@ import axios from 'axios';
 
 const router = useRouter();
 const teamMembers = ref(null);
-const testing = false;
+const testing = true;
 
 onMounted(async () => {
   try {
@@ -70,7 +70,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching team members:', error);
     // Fallback to local data
-    teamMembers.value = null;
+    teamMembers.value = teamMembersData;
   }
 });
 
