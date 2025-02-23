@@ -1,0 +1,183 @@
+{
+  "leadership": {
+    "orgUnitPath": "Leadership",
+    "members": [
+      {
+        "id": "jm001",
+        "name": "Jonathan Malmin",
+        "role": "Founder & CEO",
+        "bio_short": "Passionate about transforming homes through innovative technology solutions.",
+        "email": "jonathan@theatlhomemaker.com",
+        "phone": "(404) 555-0121",
+        "bio": "With over 15 years of experience in home renovation and technology, Jonathan leads the company with a vision to revolutionize how homeowners approach kitchen remodeling.",
+        "expertise": [
+          "Business Strategy",
+          "Kitchen Design",
+          "Project Management",
+          "Technology Integration",
+          "Customer Experience"
+        ],
+        "image": "https://images.unsplash.com/photo-1600878459138-e1123b37cb30?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2020-01-01",
+        "department": "leadership",
+        "position": "ceo",
+        "nickname": "",
+        "title": "Chief Executive Officer",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": ""
+      }
+    ]
+  },
+  "sales": {
+    "orgUnitPath": "Sales Team",
+    "members": [
+      {
+        "id": "sa001",
+        "name": "Alex Thompson",
+        "role": "Senior Sales Associate",
+        "bio_short": "Dedicated to helping homeowners find the perfect kitchen solutions within their budget.",
+        "email": "alex@theatlhomemaker.com",
+        "phone": "(404) 555-0126",
+        "bio": "With over 8 years of experience in kitchen sales and design, Alex specializes in creating customized solutions that perfectly match each client's needs and budget. Known for building lasting relationships with clients and ensuring their vision becomes reality.",
+        "expertise": [
+          "Kitchen Design Consultation",
+          "Budget Planning",
+          "Product Knowledge",
+          "Client Relations",
+          "Project Coordination"
+        ],
+        "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2023-01-15",
+        "department": "sales",
+        "position": "senior-sales",
+        "nickname": "",
+        "title": "Senior Sales Associate",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": "Specializes in luxury kitchen renovations"
+      },
+      {
+        "id": "sa002",
+        "name": "Maria Garcia",
+        "role": "Sales Associate",
+        "bio_short": "Passionate about creating dream kitchens that combine functionality with style.",
+        "email": "maria@theatlhomemaker.com",
+        "phone": "(404) 555-0127",
+        "bio": "Maria brings fresh perspectives to kitchen design with her background in interior design. She excels at helping clients visualize their perfect kitchen and making it a reality within their budget.",
+        "expertise": [
+          "Kitchen Design",
+          "Color Consultation",
+          "Material Selection",
+          "Space Planning",
+          "Budget Management"
+        ],
+        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2023-03-01",
+        "department": "sales",
+        "position": "sales",
+        "nickname": "",
+        "title": "Sales Associate",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": "Bilingual (English/Spanish)"
+      }
+    ]
+  },
+  "design": {
+    "orgUnitPath": "Design Team",
+    "members": [
+      {
+        "id": "sj001",
+        "name": "Sarah Johnson",
+        "role": "Kitchen Design Specialist",
+        "bio_short": "Creating functional and beautiful kitchen spaces for over a decade.",
+        "email": "sarah@theatlhomemaker.com",
+        "phone": "(404) 555-0123",
+        "bio": "Sarah brings her extensive background in interior design and kitchen ergonomics to create spaces that are both beautiful and highly functional.",
+        "expertise": [
+          "Kitchen Layout Design",
+          "Color Theory",
+          "Material Selection",
+          "Space Planning",
+          "Lighting Design"
+        ],
+        "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2021-03-15",
+        "department": "design",
+        "position": "senior-designer",
+        "nickname": "",
+        "title": "Senior Kitchen Designer",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": ""
+      }
+    ]
+  },
+  "project-management": {
+    "orgUnitPath": "Project Management",
+    "members": [
+      {
+        "id": "mc001",
+        "name": "Michael Chen",
+        "role": "Project Manager",
+        "bio_short": "Ensuring seamless execution of kitchen renovations from start to finish.",
+        "email": "michael@theatlhomemaker.com",
+        "phone": "(404) 555-0124",
+        "bio": "Michael excels at coordinating complex renovation projects, ensuring timely completion while maintaining the highest quality standards.",
+        "expertise": [
+          "Project Coordination",
+          "Timeline Management",
+          "Contractor Relations",
+          "Quality Control",
+          "Budget Management"
+        ],
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2021-06-01",
+        "department": "project-management",
+        "position": "senior-pm",
+        "nickname": "",
+        "title": "Senior Project Manager",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": ""
+      }
+    ]
+  },
+  "client-relations": {
+    "orgUnitPath": "Client Relations",
+    "members": [
+      {
+        "id": "er001",
+        "name": "Emily Rodriguez",
+        "role": "Client Relations Manager",
+        "bio_short": "Dedicated to providing exceptional customer service throughout the renovation journey.",
+        "email": "emily@theatlhomemaker.com",
+        "phone": "(404) 555-0125",
+        "bio": "Emily ensures every client receives personalized attention and support throughout their renovation journey, making the process smooth and enjoyable.",
+        "expertise": [
+          "Customer Service",
+          "Communication",
+          "Problem Resolution",
+          "Client Advocacy",
+          "Process Optimization"
+        ],
+        "image": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&q=80",
+        "active": true,
+        "startDate": "2022-01-15",
+        "department": "client-relations",
+        "position": "manager",
+        "nickname": "",
+        "title": "Client Relations Manager",
+        "organization": "The ATL Homemaker",
+        "url": "",
+        "note": ""
+      }
+    ]
+  }
+}
