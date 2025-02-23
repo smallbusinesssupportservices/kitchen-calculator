@@ -6,12 +6,10 @@ import { updateCalculatorSetting } from '../components/adminView/calculator/upda
 import { updateCategorySetting } from '../components/adminView/categories/updateCategorySetting.js';
 import { updateItem } from '../components/adminView/items/updateItem.js';
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js';
-import { verifyGoogleToken } from './auth/googleAuth.js';
-import teamMembers from '../data/teamMembers.json' with { type: 'json' };
-import { googleDirectoryService } from './google/googleDirectoryService.js';
 import helmet from 'helmet';
 import { generateQR } from './generateQR.js'
 import { vcard } from './vCard.js'
+import { orgUnits, members, groups, users, signInWithGoogle } from './google.js'
 
 const app = express();
 const PORT = 3000;
@@ -29,85 +27,14 @@ app.use(helmet({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Google Auth endpoint
-app.post('/auth/google', async (req, res) => {
-  try {
-    const { token } = req.body;
-    const authResult = await verifyGoogleToken(token);
-    res.json(authResult);
-  } catch (error) {
-    console.error('Auth error:', error);
-    res.status(500).json({
-      authorized: false,
-      message: 'Authentication failed'
-    });
-  }
-});
 
 app.get('/', (req, res) => res.status(200).json({"Message":"Hello world"}));
 
-// Team members endpoints
-app.get('/users', async (req, res) => {
-  try {
-    const users = await googleDirectoryService.getUsers();
-    res.json(users);
-  } catch (error) {
-    console.error('Failed to get users:', error);
-    res.status(500).json({
-      statusCode: 500,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-      message: 'Failed to get users'
-    });
-  }
-});
-
-app.get('/groups', async (req, res) => {
-  try {
-    const groups = await googleDirectoryService.getGroups();
-    res.json(groups);
-  } catch (error) {
-    console.error('Failed to get groups:', error);
-    res.status(500).json({
-      statusCode: 500,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-      message: 'Failed to get groups'
-    });
-  }
-});
-
-app.get('/groups/:groupKey/members', async (req, res) => {
-  try {
-    const members = await googleDirectoryService.getGroupMembers(req.params.groupKey);
-    res.json(members);
-  } catch (error) {
-    console.error(`Failed to get members for group ${req.params.groupKey}:`, error);
-    res.status(500).json({
-      statusCode: 500,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-      message: `Failed to get members for group ${req.params.groupKey}`
-    });
-  }
-});
-
-app.get('/orgUnits', async (req, res) => {
-  try {
-    const OrgUnits = await googleDirectoryService.getOrgUnits();
-    res.json(OrgUnits);
-  } catch (error) {
-    console.error('Failed to get users:', error);
-    res.status(500).json({
-      statusCode: 500,
-      timestamp: new Date().toISOString(),
-      path: req.url,
-      message: 'Failed to get users'
-    });
-  }
-});
-
-// vCard endpoint
+app.post('/auth/google', signInWithGoogle);
+app.get('/users', users);
+app.get('/groups', groups);
+app.get('/groups/:groupKey/members', members);
+app.get('/orgUnits', orgUnits);
 app.get('/team/:role/vcf', vcard);
 app.get('/team/:role/qr', generateQR);
 app.post('/submit-form', processFormData);
