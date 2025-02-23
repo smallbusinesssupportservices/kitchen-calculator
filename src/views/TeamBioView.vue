@@ -164,15 +164,29 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
-import teamMembers from '../data/teamMembers.json';
+import teamMembersData from '../data/teamMembers.json' with { type: 'json' };
 
 const route = useRoute();
-const router = useRouter();
 const isEditing = ref(false);
+const teamMembers = ref(null);
+const testing = false;
 
+// Fetch data on mount
+onMounted(async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/users');
+    teamMembers.value = testing ? teamMembersData : response.data;
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    teamMembers.value = null;
+  }
+  console.log("teamMembers.value:\n",teamMembers.value)
+});
+
+// Slugify function
 function slugify(text) {
   return text
     .toLowerCase()
@@ -181,15 +195,23 @@ function slugify(text) {
     .replace(/^-+|-+$/g, '');
 }
 
+function getDepartmentTitle(departmentKey) {
+  return teamMembersData[departmentKey]?.title || departmentKey;
+}
+
 function isFounderCEO(member) {
   return member.role.toLowerCase().includes('founder') || 
          member.role.toLowerCase().includes('ceo');
 }
 
+// Compute role slug
 const roleSlug = computed(() => slugify(route.params.role));
 
+// Compute member once teamMembers is loaded
 const member = computed(() => {
-  for (const department of Object.values(teamMembers)) {
+  if (!teamMembers.value) return null;
+  
+  for (const department of Object.values(teamMembers.value)) {
     const foundMember = department.members.find(m => 
       slugify(m.role) === roleSlug.value && m.active
     );
@@ -198,38 +220,18 @@ const member = computed(() => {
   return null;
 });
 
-const editedMember = ref({ ...member.value });
+// Create reactive editedMember
+const editedMember = ref(null);
 
-function getDepartmentTitle(departmentKey) {
-  return teamMembers[departmentKey]?.title || departmentKey;
-}
-
-function toggleEdit() {
-  if (isEditing.value) {
-    editedMember.value = { ...member.value };
+// Watch member changes and update editedMember
+watch(member, (newMember) => {
+  if (newMember) {
+    editedMember.value = { ...newMember };
   }
-  isEditing.value = !isEditing.value;
-}
+}, { immediate: true });
 
-function addExpertise() {
-  editedMember.value.expertise.push('');
-}
-
-function removeExpertise(index) {
-  editedMember.value.expertise.splice(index, 1);
-}
-
-async function saveChanges() {
-  try {
-    // Here you would typically make an API call to save the changes
-    // For now, we'll just log the changes
-    console.log('Saving changes:', editedMember.value);
-    isEditing.value = false;
-  } catch (error) {
-    console.error('Error saving changes:', error);
-  }
-}
 </script>
+
 
 <style scoped>
 .bio-container {

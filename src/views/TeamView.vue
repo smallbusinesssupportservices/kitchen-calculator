@@ -2,8 +2,8 @@
   <div class="team-container">
     <h1>Our Team</h1>
     
-    <div v-for="(department, key) in teamMembersData" :key="key" class="department-section">
-      <h2>{{ department.title }}</h2>
+    <div v-for="(department, key) in teamMembers" :key="key" class="department-section">
+      <h2>{{ department.orgUnitPath }}</h2>
       
       <div class="table-container">
         <table class="team-table">
@@ -24,7 +24,7 @@
             >
               <td class="name-cell">{{ member.name }}</td>
               <td class="role-cell">{{ member.role }}</td>
-              <td class="bio-cell">{{ member.bio }}</td>
+              <td class="bio-cell">{{ member.bio_short }}</td>
               <td v-if="!isFounderCEO(member)" class="contact-cell">
                 <div class="contact-info">
                   <a 
@@ -57,15 +57,16 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import teamMembersData from '../data/teamMembers.json' with { type: 'json' };
-import axios from 'axios';
+import axios from 'axios'; 
 
 const router = useRouter();
 const teamMembers = ref(null);
+const testing = false;
 
 onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:3000/users');
-    teamMembers.value = response.data;
+    teamMembers.value = testing ? teamMembersData : response.data;
   } catch (error) {
     console.error('Error fetching team members:', error);
     // Fallback to local data
