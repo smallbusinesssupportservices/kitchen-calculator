@@ -16,8 +16,15 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
-app.use(helmet());
+
+app.use(cors({
+  origin: 'http://localhost:5173', // Allow requests from your Vue app
+  credentials: true, // Allow cookies and authorization headers if needed
+  allowedHeaders: ['Content-Type', 'Authorization'] // Specify allowed headers
+}));
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" } // Fixes CORP issue
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
