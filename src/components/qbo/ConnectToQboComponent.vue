@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const authorizeUri = async () => {
   try {
-    const uri = 'https://appcenter.intuit.com/connect/oauth2?client_id=ABhn2tfb6NhEqvXLMDpCVX73byWhShPMiuUWGM2pmKmzRkx2ay&redirect_uri=https%3A%2F%2F0c6d-2601-c2-187f-3ec-d18c-5e7f-398a-2724.ngrok-free.app%2Fcallback&response_type=code&scope=com.intuit.quickbooks.accounting&state=intuit-test' //response.data
+    const uri = `https://appcenter.intuit.com/connect/oauth2?client_id=ABhn2tfb6NhEqvXLMDpCVX73byWhShPMiuUWGM2pmKmzRkx2ay&redirect_uri=${encodeURI(import.meta.env.VITE_QBO_REDIRECT_URI)}&response_type=code&scope=com.intuit.quickbooks.accounting&state=intuit-test`
   
 
     const parameters = `location=1,width=800,height=650,left=${
