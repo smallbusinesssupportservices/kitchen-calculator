@@ -2,7 +2,7 @@ import dbItems from '../components/adminView/items/items.json' assert { type: "j
 import categoryMinimums from '../components/adminView/categories/categoryMinimums.json' assert { type: "json" };
 import calculatorSettings from '../components/adminView/calculator/calculatorSettings.json' assert { type: "json"};
 import { updateVisitor } from '../components/adminView/visitors/updateVisitor.js'
-import qboClient from './qbo.js';
+import qboClient from './qbo/index.js';
 import { sendToHatch } from './hatch.js';
 import axios from 'axios';
 
