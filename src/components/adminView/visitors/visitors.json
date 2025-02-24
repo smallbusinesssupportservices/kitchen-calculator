@@ -1,5 +1,5 @@
 {
-  "56329492-d8c3-4eea-8941-d90026dc4d53": {
+  "a63b85bf-c821-4cb5-bfdc-7e0100a16c04": {
     "contactInfo": {
       "name": "williamjhgf",
       "phone": "4106102350",
@@ -10,7 +10,7 @@
       "zip": "30311"
     },
     "calculatorSettingsValue": {
-      "rng": 0.0069,
+      "rng": 0.0016,
       "lowBuffer": 0.3,
       "highBuffer": 0.4
     },
@@ -21,7 +21,7 @@
             "category": "demo",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "removeSink",
@@ -31,7 +31,7 @@
                 "subtotal": 247.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "2",
                 "markup": 0.65,
                 "name": "removeCountertops",
@@ -41,7 +41,7 @@
                 "subtotal": 330
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "4",
                 "markup": 0.65,
                 "name": "removeCabinets",
@@ -51,7 +51,7 @@
                 "subtotal": 660
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "removeBacksplash",
@@ -61,7 +61,7 @@
                 "subtotal": 495
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "2",
                 "markup": 0.65,
                 "name": "removeFlooring",
@@ -71,7 +71,7 @@
                 "subtotal": 330
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "9",
                 "markup": 0.65,
                 "name": "lightDemo",
@@ -81,7 +81,7 @@
                 "subtotal": 1485
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "drywallRepair",
@@ -97,7 +97,7 @@
             "category": "dumpster",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "dumpster",
@@ -113,7 +113,7 @@
             "category": "plumbing",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "moveSink",
@@ -123,7 +123,7 @@
                 "subtotal": 1072.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "moveFridgeWater",
@@ -133,7 +133,7 @@
                 "subtotal": 1072.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installPotFiller",
@@ -143,7 +143,7 @@
                 "subtotal": 1732.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installFaucet",
@@ -153,7 +153,7 @@
                 "subtotal": 660
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installDisposal",
@@ -163,7 +163,7 @@
                 "subtotal": 660
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "addGasLine",
@@ -179,7 +179,7 @@
             "category": "electrical",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "swapFixtures",
@@ -189,7 +189,7 @@
                 "subtotal": 247.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "fixtureCount",
@@ -199,7 +199,7 @@
                 "subtotal": 1500
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "5",
                 "markup": 0.65,
                 "name": "addCanLights",
@@ -209,7 +209,7 @@
                 "subtotal": 825
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "2",
                 "markup": 0.65,
                 "name": "addUnderCabinetLights",
@@ -219,7 +219,7 @@
                 "subtotal": 330
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "3",
                 "markup": 0.65,
                 "name": "switchesAndOutlets",
@@ -229,7 +229,7 @@
                 "subtotal": 494.99999999999994
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "6",
                 "markup": 0.65,
                 "name": "applianceOutlets",
@@ -239,7 +239,7 @@
                 "subtotal": 989.9999999999999
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "drywallRepair",
@@ -260,7 +260,7 @@
             "category": "cabinets",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "standardLineCabinets",
@@ -281,7 +281,7 @@
             "category": "countertops",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "Quartz",
@@ -291,7 +291,7 @@
                 "subtotal": 5362.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "waterfallEdges",
@@ -307,7 +307,7 @@
             "category": "newSink",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "Custom Finish",
@@ -323,7 +323,7 @@
             "category": "newFixtures",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newFixtures",
@@ -344,7 +344,7 @@
             "category": "newAppliances",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installAppliances",
@@ -354,7 +354,7 @@
                 "subtotal": 990
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installVentHood",
@@ -364,7 +364,7 @@
                 "subtotal": 742.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "installWallOven",
@@ -374,7 +374,7 @@
                 "subtotal": 990
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0.65,
                 "name": "runExhaustDucting",
@@ -384,7 +384,7 @@
                 "subtotal": 1237.5
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newRange_new",
@@ -394,7 +394,7 @@
                 "subtotal": 1000
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newCooktop_new",
@@ -404,7 +404,7 @@
                 "subtotal": 1250
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newMicrowave_new",
@@ -414,7 +414,7 @@
                 "subtotal": 450
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newFridge_new",
@@ -424,7 +424,7 @@
                 "subtotal": 2500
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newDishwasher_new",
@@ -434,7 +434,7 @@
                 "subtotal": 700
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newDisposal_new",
@@ -444,7 +444,7 @@
                 "subtotal": 220
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newWallOven_new",
@@ -454,7 +454,7 @@
                 "subtotal": 1500
               },
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": null,
                 "markup": 0,
                 "name": "newRangeHood_new",
@@ -475,7 +475,7 @@
             "category": "backsplash",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "20",
                 "markup": 0.65,
                 "name": "backsplash",
@@ -491,7 +491,7 @@
             "category": "flooring",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "9",
                 "markup": 0.65,
                 "name": "Hardwood",
@@ -507,7 +507,7 @@
             "category": "interiorPainting",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "6",
                 "markup": 0.65,
                 "name": "paintKitchen",
@@ -523,7 +523,7 @@
             "category": "finalCleaning",
             "items": [
               {
-                "qboId": "76",
+                "qboId": "3",
                 "sqftPrice": "1.1",
                 "markup": 0.65,
                 "name": "cleanKitchen",
@@ -555,11 +555,12 @@
             "hasIsland": true
           }
         },
-        "id": "ce1c5086-170a-4c83-9b23-f038aa33a06e",
-        "displayName": "Estimate 2/14/2025",
-        "rng": 0.0069,
-        "lowRange": 37683.240537499994,
-        "highRange": 76491.9219625,
+        "id": "c5ce071d-bccf-4f0e-a42a-b0c1a5da7f34",
+        "displayName": "Estimate 2/23/2025",
+        "rng": 0.0016,
+        "lowRange": 37971.3969,
+        "highRange": 76203.7656,
+        "qboId": "247",
         "formSubmission": {
           "kitchenSize": {
             "length": 120,
@@ -681,7 +682,7 @@
             "cleanKitchen": true
           },
           "user": {
-            "id": "56329492-d8c3-4eea-8941-d90026dc4d53",
+            "id": "a63b85bf-c821-4cb5-bfdc-7e0100a16c04",
             "name": "williamjhgf",
             "phone": "4106102350",
             "email": "technology@theatlhomemaker.com",
@@ -690,8 +691,7 @@
             "state": "GA",
             "zip": "30311"
           }
-        },
-        "userSelection": "schedule"
+        }
       }
     ]
   }
