@@ -21,7 +21,7 @@ class QBOClient {
     try {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
-      const tokenPath = path.join(__dirname, '..', 'components', 'qbo', 'token.json');
+      const tokenPath = path.join(__dirname, '..', '..', 'components', 'qbo', 'token.json');
       
       try {
         const data = await readFile(tokenPath, 'utf8');
@@ -55,7 +55,7 @@ class QBOClient {
     try {
       const __filename = fileURLToPath(import.meta.url);
       const __dirname = path.dirname(__filename);
-      const tokenPath = path.join(__dirname, '..', 'components', 'qbo', 'token.json');
+      const tokenPath = path.join(__dirname, '..', '..', 'components', 'qbo', 'token.json');
       
       const baseData = {
         environment: process.env.QBO_ENVIRONMENT || 'sandbox',
@@ -137,7 +137,7 @@ class QBOClient {
         token.access_token,
         false,
         token.realmId,
-        process.env.QBO_ENVIRONMENT === 'sandbox',
+        process.env.QBO_ENVIRONMENT === 'Sandbox' ? false : true,
         true,
         null,
         '2.0',
@@ -152,7 +152,16 @@ class QBOClient {
   async refreshTokens() {
     try {
       console.log('Refreshing tokens');
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const tokenPath = path.join(__dirname, '..', '..', 'components', 'qbo', 'token.json');
+      
+
+      const data = await readFile(tokenPath, 'utf8');
+      const tokenData = JSON.parse(data);
       const authResponse = await this.oauthClient.refresh();
+      console.log("tokenData: ", tokenData)
+      console.log("authResponse: ", authResponse.Token)
       console.log('Refresh response received');
       
       const token = {
