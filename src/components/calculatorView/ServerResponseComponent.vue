@@ -21,41 +21,47 @@
       <div class="action-cards">
         <!-- Schedule Card -->
         <div class="action-card primary">
-          <h3>Ready to Start?</h3>
-          <p>Schedule a free consultation with one of our kitchen design experts to discuss your project in detail.</p>
+          <!-- <h3>Ready to Start?</h3> -->
+          
           <button 
             class="action-button primary" 
             @click="handleButtonClick('schedule')"
           >
-            Start Your Kitchen Transformation
-            <span class="icon">→</span>
+            Start Your Kitchen Transformation Now
+            <!-- <span class="icon">→</span> -->
           </button>
+          <br>
+          <p style="text-align: center;">Schedule a free consultation to refine your project scope and receive a more precise cost estimate.</p>
+          <!-- <p>Schedule a consultation with our designer to bring your kitchen vision to life. At this meeting, a 30% design and materials deposit is required to cover design labor and secure cabinet and countertop materials once selections are finalized.</p> -->
         </div>
 
         <!-- Design Card -->
         <div class="action-card secondary">
-          <h3>Need More Time?</h3>
-          <p>Let's explore your design ideas and selections together. Our experts can help refine your vision.</p>
+          <!-- <h3>Need More Time?</h3> -->
           <button 
             class="action-button secondary" 
             @click="handleButtonClick('design')"
           >
-            Explore Design Options
-            <span class="icon">→</span>
+          I'm still thinking through my design and selection options
+            <!-- <span class="icon">→</span> -->
           </button>
+          <br>
+          <p style="text-align: center;">Explore design concepts, appliance reviews, and color combinations.</p>
         </div>
 
         <!-- Budget Card -->
         <div class="action-card secondary">
-          <h3>Budget Concerns?</h3>
-          <p>We offer flexible options to match your financial goals while achieving your dream kitchen.</p>
+          <!-- <h3>Budget Concerns?</h3> -->
+          
           <button 
             class="action-button secondary" 
             @click="handleButtonClick('budget')"
           >
-            Discuss Budget Options
-            <span class="icon">→</span>
+            This is way over my budget. What are my other options?
+            <!-- <span class="icon">→</span> -->
           </button>
+          <br>
+          <p style="text-align: center;">Explore cheap altertive renovation options.</p>
         </div>
       </div>
 
@@ -212,7 +218,7 @@ const handleButtonClick = async (selection) => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   width: 100%;
 }
