@@ -22,33 +22,46 @@ const authorizeUri = async () => {
 
 <template>
   <div class="connect-to-qbo">
-    <!-- <h3>Services</h3> -->
-    <div class="connect-to-qbo-button">
-      <a class="imgLink" href="#" @click.prevent="authorizeUri">
-        <img src="./images/C2QB_green_btn_lg_default.png" width="178" alt="Connect to QuickBooks" />
-      </a>
+    <div class="connect-container">
+      <p class="connect-description">
+        Connect to QuickBooks Online to enable integration with your accounting system.
+        This allows the calculator to create customers and estimates directly in QuickBooks.
+      </p>
+      <div class="connect-to-qbo-button">
+        <a class="imgLink" href="#" @click.prevent="authorizeUri">
+          <img src="./images/C2QB_green_btn_lg_default.png" width="178" alt="Connect to QuickBooks" />
+        </a>
+      </div>
     </div>
-    
   </div>
- 
 </template>
 
 <style scoped>
 .connect-to-qbo {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.connect-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
+  text-align: center;
+}
+
+.connect-description {
+  margin-bottom: 2rem;
+  color: #666;
+  line-height: 1.6;
 }
 
 .connect-to-qbo-button {
-  grid-column: 1 / 1;
-  grid-row: 1 / 1;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  width: 250px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .imgLink {
@@ -63,12 +76,4 @@ const authorizeUri = async () => {
 .imgLink:hover img {
   opacity: 0.9;
 }
-
-  .input-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
 </style>

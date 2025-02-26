@@ -56,7 +56,7 @@ const saveItem = async (updatedItem) => {
         v-for="(item, key) in dbItems" 
         :key="key" 
         @click="selectItem(item, key)" 
-        class="item-list">
+        class="item-list-item">
         {{ key }}
       </li>
     </ul>
@@ -88,7 +88,7 @@ const saveItem = async (updatedItem) => {
   height: 100%;
 }
 
-.item-list li {
+.item-list-item {
   margin-bottom: 10px;
   padding: 5px;
   cursor: pointer;
@@ -98,7 +98,7 @@ const saveItem = async (updatedItem) => {
   transition: background-color 0.3s ease;
 }
 
-.item-list li:hover {
+.item-list-item:hover {
   background-color: #e9e9e9;
 }
 </style>

@@ -17,43 +17,44 @@ const saveToServer = async () => {
 </script>
 
 <template>
-  <!-- <h3>Calculator Settings</h3> -->
   <div class="calculator-settings">
-    <div class="input-group">
-      <label for="lowside">Lowside Buffer:</label>
-      <input type="number" id="lowside" v-model="settings.lowBuffer" />
-    </div>
+    <div class="settings-container">
+      <div class="input-group">
+        <label for="lowside">Lowside Buffer:</label>
+        <input type="number" id="lowside" v-model="settings.lowBuffer" />
+      </div>
 
-    <div class="input-group">
-      <label for="highside">Highside Buffer:</label>
-      <input type="number" id="highside" v-model="settings.highBuffer" />
-    </div>
+      <div class="input-group">
+        <label for="highside">Highside Buffer:</label>
+        <input type="number" id="highside" v-model="settings.highBuffer" />
+      </div>
 
-    <div class="input-group">
-      <label for="rng">RNG Value:</label>
-      <input type="number" id="rng" v-model="settings.rng" />
-    </div>
-    <div class="input-group">
-      <label for="rng">Mark up:</label>
-      <input type="number" id="markUp" v-model="settings.markUp" />
-    </div>
+      <div class="input-group">
+        <label for="rng">RNG Value:</label>
+        <input type="number" id="rng" v-model="settings.rng" />
+      </div>
+      <div class="input-group">
+        <label for="markUp">Mark up:</label>
+        <input type="number" id="markUp" v-model="settings.markUp" />
+      </div>
 
-    <div class="input-group">
-      <label for="rng">Cabinet Multiplier:</label>
-      <input type="number" id="cabinetMultiplier" v-model="settings.cabinet_multiplier" />
-    </div>
-    <div class="input-group">
-      <label for="rng">Contertop Multiplier:</label>
-      <input type="number" id="countertopMultiplier" v-model="settings.countertop_multiplier" />
-    </div>
-    <div class="input-group">
-      <label for="rng">Window Constant:</label>
-      <input type="number" id="windowConstant" v-model="settings.window_constant" />
-    </div>
+      <div class="input-group">
+        <label for="cabinetMultiplier">Cabinet Multiplier:</label>
+        <input type="number" id="cabinetMultiplier" v-model="settings.cabinet_multiplier" />
+      </div>
+      <div class="input-group">
+        <label for="countertopMultiplier">Countertop Multiplier:</label>
+        <input type="number" id="countertopMultiplier" v-model="settings.countertop_multiplier" />
+      </div>
+      <div class="input-group">
+        <label for="windowConstant">Window Constant:</label>
+        <input type="number" id="windowConstant" v-model="settings.window_constant" />
+      </div>
 
-    <div class="input-group">
-      <label for="rng">Appiance Constant:</label>
-      <input type="number" id="applianceConstant" v-model="settings.appliance_constant" />
+      <div class="input-group">
+        <label for="applianceConstant">Appliance Constant:</label>
+        <input type="number" id="applianceConstant" v-model="settings.appliance_constant" />
+      </div>
     </div>
     <button @click="saveToServer">Save</button>
   </div>
@@ -61,13 +62,16 @@ const saveToServer = async () => {
 
 <style scoped>
 .calculator-settings {
-  grid-column: 1 / 1;
-  grid-row: 1 / 1;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  width: 200px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.settings-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .input-group {
@@ -84,9 +88,12 @@ label {
 
 input {
   width: 100px;
-  /* Set width of input fields to match previous components */
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+button {
+  margin-top: 15px;
 }
 </style>

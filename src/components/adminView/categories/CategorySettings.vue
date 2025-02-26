@@ -16,15 +16,16 @@ const saveToServer = async () => {
 </script>
 
 <template>
-  <!-- <h3>Category Settings</h3> -->
   <div class="category-settings">
-    <div v-for="(value, key) in categoryMinimums" :key="key" class="category-input">
-      <label :for="key">{{ key }}:</label>
-      <input 
-        type="number" 
-        :id="key" 
-        v-model="settings[key]"
-      />
+    <div class="settings-container">
+      <div v-for="(value, key) in categoryMinimums" :key="key" class="category-input">
+        <label :for="key">{{ key }}:</label>
+        <input 
+          type="number" 
+          :id="key" 
+          v-model="settings[key]"
+        />
+      </div>
     </div>
     <button @click="saveToServer">Save</button>
   </div>
@@ -32,13 +33,16 @@ const saveToServer = async () => {
 
 <style scoped>
 .category-settings {
-  grid-column: 3 / 3;
-  grid-row: 1 / 1;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.settings-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .category-input {
@@ -54,9 +58,13 @@ label {
 }
 
 input {
-  width: 100px; /* Set width of input fields to 100px */
+  width: 100px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+button {
+  margin-top: 15px;
 }
 </style>

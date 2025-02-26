@@ -152,20 +152,22 @@ class QBOClient {
   async refreshTokens() {
     try {
       console.log('Refreshing tokens');
-      const __filename = fileURLToPath(import.meta.url);
-      const __dirname = path.dirname(__filename);
-      const tokenPath = path.join(__dirname, '..', '..', 'components', 'qbo', 'token.json');
       
-
-      const data = await readFile(tokenPath, 'utf8');
-      const tokenData = JSON.parse(data);
+      // Get the current token data before refreshing
+      const currentToken = this.oauthClient.getToken();
+      const realmId = currentToken.realmId;
+      
+      // Refresh the token
       const authResponse = await this.oauthClient.refresh();
-      console.log("tokenData: ", tokenData)
-      console.log("authResponse: ", authResponse.Token)
-      console.log('Refresh response received');
+      console.log('Refresh response received:', authResponse);
       
+      if (!authResponse) {
+        throw new Error('No response received from refresh token request');
+      }
+      
+      // Create a properly formatted token object
       const token = {
-        realmId: this.oauthClient.getToken().realmId,
+        realmId: realmId,
         token_type: authResponse.token_type,
         access_token: authResponse.access_token,
         refresh_token: authResponse.refresh_token,
@@ -178,6 +180,8 @@ class QBOClient {
       
       console.log('Setting refreshed token');
       this.oauthClient.setToken(token);
+      
+      // Save the refreshed token to file
       await this.saveTokenToFile(token);
       
       return token;

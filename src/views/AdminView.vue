@@ -84,12 +84,16 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
   box-shadow: var(--shadow);
   overflow: hidden;
   border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 600px; /* Fixed height for all admin sections */
 }
 
 .section-header {
   padding: 1.5rem;
   background-color: #f8fafc;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .section-header h2 {
@@ -101,6 +105,10 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
 
 .section-content {
   padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide overflow at the container level */
 }
 
 /* Override child component styles to fit the new layout */
@@ -113,6 +121,9 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
   padding: 0;
   box-shadow: none;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 :deep(.input-group) {
@@ -137,6 +148,7 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.2s ease;
+  margin-top: auto; /* Push buttons to the bottom */
 }
 
 :deep(button:hover) {
@@ -151,8 +163,9 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
 }
 
 :deep(.item-list) {
-  max-height: 400px;
   overflow-y: auto;
+  flex: 1;
+  height: 100%;
 }
 
 @media (max-width: 768px) {
@@ -162,6 +175,7 @@ import ConnectToQBO from '../components/qbo/ConnectToQboComponent.vue';
 
   .admin-section {
     margin-bottom: 1rem;
+    height: 500px; /* Smaller height on mobile */
   }
 }
 </style>
