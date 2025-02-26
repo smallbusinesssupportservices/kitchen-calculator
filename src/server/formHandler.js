@@ -452,11 +452,18 @@ export const processFormData = async (req, res) => {
 const calculateEstimate = async (formData) => {
   const dimensions = calculateDimensions(formData);
   const estimate = {
-    categories: [],
-    overallTotal: 0,
-    dimensions,
     id: generateUUID(),
     displayName: `Estimate ${new Date().toLocaleDateString("en-US")}`,
+    dimensions,
+    calculations : {
+      overallTotal : 0,
+      lowRange: 0,
+      highRange: 0,
+      rng: 0,
+      lowBuffer: 0,
+      highBuffer: 0,
+    },
+    categories: [],
   };
 
   // Process each category
@@ -479,14 +486,15 @@ const calculateEstimate = async (formData) => {
     }
 
     estimate.categories.push(category);
-    estimate.overallTotal += category.categoryTotal;
+    estimate.calculations.overallTotal += category.categoryTotal;
   }
 
-  // Calculate estimate ranges
-  const rng = (Math.floor(Math.random() * 75) + 1) / 10000;
-  estimate.rng = rng;
-  estimate.lowRange = estimate.overallTotal - (estimate.overallTotal * (calculatorSettings.lowBuffer + rng));
-  estimate.highRange = estimate.overallTotal + (estimate.overallTotal * (calculatorSettings.highBuffer + rng));
+  estimate.calculations.rng = (Math.floor(Math.random() * 75) + 1) / 10000;
+  estimate.calculations.lowBuffer = calculatorSettings.lowBuffer;
+  estimate.calculations.highBuffer = calculatorSettings.highBuffer;
+  estimate.calculations.lowRange = estimate.calculations.overallTotal - (estimate.calculations.overallTotal * (calculatorSettings.lowBuffer + estimate.calculations.rng));
+  estimate.calculations.highRange = estimate.calculations.overallTotal + (estimate.calculations.overallTotal * (calculatorSettings.highBuffer + estimate.calculations.rng));
+  estimate.formSubmission = formData;
 
   return estimate;
 };
@@ -592,11 +600,6 @@ const saveVisitorData = async (formData, estimate) => {
     console.log("response: ", response)
     let visitorData = response.data || {
       contactInfo: contactInfoData,
-      calculatorSettingsValue: {
-        rng: estimate.rng,
-        lowBuffer: calculatorSettings.lowBuffer,
-        highBuffer: calculatorSettings.highBuffer
-      },
       estimates: []
     };
 
@@ -605,18 +608,10 @@ const saveVisitorData = async (formData, estimate) => {
       visitorData.estimates = [];
     }
 
-    //add form data to estimate object
-    estimate.formSubmission = formData;
-
-    visitorData.estimates.push(estimate);
-
     // Update contact info and calculator settings
     visitorData.contactInfo = contactInfoData;
-    visitorData.calculatorSettingsValue = {
-      rng: estimate.rng,
-      lowBuffer: calculatorSettings.lowBuffer,
-      highBuffer: calculatorSettings.highBuffer
-    };
+
+    visitorData.estimates.push(estimate);
 
     // Save the updated visitor data
     await updateVisitor({

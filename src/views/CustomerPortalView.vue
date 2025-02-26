@@ -48,7 +48,7 @@
             Estimate {{ index + 1 }}
             <span class="estimate-date">{{ formatDate(estimate.createdAt) }}</span>
             <span class="estimate-range">
-              {{ formatCurrency(estimate.lowRange) }} - {{ formatCurrency(estimate.highRange) }}
+              {{ formatCurrency(estimate.calculations.lowRange) }} - {{ formatCurrency(estimate.calculations.highRange) }}
             </span>
           </button>
         </div>
@@ -66,10 +66,10 @@
             <label>Status:</label>
             <span class="status">In Progress</span>
           </div>
-          <div v-if="selectedEstimate?.lowRange && selectedEstimate?.highRange" class="detail-item">
+          <div v-if="selectedEstimate.calculations?.lowRange && selectedEstimate.calculations?.highRange" class="detail-item">
             <label>Estimate Range:</label>
             <span class="estimate">
-              {{ formatCurrency(selectedEstimate.lowRange) }} - {{ formatCurrency(selectedEstimate.highRange) }}
+              {{ formatCurrency(selectedEstimate.calculations.lowRange) }} - {{ formatCurrency(selectedEstimate.calculations.highRange) }}
             </span>
           </div>
         </div>

@@ -11,7 +11,7 @@
         <div class="estimate-details">
           <p class="estimate-description">Based on your selections, here's your estimated price range:</p>
           <div class="estimate-amount">
-            {{ formatCurrency(response.estimate.lowRange) }} - {{ formatCurrency(response.estimate.highRange) }}
+            {{ formatCurrency(response.estimate.calculations.lowRange) }} - {{ formatCurrency(response.estimate.calculations.highRange) }}
           </div>
           <p class="estimate-disclaimer">*This estimate is based on the specifications you provided and may vary based on final design choices and site conditions.</p>
         </div>
